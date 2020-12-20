@@ -38,6 +38,7 @@ li {
 
 /* 背景图 */
 .bingBg {
+    background-color: sandybrown;
     background: url(https://xxgcteam.com/bing/);
 }
 
@@ -70,6 +71,11 @@ li {
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
 }
 
 /* 搜索框架 */
@@ -274,4 +280,13 @@ li {
 
 .tabBox .el-input-number {
     width: 100px;
+}
+
+.tabBox .el-switch__core {
+    transform: scale(1.5) !important;
+    -webkit-transform: scale(1.5) !important;
+    -moz-transform: scale(1.5) !important;
+    -ms-transform: scale(1.5) !important;
+    -o-transform: scale(1.5) !important;
+    margin: 10px 0 0 10px;
 }

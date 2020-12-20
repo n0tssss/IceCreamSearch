@@ -23,10 +23,15 @@ new Vue({
         initWindow() {
             let vm = this;
             let iceCream = vm.getStorage("IceCream");
-            // 允许操作则不提示
-            if(iceCream && iceCream.updateStorage) {
+            // 允许设置存在不提示
+            let storageCache = vm.getStorage("updateStorage");
+            if(iceCream != null) {
                 vm.initDialog = false;
                 vm.soBoxlistShowNum = iceCream.soBoxlistShowNum;
+            // 如果用户已经拒绝也不提示
+            } else if(storageCache != null && !storageCache) {
+                vm.initDialog = false;
+                vm.updateStorage = false;
             }
         },
         // 初始化判断
@@ -35,11 +40,27 @@ new Vue({
             if(b) {
                 vm.updateStorage = true;
                 vm.saveStorage();
+                vm.$message.success("已开启本地存储设置");
+                // 记住用户已开启
+                vm.setStorage("updateStorage", vm.updateStorage);
             } else {
                 vm.updateStorage = false;
-                vm.clearStorage();
+                vm.removeStorage("IceCream");
+                vm.$message.warning("已关闭本地存储设置，设置里面还可以开启哦");
+                // 记住用户已关闭
+                vm.setStorage("updateStorage", vm.updateStorage);
             }
+            // 关闭窗口
             vm.initDialog = false;
+        },
+        // 本地存储开关
+        StorageStatus() {
+            let vm = this;
+            if(vm.updateStorage) {
+                vm.initDialogClose(true);
+            } else {
+                vm.initDialogClose(false);
+            }
         },
         // 一言API
         gethitokoto() {
@@ -101,7 +122,7 @@ new Vue({
         // Storage 操作
         saveStorage() {
             let vm = this;
-            vm.clearStorage();
+            vm.removeStorage("IceCream");
             if(vm.updateStorage) {
                 vm.setStorage("IceCream", {
                     updateStorage: vm.updateStorage, // 是否初始化
@@ -116,9 +137,9 @@ new Vue({
         getStorage(value) {
             return this.StorageData = JSON.parse($stor.getItem(value));
         },
-        clearStorage() {
+        removeStorage(value) {
             this.StorageData = {};
-            return $stor.clear();
+            return $stor.removeItem(value);
         }
     }
 })
