@@ -4,39 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>岳阳职业技术学院计算机协会 - 常用导航</title>
+    <title>坚果导航</title>
     <link rel="stylesheet" href="./css/style.css">
+    <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css" rel="stylesheet">
 </head>
 
 <body>
+    <!-- 主体框架 -->
     <div id="Search">
         <div class="bingBg"></div>
         <div id="soBox">
-            <p>
-                <input type="text" id="soBoxtext">
-                <input type="button" name="btn" id="soBoxbtn" value="百度一下" />
-            </p>
-            <ul id="soBoxlist"></ul>
+            <div class="soBoxtext">
+                <input type="text" id="soBoxtext" v-model="soBoxtext" placeholder="输入并搜索..." @focus="SoFocus(true)"
+                    @blur="SoFocus(false)" @keyup="SoChange($event)">
+            </div>
+            <div class="soBoxlist">
+                <ul id="soBoxlist"></ul>
+            </div>
         </div>
     </div>
 
     <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.9/vue.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.min.js"></script>
     <script src="./js/wdnmd.js"></script>
     <script src="./js/wdnmd2.js"></script>
     <script>
-        // 搜索框数据回调显示
+        // 百度搜索框回调
         function callback(data) {
-            console.log(data);
-            for(let i = 0; i < data.s.length; i++) {
+            // li 高度
+            let listHeight = 40;
+            // 结果高度
+            let resultHeight = 0;
+            for (let i = 0; i < data.s.length; i++) {
+                // 结果 li 添加
                 let oLi = document.createElement("li");
-                oLi.innerHTML = "<a href=\"https://www.baidu.com/s?wd=" + data.s[i] + "\">" + data.s[i] + "</a>";
+                oLi.innerHTML = "<a target='_blank' href=\"https://www.baidu.com/s?wd=" + data.s[i] + "\">" + data.s[i] + "</a>";
                 soBoxlist.appendChild(oLi);
-                if(i + 1 == 5) {
+                // 结果高度计算
+                resultHeight += listHeight;
+                // 超过预定数量跳出
+                if(i == window.sessionStorage.getItem("soBoxlistShowNum") - 1) {
                     break;
                 }
             }
-            soBoxlist.style.display = "block";
+            // 结果高度设置
+            document.querySelector(".soBoxlist").style.height = resultHeight + "px";
         }
     </script>
 </body>
