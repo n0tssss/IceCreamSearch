@@ -4,31 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>坚果导航</title>
+    <title>IceCream</title>
     <link rel="stylesheet" href="./css/style.css">
-    <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 </head>
 
 <body>
     <!-- 主体框架 -->
     <div id="Search">
+
+        <!-- Bing今日壁纸 -->
         <div class="bingBg"></div>
+
+        <!-- 初始化询问 -->
+        <el-dialog title="提示" :visible.sync="initDialog" width="40%">
+            <span>是否允许我们将您的设置文件存入到 localStorage，这将获得完美的体验</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="initDialogClose(false)">取 消</el-button>
+                <el-button type="primary" @click="initDialogClose(true)">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <!-- 搜索框 -->
         <div id="soBox">
             <div class="soBoxtext">
                 <input type="text" id="soBoxtext" v-model="soBoxtext" placeholder="输入并搜索..." @focus="SoFocus(true)"
                     @blur="SoFocus(false)" @keyup="SoChange($event)">
             </div>
-            <div class="soBoxlist">
+            <div class="soBoxlist" v-if="soBoxlistShow">
                 <ul id="soBoxlist"></ul>
             </div>
+            <!-- 一言 -->
+            <p id="hitokoto">:D 获取中...</p>
+            <!-- <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=tv&skin=pitaya" frameborder="0" width="255" height="25" allowtransparency="true"></iframe> -->
         </div>
+        <div class="optionIcon">
+            <i class="el-icon-setting" @click="leftBar = true"></i>
+        </div>
+        <!-- 侧边菜单 -->
+        <el-drawer :visible.sync="leftBar" :with-header="false" direction="ltr">
+            <el-tabs v-model="tabsActive">
+                <el-tab-pane label="基本设置" name="option">
+                    <div class="tabBox">
+                        <p class="h1">样式设置</p>
+                        <span>搜索结果数量（1 - 10）：</span>
+                        <el-input-number v-model="soBoxlistShowNum" controls-position="right"
+                            @change="soBoxlistUpdate($event)" :min="0" :max="10"></el-input-number>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="关于" name="about">关于</el-tab-pane>
+                <el-tab-pane label="待添加" name="load">待添加</el-tab-pane>
+            </el-tabs>
+        </el-drawer>
     </div>
 
+    <!-- js引用 -->
     <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.9/vue.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.min.js"></script>
     <script src="./js/wdnmd.js"></script>
-    <script src="./js/wdnmd2.js"></script>
     <script>
         // 百度搜索框回调
         function callback(data) {
@@ -39,12 +73,13 @@
             for (let i = 0; i < data.s.length; i++) {
                 // 结果 li 添加
                 let oLi = document.createElement("li");
-                oLi.innerHTML = "<a target='_blank' href=\"https://www.baidu.com/s?wd=" + data.s[i] + "\">" + data.s[i] + "</a>";
+                oLi.innerHTML = "<a target='_blank' href=\"https://www.baidu.com/s?wd=" + data.s[i] + "\">" + data.s[
+                    i] + "</a>";
                 soBoxlist.appendChild(oLi);
                 // 结果高度计算
                 resultHeight += listHeight;
                 // 超过预定数量跳出
-                if(i == window.sessionStorage.getItem("soBoxlistShowNum") - 1) {
+                if (i == JSON.parse(window.localStorage.getItem("IceCream")).soBoxlistShowNum - 1) {
                     break;
                 }
             }
