@@ -1,4 +1,4 @@
-let $stor = window.localStorage;
+import $stor from './wdnmd2.js'
 
 new Vue({
     el: '#Search',
@@ -10,7 +10,7 @@ new Vue({
         soBoxtext: '', // 输入框内容
         soBoxlist: [], // 搜索结果
         soBoxlistShow: false, // 搜索结果展示
-        soBoxlistShowNum: 5, // 搜索结果数量
+        soBoxlistShowNum: 8, // 搜索结果数量
         leftBar: false, // 左侧菜单是否打开
         tabsActive: 'option', // 左侧菜单默认选择项
     },
@@ -22,41 +22,33 @@ new Vue({
         // 初始化
         initWindow() {
             let vm = this;
-            let iceCream = vm.getStorage("IceCream");
-            // 允许设置存在不提示
-            let storageCache = vm.getStorage("updateStorage");
-            if(iceCream != null) {
+            let storageCache = $stor.storage.get("IceCream");
+            let sessionCache = $stor.session.get("IceCream");
+            // 是否存在用户配置
+            if(storageCache) {
                 vm.initDialog = false;
-                vm.soBoxlistShowNum = iceCream.soBoxlistShowNum;
-            // 如果用户已经拒绝也不提示
-            } else if(storageCache != null && !storageCache) {
-                vm.initDialog = false;
-                vm.updateStorage = false;
             }
         },
-        // 初始化判断
+        // 本地存储修改
         initDialogClose(b) {
             let vm = this;
-            if(b) {
+            if (b) {
                 vm.updateStorage = true;
-                vm.saveStorage();
                 vm.$message.success("已开启本地存储设置");
-                // 记住用户已开启
-                vm.setStorage("updateStorage", vm.updateStorage);
             } else {
                 vm.updateStorage = false;
-                vm.removeStorage("IceCream");
+                $stor.storage.remove("IceCream");
                 vm.$message.warning("已关闭本地存储设置，设置里面还可以开启哦");
-                // 记住用户已关闭
-                vm.setStorage("updateStorage", vm.updateStorage);
             }
+            // 记住用户设置
+            this.saveStorage();
             // 关闭窗口
             vm.initDialog = false;
         },
         // 本地存储开关
         StorageStatus() {
             let vm = this;
-            if(vm.updateStorage) {
+            if (vm.updateStorage) {
                 vm.initDialogClose(true);
             } else {
                 vm.initDialogClose(false);
@@ -106,7 +98,9 @@ new Vue({
             if (vm.soBoxtext) {
                 // 动态创建script标签
                 let oScript = document.createElement("script");
-                oScript.src = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=" + vm.soBoxtext + "&cb=callback";
+                oScript.src = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=" +
+                    vm.soBoxtext +
+                    "&cb=callback";
                 // 添加链接及回调函数
                 document.body.appendChild(oScript);
                 document.body.removeChild(oScript);
@@ -122,24 +116,16 @@ new Vue({
         // Storage 操作
         saveStorage() {
             let vm = this;
-            vm.removeStorage("IceCream");
-            if(vm.updateStorage) {
-                vm.setStorage("IceCream", {
-                    updateStorage: vm.updateStorage, // 是否初始化
-                    soBoxlistShowNum: vm.soBoxlistShowNum, // 搜索结果数量
-                });
+            let saveData = {
+                updateStorage: vm.updateStorage, // 用户是否允许操作 Storage
+                soBoxlistShowNum: vm.soBoxlistShowNum, // 搜索结果数量
             }
+            // 是否存入 Storage
+            if (vm.updateStorage) {
+                $stor.storage.set("IceCream", saveData);
+            }
+            // 存入 session
+            $stor.session.set("IceCream", saveData);
         },
-        setStorage(value, params) {
-            params = JSON.stringify(params);
-            $stor.setItem(value, params);
-        },
-        getStorage(value) {
-            return this.StorageData = JSON.parse($stor.getItem(value));
-        },
-        removeStorage(value) {
-            this.StorageData = {};
-            return $stor.removeItem(value);
-        }
     }
 })

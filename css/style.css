@@ -39,7 +39,7 @@ li {
 /* 背景图 */
 .bingBg {
     background-color: sandybrown;
-    background: url(https://xxgcteam.com/bing/);
+    background: url(https://api.fczbl.vip/bing/);
 }
 
 .bingBg {
@@ -67,7 +67,7 @@ li {
 }
 
 .bingBgBlack {
-    background: linear-gradient(to left, rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(https://xxgcteam.com/bing/);
+    background: linear-gradient(to left, rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(https://api.fczbl.vip/bing/);
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -82,7 +82,7 @@ li {
 #soBox {
     width: 50%;
     position: absolute;
-    top: 20%;
+    top: 30%;
     left: 50%;
     transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
