@@ -4,7 +4,7 @@ new Vue({
     el: '#Search',
     data: {
         initDialog: true, // 初始化窗口显示
-        updateStorage: true, // 用户是否允许操作 Storage
+        updateStorage: false, // 用户是否允许操作 Storage
         soBoxtextDom: document.querySelector("#soBoxtext"), // 输入框获取
         soBoxlistDom: document.querySelector("#soBoxlist"), // 结果获取
         soBoxtext: '', // 输入框内容
@@ -14,7 +14,8 @@ new Vue({
         leftBar: false, // 左侧菜单是否打开
         tabsActive: 'option', // 左侧菜单默认选择项
         bingData: [], // bing 背景数据
-        bgLink: '', // 背景图片外链
+        bgLink: '', // 背景图片链接
+        bingIndex: 1, // bing 背景当前显示
     },
     created() {
         this.initWindow(); // 初始化
@@ -28,19 +29,23 @@ new Vue({
             let storageCache = $stor.storage.get("IceCream");
             let sessionCache = $stor.session.get("IceCream");
             // 是否存在用户配置
-            if(storageCache) {
+            if (storageCache) {
                 vm.initDialog = false;
                 vm.updateStorage = true;
                 vm.soBoxlistShowNum = storageCache.soBoxlistShowNum;
-            } else {
+                vm.bgLink = storageCache.bgLink;
+            } else if (sessionCache) {
                 vm.initDialog = false;
                 vm.updateStorage = false;
                 vm.soBoxlistShowNum = sessionCache.soBoxlistShowNum;
+                vm.bgLink = sessionCache.bgLink;
             }
+            this.saveStorage();
         },
         // 本地存储修改
         initDialogClose(b) {
             let vm = this;
+            vm.initDialog = false;
             if (b) {
                 vm.updateStorage = true;
                 vm.$message.success("已开启本地存储设置");
@@ -66,17 +71,55 @@ new Vue({
         // bing 壁纸
         getBing(index) {
             let vm = this;
-            axios.get("http://192.168.1.110:8081/admin/bing/get_bing/0/8").then(res => {
-                if(res.status == 200) {
+            axios.get($stor.ServerBase + "admin/bing/get_bing/0/8").then(res => {
+                if (res.status == 200) {
                     vm.bingData = res.data.data;
-                    // console.log(vm.bingData);
-                    // 背景选择设置
-                    let bing = "https://cn.bing.com/";
-                    vm.bgLink = bing + vm.bingData.images[index - 1].url;
+                }
+                // 如果未设定则显示 bing 壁纸
+                if (vm.bgLink == "") {
+                    vm.bgLink = "";
+                    vm.bingIndex = index - 1;
+                    let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
+                    this.setNowBg(bing);
+                } else {
+                    // 显示设定壁纸
+                    this.setNowBg(vm.bgLink);
                 }
             }, err => {
                 console.log(err);
             })
+        },
+        // 背景图片设置
+        // 判断选择
+        selectBgImg(index) {
+            let vm = this;
+            if (index == 1) {
+                window.open("https://imgchr.com/", "_blank");
+            } else if (index == 2) {
+                vm.bgLink = "";
+                if (vm.bingIndex == vm.bingData.images.length - 1) {
+                    vm.bingIndex = 0;
+                }
+                vm.setNowBg("https://cn.bing.com/" + vm.bingData.images[vm.bingIndex++].url);
+                this.saveStorage();
+            }
+        },
+        // 链接设置
+        setBgImg() {
+            if (this.bgLink) {
+                this.setNowBg(this.bgLink);
+            } else {
+                this.getBing(1);
+            }
+            this.saveStorage();
+        },
+        // 设置 url 背景
+        setNowBg(url) {
+            let bgBox = document.querySelector(".bingBg");
+            bgBox.style.background = `url(${url})`;
+            bgBox.style.backgroundSize = "cover";
+            bgBox.style.backgroundPosition = "center";
+            bgBox.style.backgroundAttachment = "fixed";
         },
         // 一言API
         gethitokoto() {
@@ -95,9 +138,11 @@ new Vue({
                 document.querySelector(".bingBg").classList.add("bingBgBlack");
                 document.querySelector(".soBoxtext").classList.add("soBoxtextFocus");
             } else {
-                this.soBoxlistShow = false;
                 document.querySelector(".bingBg").classList.remove("bingBgBlack");
                 document.querySelector(".soBoxtext").classList.remove("soBoxtextFocus");
+                setTimeout(() => {
+                    this.soBoxlistShow = false;
+                }, 500);
             }
         },
         // 输入框内容处理
@@ -137,10 +182,6 @@ new Vue({
             vm.$message.success(`设置成功，当前显示${this.soBoxlistShowNum}个！`);
             vm.saveStorage();
         },
-        // 背景图片设置
-        setBgImg() {
-            this.saveStorage();
-        },
         // Storage 操作
         saveStorage() {
             let vm = this;
@@ -153,8 +194,11 @@ new Vue({
             if (vm.updateStorage) {
                 $stor.storage.set("IceCream", saveData);
             }
-            // 存入 session
-            $stor.session.set("IceCream", saveData);
+            // 初始化后允许存入
+            if (!vm.initDialog) {
+                // 存入 session
+                $stor.session.set("IceCream", saveData);
+            }
         },
     }
 })

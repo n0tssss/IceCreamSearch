@@ -49,39 +49,30 @@ li {
 .bingBg {
     width: 100%;
     height: 100%;
-    background-color: sandybrown;
-    background: url(https://api.fczbl.vip/bing/);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
     position: absolute;
     top: 0;
     left: 0;
     z-index: -1;
-    filter: blur(0px);
-    -webkit-filter: blur(0px);
     transform: scale(1.1);
     -webkit-transform: scale(1.1);
     -moz-transform: scale(1.1);
     -ms-transform: scale(1.1);
     -o-transform: scale(1.1);
-    transition: all .3s;
-    -webkit-transition: all .3s;
-    -moz-transition: all .3s;
-    -ms-transition: all .3s;
-    -o-transition: all .3s;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -ms-transition: all .5s;
+    -o-transition: all .5s;
 }
 
 .bingBgBlack {
-    background: linear-gradient(to left, rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(https://api.fczbl.vip/bing/);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    transition: all .3s;
-    -webkit-transition: all .3s;
-    -moz-transition: all .3s;
-    -ms-transition: all .3s;
-    -o-transition: all .3s;
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
 }
 
 /* 搜索框架 */
@@ -182,6 +173,11 @@ li {
     -o-transform: scale(1.02);
 }
 
+#soBox a {
+    text-decoration: none;
+    color: black;
+}
+
 /* 一言 */
 #hitokoto {
     display: block;
@@ -242,6 +238,7 @@ li {
 /* 侧边菜单 */
 .el-drawer {
     min-width: 400px;
+    background-color: rgb(233, 233, 233);
 }
 
 .el-tabs {
@@ -268,6 +265,18 @@ li {
     color: #58c4c7 !important;
 }
 
+.tabBox {
+    padding: 10px;
+    margin: 20px 0;
+    background-color: white;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .2);
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
 .tabBox .h1 {
     font-size: 1.1rem;
     border-left: 3px solid #58c4c7;
@@ -275,9 +284,8 @@ li {
     margin: 5px 0;
 }
 
-.tabBox {
-    padding: 10px;
-    margin: 20px 0;
+.tabBox .tools {
+    margin: 10px 0;
 }
 
 .tabBox .el-input-number {

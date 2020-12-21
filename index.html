@@ -75,12 +75,12 @@
                         <p class="h1">背景图片</p>
                         <div class="text">
                             <p>背景图片外链：</p>
-                            <p>可上传网络图片或选择本地图片</p> 
+                            <p>允许上传网络图片，网络地址需为图片真实地址</p> 
                         </div>
                         <div class="tools">
                             <el-input v-model="bgLink" placeholder="请输入图片链接" @change="setBgImg"></el-input>
-                            <el-button type="primary" icon="el-icon-upload">上传图片获取链接</el-button>
-                            <el-button type="primary" icon="el-icon-upload2">本地图片</el-button>
+                            <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(1)">上传图片获取链接</el-button>
+                            <el-button type="primary" icon="el-icon-refresh-right" @click="selectBgImg(2)">随机一张</el-button>
                         </div>
                     </div>
                 </el-tab-pane>
@@ -103,6 +103,10 @@
             // 结果高度
             let resultHeight = 0;
             for (let i = 0; i < data.s.length; i++) {
+                // 超过预定数量跳出
+                if (i == JSON.parse(window.sessionStorage.getItem("IceCream")).soBoxlistShowNum) {
+                    break;
+                }
                 // 结果 li 添加
                 let oLi = document.createElement("li");
                 oLi.innerHTML = "<a target='_blank' href=\"https://www.baidu.com/s?wd=" + data.s[i] + "\">" + data.s[
@@ -110,10 +114,6 @@
                 soBoxlist.appendChild(oLi);
                 // 结果高度计算
                 resultHeight += listHeight;
-                // 超过预定数量跳出
-                if (i == JSON.parse(window.sessionStorage.getItem("IceCream")).soBoxlistShowNum - 1) {
-                    break;
-                }
             }
             // 结果高度设置
             document.querySelector(".soBoxlist").style.height = resultHeight + "px";
