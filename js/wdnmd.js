@@ -13,9 +13,12 @@ new Vue({
         soBoxlistShowNum: 8, // 搜索结果数量
         leftBar: false, // 左侧菜单是否打开
         tabsActive: 'option', // 左侧菜单默认选择项
+        bingData: [], // bing 背景数据
+        bgLink: '', // 背景图片外链
     },
     created() {
         this.initWindow(); // 初始化
+        this.getBing(1); // bing 壁纸获取
         this.gethitokoto(); // 一言
     },
     methods: {
@@ -27,6 +30,12 @@ new Vue({
             // 是否存在用户配置
             if(storageCache) {
                 vm.initDialog = false;
+                vm.updateStorage = true;
+                vm.soBoxlistShowNum = storageCache.soBoxlistShowNum;
+            } else {
+                vm.initDialog = false;
+                vm.updateStorage = false;
+                vm.soBoxlistShowNum = sessionCache.soBoxlistShowNum;
             }
         },
         // 本地存储修改
@@ -53,6 +62,21 @@ new Vue({
             } else {
                 vm.initDialogClose(false);
             }
+        },
+        // bing 壁纸
+        getBing(index) {
+            let vm = this;
+            axios.get("http://192.168.1.110:8081/admin/bing/get_bing/0/8").then(res => {
+                if(res.status == 200) {
+                    vm.bingData = res.data.data;
+                    // console.log(vm.bingData);
+                    // 背景选择设置
+                    let bing = "https://cn.bing.com/";
+                    vm.bgLink = bing + vm.bingData.images[index - 1].url;
+                }
+            }, err => {
+                console.log(err);
+            })
         },
         // 一言API
         gethitokoto() {
@@ -113,12 +137,17 @@ new Vue({
             vm.$message.success(`设置成功，当前显示${this.soBoxlistShowNum}个！`);
             vm.saveStorage();
         },
+        // 背景图片设置
+        setBgImg() {
+            this.saveStorage();
+        },
         // Storage 操作
         saveStorage() {
             let vm = this;
             let saveData = {
                 updateStorage: vm.updateStorage, // 用户是否允许操作 Storage
                 soBoxlistShowNum: vm.soBoxlistShowNum, // 搜索结果数量
+                bgLink: vm.bgLink, // 背景图片外链
             }
             // 是否存入 Storage
             if (vm.updateStorage) {

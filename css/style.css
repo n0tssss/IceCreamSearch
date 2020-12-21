@@ -20,8 +20,17 @@ html {
 }
 
 a {
-    text-decoration: none;
-    color: black;
+    text-decoration: underline #58c4c7;
+    color: #58c4c7;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
+}
+
+a:hover {
+    color: #2a787a;
 }
 
 li {
@@ -38,13 +47,10 @@ li {
 
 /* 背景图 */
 .bingBg {
-    background-color: sandybrown;
-    background: url(https://api.fczbl.vip/bing/);
-}
-
-.bingBg {
     width: 100%;
     height: 100%;
+    background-color: sandybrown;
+    background: url(https://api.fczbl.vip/bing/);
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -238,10 +244,6 @@ li {
     min-width: 400px;
 }
 
-.el-drawer__body {
-    background-color: rgb(240, 240, 240) !important;
-}
-
 .el-tabs {
     padding: 20px;
     color: #58c4c7;
@@ -274,19 +276,20 @@ li {
 }
 
 .tabBox {
-    background-color: white;
-    padding: 15px;
+    padding: 10px;
+    margin: 20px 0;
 }
 
 .tabBox .el-input-number {
     width: 100px;
 }
 
-.tabBox .el-switch__core {
-    transform: scale(1.5) !important;
-    -webkit-transform: scale(1.5) !important;
-    -moz-transform: scale(1.5) !important;
-    -ms-transform: scale(1.5) !important;
-    -o-transform: scale(1.5) !important;
-    margin: 10px 0 0 10px;
+.tools>.el-input {
+    margin: 5px 0;
+}
+
+.tabBox .el-button {
+    background-color: #58c4c7;
+    border: none;
+    margin: 10px 10px 0 0;
 }

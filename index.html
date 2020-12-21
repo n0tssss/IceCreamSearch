@@ -42,8 +42,8 @@
         </div>
 
         <!-- 设置按钮 -->
-        <div class="optionIcon">
-            <i class="el-icon-setting" @click="leftBar = true"></i>
+        <div class="optionIcon" @click="leftBar = true">
+            <i class="el-icon-setting"></i>
         </div>
 
         <!-- 侧边菜单 -->
@@ -52,16 +52,36 @@
                 <el-tab-pane label="基本设置" name="option">
                     <div class="tabBox">
                         <p class="h1">本地存储</p>
-                        <span>是否将设置存储到本地（下次打开的时候设置还会保存哦）：</span>
-                        <el-switch style="display: block" v-model="updateStorage" active-color="#13ce66"
-                            @change="StorageStatus">
-                        </el-switch>
+                        <div class="text">
+                            <p>将设置存储在本地</p>
+                        </div>
+                        <div class="tools">
+                            <el-switch style="display: block" v-model="updateStorage" active-color="#13ce66"
+                                @change="StorageStatus">
+                            </el-switch>
+                        </div>
                     </div>
                     <div class="tabBox">
                         <p class="h1">搜索框</p>
-                        <span>搜索结果数量（1 - 10）：</span>
-                        <el-input-number v-model="soBoxlistShowNum" controls-position="right"
-                            @change="soBoxlistUpdate($event)" :min="0" :max="10"></el-input-number>
+                        <div class="text">
+                            <p>搜索结果显示的数量（1 - 10）</p>
+                        </div>
+                        <div class="tools">
+                            <el-input-number v-model="soBoxlistShowNum" controls-position="right"
+                                @change="soBoxlistUpdate($event)" :min="0" :max="10"></el-input-number>
+                        </div>
+                    </div>
+                    <div class="tabBox">
+                        <p class="h1">背景图片</p>
+                        <div class="text">
+                            <p>背景图片外链：</p>
+                            <p>可上传网络图片或选择本地图片</p> 
+                        </div>
+                        <div class="tools">
+                            <el-input v-model="bgLink" placeholder="请输入图片链接" @change="setBgImg"></el-input>
+                            <el-button type="primary" icon="el-icon-upload">上传图片获取链接</el-button>
+                            <el-button type="primary" icon="el-icon-upload2">本地图片</el-button>
+                        </div>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="关于" name="about">关于</el-tab-pane>
