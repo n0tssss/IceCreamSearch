@@ -95,6 +95,7 @@ new Vue({
         },
         // 壁纸错误
         error() {
+            console.log("壁纸挂啦");
             let vm = this;
             // 如果壁纸接口拉闸则调用本地背景
             this.$message.error("壁纸有点脾气罢工了，请联系网站管理员查看");
