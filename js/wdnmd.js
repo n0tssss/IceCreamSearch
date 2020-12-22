@@ -9,7 +9,7 @@ new Vue({
         soBoxlistDom: document.querySelector("#soBoxlist"), // 结果获取
         soBoxtext: '', // 输入框内容
         soBoxlist: [], // 搜索结果
-        soBoxlistShow: false, // 搜索结果展示
+        soBoxlistShow: false, // 搜索结果显示
         soBoxlistShowNum: 8, // 搜索结果数量
         leftBar: false, // 左侧菜单是否打开
         tabsActive: 'option', // 左侧菜单默认选择项
@@ -80,28 +80,40 @@ new Vue({
                     vm.bgLink = "";
                     vm.bingIndex = index - 1;
                     let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
-                    this.setNowBg(bing);
+                    vm.setNowBg(bing);
                 } else {
                     // 显示设定壁纸
-                    this.setNowBg(vm.bgLink);
+                    vm.setNowBg(vm.bgLink);
                 }
             }, err => {
-                console.log(err);
+                // 如果壁纸接口拉闸则调用本地背景
+                this.$message.error("壁纸有点脾气罢工了，请联系网站管理员查看");
+                if (vm.bgLink == "") {
+                    vm.setNowBg("./errorBg.jpg");
+                } else {
+                    vm.setNowBg(vm.bgLink);
+                }
             })
         },
         // 背景图片设置
         // 判断选择
         selectBgImg(index) {
             let vm = this;
+            // 打开外链网站
             if (index == 1) {
                 window.open("https://imgchr.com/", "_blank");
             } else if (index == 2) {
-                vm.bgLink = "";
-                if (vm.bingIndex == vm.bingData.images.length - 1) {
-                    vm.bingIndex = -1;
+                // 随机 bing
+                if (vm.bingData.length != 0) {
+                    vm.bgLink = "";
+                    if (vm.bingIndex == vm.bingData.images.length - 1) {
+                        vm.bingIndex = -1;
+                    }
+                    vm.setNowBg("https://cn.bing.com/" + vm.bingData.images[++vm.bingIndex].url);
+                    this.saveStorage();
+                } else {
+                    this.getBing();
                 }
-                vm.setNowBg("https://cn.bing.com/" + vm.bingData.images[++vm.bingIndex].url);
-                this.saveStorage();
             }
         },
         // 链接设置
@@ -134,15 +146,13 @@ new Vue({
         // 搜索框聚焦
         SoFocus(b) {
             if (b) {
-                this.soBoxlistShow = true;
+                document.querySelector(".soBoxlist").classList.add("soBoxlistShow");
                 document.querySelector(".bingBg").classList.add("bingBgBlack");
                 document.querySelector(".soBoxtext").classList.add("soBoxtextFocus");
             } else {
                 document.querySelector(".bingBg").classList.remove("bingBgBlack");
                 document.querySelector(".soBoxtext").classList.remove("soBoxtextFocus");
-                setTimeout(() => {
-                    this.soBoxlistShow = false;
-                }, 500);
+                document.querySelector(".soBoxlist").classList.remove("soBoxlistShow");
             }
         },
         // 输入框内容处理
@@ -150,20 +160,15 @@ new Vue({
             let vm = this;
             // 清空结果
             document.querySelector("#soBoxlist").innerHTML = "";
-
-            // 结果显示
-            if (vm.soBoxtext) {
-                document.querySelector(".soBoxlist").classList.add("soBoxlistShow");
-            } else {
-                document.querySelector(".soBoxlist").classList.remove("soBoxlistShow");
+            // 没有内容则隐藏
+            if (!vm.soBoxtext) {
+                document.querySelector(".soBoxlist").style.height = "0px";
             }
-
             // 回车跳转
             if (e.keyCode == 13) {
                 window.open('https://www.baidu.com/s?wd=' + vm.soBoxtext)
                 this.keydown = '';
             }
-
             if (vm.soBoxtext) {
                 // 动态创建script标签
                 let oScript = document.createElement("script");
@@ -190,7 +195,7 @@ new Vue({
                 soBoxlistShowNum: vm.soBoxlistShowNum, // 搜索结果数量
                 bgLink: vm.bgLink, // 背景图片外链
             }
-            // 是否存入 Storage
+            // 是否允许存入 Storage
             if (vm.updateStorage) {
                 $stor.storage.set("IceCream", saveData);
             }
