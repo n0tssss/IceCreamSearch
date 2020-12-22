@@ -175,8 +175,7 @@ new Vue({
             }
             // 回车跳转
             if (e.keyCode == 13) {
-                window.open('https://www.baidu.com/s?wd=' + vm.soBoxtext)
-                this.keydown = '';
+                this.goBaidu();
             }
             if (vm.soBoxtext) {
                 // 动态创建script标签
@@ -187,6 +186,14 @@ new Vue({
                 // 添加链接及回调函数
                 document.body.appendChild(oScript);
                 document.body.removeChild(oScript);
+            }
+        },
+        // 百度跳转
+        goBaidu() {
+            if(this.soBoxtext) {
+                window.open('https://www.baidu.com/s?wd=' + this.soBoxtext)
+            } else {
+                this.$message("您还没输入内容呢");
             }
         },
         // 搜索框数量设置

@@ -29,7 +29,7 @@
         <div id="soBox">
             <!-- 主体框框 -->
             <div class="soBoxtext">
-                <i class="el-icon-search"></i>
+                <i class="el-icon-search" @click="goBaidu"></i>
                 <input type="text" id="soBoxtext" v-model="soBoxtext" placeholder="输入并搜索..." @focus="SoFocus(true)"
                     @blur="SoFocus(false)" @keyup="SoChange($event)">
             </div>
