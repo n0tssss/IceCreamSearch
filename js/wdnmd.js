@@ -98,9 +98,9 @@ new Vue({
             } else if (index == 2) {
                 vm.bgLink = "";
                 if (vm.bingIndex == vm.bingData.images.length - 1) {
-                    vm.bingIndex = 0;
+                    vm.bingIndex = -1;
                 }
-                vm.setNowBg("https://cn.bing.com/" + vm.bingData.images[vm.bingIndex++].url);
+                vm.setNowBg("https://cn.bing.com/" + vm.bingData.images[++vm.bingIndex].url);
                 this.saveStorage();
             }
         },
