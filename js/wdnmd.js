@@ -119,10 +119,15 @@ new Vue({
         getBing(index) {
             let vm = this;
             try {
-                axios.get($stor.ServerBase).then(res => {
-                    console.log(res);
+                axios.post($stor.ServerBase, {
+                    "url": "https://cn.bing.com/HPImageArchive.aspx",
+                    "format": "js",
+                    "idx": 0,
+                    "n": 8,
+                    "mkt": "zh-CN"
+                }).then(res => {
                     if (res.status == 200) {
-                        vm.bingData = res.data.data;
+                        vm.bingData = res.data;
                     }
                     // 如果未设定则显示 bing 壁纸
                     if (vm.bgLink == "") {
