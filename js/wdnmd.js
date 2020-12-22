@@ -71,29 +71,38 @@ new Vue({
         // bing 壁纸
         getBing(index) {
             let vm = this;
-            axios.get($stor.ServerBase + "admin/bing/get_bing/0/8").then(res => {
-                if (res.status == 200) {
-                    vm.bingData = res.data.data;
-                }
-                // 如果未设定则显示 bing 壁纸
-                if (vm.bgLink == "") {
-                    vm.bgLink = "";
-                    vm.bingIndex = index - 1;
-                    let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
-                    vm.setNowBg(bing);
-                } else {
-                    // 显示设定壁纸
-                    vm.setNowBg(vm.bgLink);
-                }
-            }, err => {
-                // 如果壁纸接口拉闸则调用本地背景
-                this.$message.error("壁纸有点脾气罢工了，请联系网站管理员查看");
-                if (vm.bgLink == "") {
-                    vm.setNowBg("./errorBg.jpg");
-                } else {
-                    vm.setNowBg(vm.bgLink);
-                }
-            })
+            try {
+                axios.get($stor.ServerBase + "admin/bing/get_bing/0/8").then(res => {
+                    if (res.status == 200) {
+                        vm.bingData = res.data.data;
+                    }
+                    // 如果未设定则显示 bing 壁纸
+                    if (vm.bgLink == "") {
+                        vm.bgLink = "";
+                        vm.bingIndex = index - 1;
+                        let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
+                        vm.setNowBg(bing);
+                    } else {
+                        // 显示设定壁纸
+                        vm.setNowBg(vm.bgLink);
+                    }
+                }, err => {
+                    vm.error();
+                })
+            } catch (err) {
+                vm.error();
+            }
+        },
+        // 壁纸错误
+        error() {
+            let vm = this;
+            // 如果壁纸接口拉闸则调用本地背景
+            this.$message.error("壁纸有点脾气罢工了，请联系网站管理员查看");
+            if (vm.bgLink == "") {
+                vm.setNowBg("./errorBg.jpg");
+            } else {
+                vm.setNowBg(vm.bgLink);
+            }
         },
         // 背景图片设置
         // 判断选择
