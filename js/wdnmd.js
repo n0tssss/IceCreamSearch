@@ -15,7 +15,54 @@ new Vue({
         tabsActive: 'option', // 左侧菜单默认选择项
         bingData: [], // bing 背景数据
         bgLink: '', // 背景图片链接
-        bingIndex: 1, // bing 背景当前显示
+        bingIndex: 0, // bing 背景当前显示
+        openApp: false, // 网站导航是否打开
+        // 链接数据
+        LinkList: [{
+                name: '生活类',
+                data: [{
+                        name: 'A',
+                        href: 'https://n0ts.cn',
+                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
+                        content: 'content'
+                    },
+                    {
+                        name: 'B',
+                        href: 'https://n0ts.cn',
+                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
+                        content: 'content'
+                    },
+                    {
+                        name: 'C',
+                        href: 'https://n0ts.cn',
+                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
+                        content: 'content'
+                    },
+                ]
+            },
+            {
+                name: '学习类',
+                data: [{
+                        name: 'A',
+                        href: 'https://n0ts.cn',
+                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
+                        content: 'content'
+                    },
+                    {
+                        name: 'B',
+                        href: 'https://n0ts.cn',
+                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
+                        content: 'content'
+                    },
+                    {
+                        name: 'C',
+                        href: 'https://n0ts.cn',
+                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
+                        content: 'content'
+                    },
+                ]
+            },
+        ],
     },
     created() {
         this.initWindow(); // 初始化
@@ -72,7 +119,8 @@ new Vue({
         getBing(index) {
             let vm = this;
             try {
-                axios.get($stor.ServerBase + "admin/bing/get_bing/0/8").then(res => {
+                axios.get($stor.ServerBase).then(res => {
+                    console.log(res);
                     if (res.status == 200) {
                         vm.bingData = res.data.data;
                     }
@@ -144,13 +192,9 @@ new Vue({
         },
         // 一言API
         gethitokoto() {
-            fetch('https://v1.hitokoto.cn')
-                .then(response => response.json())
-                .then(data => {
-                    const hitokoto = document.querySelector('#hitokoto');
-                    hitokoto.innerText = data.hitokoto
-                })
-                .catch(console.error)
+            axios.get("https://v1.hitokoto.cn").then(res => {
+                document.querySelector("#hitokoto").innerText = res.data.hitokoto;
+            })
         },
         // 搜索框聚焦
         SoFocus(b) {
@@ -190,7 +234,7 @@ new Vue({
         },
         // 百度跳转
         goBaidu() {
-            if(this.soBoxtext) {
+            if (this.soBoxtext) {
                 window.open('https://www.baidu.com/s?wd=' + this.soBoxtext)
             } else {
                 this.$message("您还没输入内容呢");
@@ -221,5 +265,11 @@ new Vue({
                 $stor.session.set("IceCream", saveData);
             }
         },
+        // 网站导航
+        openAppList() {
+            let vm = this;
+            vm.openApp = !vm.openApp;
+
+        }
     }
 })

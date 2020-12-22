@@ -2,7 +2,7 @@ let $stor = window.localStorage;
 let $sess = window.sessionStorage;
 
 export default {
-    ServerBase: 'http://192.168.1.110:8081/',
+    ServerBase: 'http://49.234.77.225:9000/Cross/analysis?url=',
     storage: {
         set(value, params) {
             $stor.setItem(value, JSON.stringify(params));
