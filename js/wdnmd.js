@@ -63,7 +63,25 @@ new Vue({
                 ]
             },
         ],
-        // 
+        // 搜索引擎
+        so: [{
+                name: '百度',
+                icon: './images/baidu.png',
+                linkHead: 'https://www.baidu.com/s?wd='
+            },
+            {
+                name: '必应',
+                icon: './images/bing.png',
+                linkHead: 'https://cn.bing.com/search?q='
+            },
+            {
+                name: '谷歌',
+                icon: './images/google.png',
+                linkHead: 'http://www.goole.com/search?q='
+            },
+        ],
+        soIndex: 1, // 当前选中的搜索引擎
+        soSelect: false, // 选择引擎界面是否打开
     },
     created() {
         this.initWindow(); // 初始化
@@ -240,12 +258,13 @@ new Vue({
                 document.body.removeChild(oScript);
             }
         },
-        // 百度跳转
+        // 回车跳转
         goBaidu() {
-            if (this.soBoxtext) {
-                window.open('https://www.baidu.com/s?wd=' + this.soBoxtext)
+            let vm = this;
+            if (vm.soBoxtext) {
+                window.open(vm.so[vm.soIndex].linkHead + vm.soBoxtext)
             } else {
-                this.$message("您还没输入内容呢");
+                vm.$message("您还没输入内容呢");
             }
         },
         // 搜索框数量设置
@@ -262,6 +281,8 @@ new Vue({
                 updateStorage: vm.updateStorage, // 用户是否允许操作 Storage
                 soBoxlistShowNum: vm.soBoxlistShowNum, // 搜索结果数量
                 bgLink: vm.bgLink, // 背景图片外链
+                so: vm.so, // 搜索引擎
+                soIndex: vm.soIndex, // 当前选中的搜索引擎
             }
             // 是否允许存入 Storage
             if (vm.updateStorage) {
@@ -278,6 +299,11 @@ new Vue({
             let vm = this;
             vm.openApp = !vm.openApp;
 
-        }
+        },
+        // 导航选择
+        selectLink() {
+            let vm = this;
+            vm.soSelect = !vm.soSelect;
+        },
     }
 })

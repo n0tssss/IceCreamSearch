@@ -2,7 +2,8 @@ let $stor = window.localStorage;
 let $sess = window.sessionStorage;
 
 export default {
-    ServerBase: 'http://49.234.77.225:9000/cors/analysis',
+    ServerBase: 'https://api.xxgcteam.com/analysis',
+    // ServerBase: 'wdnmd',
     storage: {
         set(value, params) {
             $stor.setItem(value, JSON.stringify(params));

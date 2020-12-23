@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
     <title>IceCream</title>
     <link rel="stylesheet" href="./css/style.css">
     <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css" rel="stylesheet">
@@ -13,7 +13,6 @@
 <body>
     <!-- 主体框架 -->
     <div id="Search">
-
         <!-- Bing今日壁纸 -->
         <div class="bingBg">
             <!-- 网站列表打开 -->
@@ -79,13 +78,29 @@
         <div id="soBox" :class="{soBoxtop: openApp}">
             <!-- 主体框框 -->
             <div class="soBoxtext">
-                <i class="el-icon-search" @click="goBaidu"></i>
+                <!-- 右侧搜索图标 -->
+                <i class="el-icon-search rightIcon" @click="goBaidu"></i>
+                <!-- 左侧搜索引擎图标 -->
+                <div class="soImg" @click="selectLink">
+                    <img :src="so[soIndex].icon">
+                </div>
+                <!-- 搜索框本框 -->
                 <input type="text" id="soBoxtext" v-model="soBoxtext" placeholder="输入并搜索..." @focus="SoFocus(true)"
                     @blur="SoFocus(false)" @keyup="SoChange($event)">
             </div>
             <!-- 搜索结果 -->
             <div class="soBoxlist">
-                <ul id="soBoxlist"></ul>
+                <div id="soBoxlist"></div>
+            </div>
+
+            <!-- 搜索引擎切换 -->
+            <div :class="{soSelectList: true, soSelectListShow: soSelect}">
+                <div class="soSelect" v-for="(item, index) in so">
+                    <div :class="{active: index == soIndex}">
+                        <img :src="item.icon">
+                        <p>{{item.name}}</p>
+                    </div>
+                </div>
             </div>
 
             <!-- 一言 -->
@@ -182,13 +197,15 @@
             // 结果高度
             let resultHeight = 0;
             for (let i = 0; i < data.s.length; i++) {
+                let ice = JSON.parse(window.sessionStorage.getItem("IceCream"));
                 // 超过预定数量跳出
-                if (i == JSON.parse(window.sessionStorage.getItem("IceCream")).soBoxlistShowNum) {
+                if (i == ice.soBoxlistShowNum) {
                     break;
                 }
+                let so = ice.so[ice.soIndex].linkHead;
                 // 结果 li 添加
                 let oLi = document.createElement("li");
-                oLi.innerHTML = "<a target='_blank' href=\"https://www.baidu.com/s?wd=" + data.s[i] + "\">" + data.s[
+                oLi.innerHTML = "<a target='_blank' href=\"" + so + "" + data.s[i] + "\">" + data.s[
                     i] + "</a>";
                 soBoxlist.appendChild(oLi);
                 // 结果高度计算
