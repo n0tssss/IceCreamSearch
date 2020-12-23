@@ -551,7 +551,7 @@ a:hover {
 /* 分类菜单 */
 .appListMenu {
     width: 18%;
-    height: 80%;
+    height: 85%;
     position: absolute;
     bottom: 5%;
     left: 0;
@@ -584,7 +584,7 @@ a:hover {
 /* 分类框架 */
 .appListBox {
     width: 80%;
-    height: 80%;
+    height: 85%;
     position: absolute;
     bottom: 5%;
     right: 0;
@@ -643,6 +643,7 @@ a:hover {
     -ms-transform: scale(1.1);
     -o-transform: scale(1.1);
     box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, .3);
 }
 
 .appListClassList a {
@@ -671,6 +672,12 @@ a:hover {
 .appListClassList a>p:nth-child(3) {
     font-size: .3rem;
     color: rgb(209, 209, 209);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 /* 撑开分类底部 */

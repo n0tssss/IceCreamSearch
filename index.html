@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>IceCream</title>
     <link rel="stylesheet" href="./css/style.css">
     <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css" rel="stylesheet">
@@ -29,7 +30,6 @@
                 </div>
                 <!-- 分类菜单 -->
                 <div class="appListMenu">
-                    <p>Menu</p>
                     <div v-for="(item, index) in LinkList" :key="index">{{item.name}}</div>
                 </div>
                 <!-- 分类框架 -->

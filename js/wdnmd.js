@@ -24,7 +24,7 @@ new Vue({
                         name: 'A',
                         href: 'https://n0ts.cn',
                         img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
-                        content: 'content'
+                        content: 'contentcontentcontentcontentcontentcontentcontentcontent'
                     },
                     {
                         name: 'B',
@@ -63,6 +63,7 @@ new Vue({
                 ]
             },
         ],
+        // 
     },
     created() {
         this.initWindow(); // 初始化
@@ -210,7 +211,9 @@ new Vue({
             } else {
                 document.querySelector(".bingBg").classList.remove("bingBgBlack");
                 document.querySelector(".soBoxtext").classList.remove("soBoxtextFocus");
-                document.querySelector(".soBoxlist").classList.remove("soBoxlistShow");
+                setTimeout(() => {
+                    document.querySelector(".soBoxlist").classList.remove("soBoxlistShow");
+                }, 100);
             }
         },
         // 输入框内容处理
