@@ -79,6 +79,31 @@ new Vue({
                 icon: './images/google.png',
                 linkHead: 'http://www.goole.com/search?q='
             },
+            {
+                name: '谷歌',
+                icon: './images/google.png',
+                linkHead: 'http://www.goole.com/search?q='
+            },
+            {
+                name: '谷歌',
+                icon: './images/google.png',
+                linkHead: 'http://www.goole.com/search?q='
+            },
+            {
+                name: '谷歌',
+                icon: './images/google.png',
+                linkHead: 'http://www.goole.com/search?q='
+            },
+            {
+                name: '谷歌',
+                icon: './images/google.png',
+                linkHead: 'http://www.goole.com/search?q='
+            },
+            {
+                name: '谷歌',
+                icon: './images/google.png',
+                linkHead: 'http://www.goole.com/search?q='
+            },
         ],
         soIndex: 1, // 当前选中的搜索引擎
         soSelect: false, // 选择引擎界面是否打开
@@ -302,7 +327,7 @@ new Vue({
         },
         // 导航选择
         selectLink() {
-            let vm = this;
+            let vm =  this;
             vm.soSelect = !vm.soSelect;
         },
     }

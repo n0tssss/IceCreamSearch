@@ -104,6 +104,7 @@ a:hover {
     -moz-transition: all .3s;
     -ms-transition: all .3s;
     -o-transition: all .3s;
+    overflow: hidden;
 }
 
 .soBoxtop {
@@ -267,7 +268,8 @@ a:hover {
 
 /* 搜索引擎切换 */
 .soSelectList {
-    width: 0;
+    width: 90%;
+    height: 0;
     background-color: white;
     position: relative;
     top: 5px;
@@ -282,13 +284,17 @@ a:hover {
     -moz-transition: all .3s;
     -ms-transition: all .3s;
     -o-transition: all .3s;
+    display: flex;
+    flex-wrap: wrap;
 }
 
+/* 搜索引擎切换显示 */
 .soSelectListShow {
-    width: 90%;
+    height: auto;
     padding: 10px 5%;
 }
 
+/* 搜索引擎小盒子 */
 .soSelect {
     width: 50px;
     margin: 10px;
@@ -672,6 +678,7 @@ a:hover {
 
 .appListMenu>div:hover {
     box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, .3);
 }
 
 /* 分类框架 */
@@ -717,7 +724,7 @@ a:hover {
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
-    margin: 10px;
+    margin: 15px 10px;
     text-align: center;
     padding: 5px 10px;
     color: white;
@@ -730,12 +737,11 @@ a:hover {
 }
 
 .appListClassList:hover {
-    transform: scale(1.1);
-    -webkit-transform: scale(1.1);
-    -moz-transform: scale(1.1);
-    -ms-transform: scale(1.1);
-    -o-transform: scale(1.1);
-    box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    -o-transform: scale(1.05);
     background-color: rgba(0, 0, 0, .3);
 }
 
