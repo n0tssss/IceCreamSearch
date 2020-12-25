@@ -29,21 +29,26 @@
                 </div>
                 <!-- 分类菜单 -->
                 <div class="appListMenu">
-                    <div v-for="(item, index) in LinkList" :key="index">{{item.name}}</div>
+                    <div v-for="(item, index) in LinkList" :key="index" @click="scrollMenu(index)">{{item.navName}}
+                    </div>
                 </div>
                 <!-- 分类框架 -->
-                <div class="appListBox">
+                <div class="appListBox" @scroll="shadow">
                     <!-- 各种分类 -->
                     <div class="appListClass" v-for="(item, index) in LinkList" :key="index">
                         <!-- 分类标题 -->
-                        <p class="appListClassTitle">{{item.name}}</p>
+                        <p class="appListClassTitle">{{item.navName}}</p>
                         <!-- 分类列表 -->
                         <div class="appListClassBox">
-                            <div class="appListClassList" v-for="(item2, index2) in item.data" :key="index2">
+                            <div class="appListClassList" v-for="(item2, index2) in item.links" :key="index2">
                                 <a :href="item2.href" target="_blank">
-                                    <img :src="item2.img">
-                                    <p>{{item2.name}}</p>
-                                    <p>{{item2.content}}</p>
+                                    <el-tooltip class="item" effect="dark" :content="item2.content" placement="bottom">
+                                        <div>
+                                            <img :src="item2.img">
+                                            <p>{{item2.name}}</p>
+                                            <p>{{item2.content}}</p>
+                                        </div>
+                                    </el-tooltip>
                                 </a>
                             </div>
                         </div>
@@ -96,10 +101,13 @@
             <!-- 搜索引擎切换 -->
             <div :class="{soSelectList: true, soSelectListShow: soSelect}">
                 <div class="soSelect" v-for="(item, index) in so">
-                    <div :class="{active: index == soIndex}">
+                    <div :class="{active: index == soIndex}" @click="soSelect1(index)" @contextmenu.prevent="">
                         <img :src="item.icon">
                         <p>{{item.name}}</p>
                     </div>
+                </div>
+                <div class="soSelect soSelectAdd" @click="soSelectAdd = true">
+                    <i class="el-icon-plus"></i>
                 </div>
             </div>
 
@@ -108,6 +116,28 @@
 
             <!-- <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=tv&skin=pitaya" frameborder="0" width="255" height="25" allowtransparency="true"></iframe> -->
         </div>
+
+        <!-- 搜索引擎添加 -->
+        <el-dialog title="新增一个搜索引擎" :visible.sync="soSelectAdd">
+            <el-form label-width="80px" label-position="top">
+                <el-form-item>
+                    <p>搜索引擎名称</p>
+                    <p>例如：百度</p>
+                    <el-input v-model="soAdd.name" placeholder="搜索引擎名称"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <p>搜索引擎图标</p>
+                    <p>例如：https://www.baidu.com/favicon.ico</p>
+                    <el-input v-model="soAdd.icon" placeholder="搜索引擎图标"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <p>搜索引擎链接</p>
+                    <p>例如：https://www.baidu.com/s?wd=</p>
+                    <el-input v-model="soAdd.linkHead" placeholder="搜索引擎链接"></el-input>
+                </el-form-item>
+                <el-button type="primary" @click="soSelectAddFc" style="width: 100%;">添加</el-button>
+            </el-form>
+        </el-dialog>
 
         <!-- 设置按钮 -->
         <div class="optionIcon" @click="leftBar = true">
@@ -160,7 +190,7 @@
                             <p>基于 Vue 与 ElementUI实现的导航，自带搜索功能以及各种实用网站导航，目前暂未完工，尽请期待...</p>
                         </div>
                     </div>
-                    <div class="tabBox updataInfo">
+                    <!-- <div class="tabBox updataInfo">
                         <p class="h1">更新日志</p>
                         <div class="text">
                             <div>
@@ -177,7 +207,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </el-tab-pane>
                 <el-tab-pane label="待添加" name="load">待添加</el-tab-pane>
             </el-tabs>

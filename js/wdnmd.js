@@ -18,100 +18,39 @@ new Vue({
         bingIndex: 0, // bing 背景当前显示
         openApp: false, // 网站导航是否打开
         // 链接数据
-        LinkList: [{
-                name: '生活类',
-                data: [{
-                        name: 'A',
-                        href: 'https://n0ts.cn',
-                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
-                        content: 'contentcontentcontentcontentcontentcontentcontentcontent'
-                    },
-                    {
-                        name: 'B',
-                        href: 'https://n0ts.cn',
-                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
-                        content: 'content'
-                    },
-                    {
-                        name: 'C',
-                        href: 'https://n0ts.cn',
-                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
-                        content: 'content'
-                    },
-                ]
-            },
-            {
-                name: '学习类',
-                data: [{
-                        name: 'A',
-                        href: 'https://n0ts.cn',
-                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
-                        content: 'content'
-                    },
-                    {
-                        name: 'B',
-                        href: 'https://n0ts.cn',
-                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
-                        content: 'content'
-                    },
-                    {
-                        name: 'C',
-                        href: 'https://n0ts.cn',
-                        img: 'https://s3.ax1x.com/2020/12/21/r0TEDJ.jpg',
-                        content: 'content'
-                    },
-                ]
-            },
-        ],
+        LinkList: [],
         // 搜索引擎
         so: [{
-                name: '百度',
-                icon: './images/baidu.png',
-                linkHead: 'https://www.baidu.com/s?wd='
-            },
-            {
-                name: '必应',
-                icon: './images/bing.png',
-                linkHead: 'https://cn.bing.com/search?q='
-            },
-            {
-                name: '谷歌',
-                icon: './images/google.png',
-                linkHead: 'http://www.goole.com/search?q='
-            },
-            {
-                name: '谷歌',
-                icon: './images/google.png',
-                linkHead: 'http://www.goole.com/search?q='
-            },
-            {
-                name: '谷歌',
-                icon: './images/google.png',
-                linkHead: 'http://www.goole.com/search?q='
-            },
-            {
-                name: '谷歌',
-                icon: './images/google.png',
-                linkHead: 'http://www.goole.com/search?q='
-            },
-            {
-                name: '谷歌',
-                icon: './images/google.png',
-                linkHead: 'http://www.goole.com/search?q='
-            },
-            {
-                name: '谷歌',
-                icon: './images/google.png',
-                linkHead: 'http://www.goole.com/search?q='
-            },
+            name: '百度',
+            icon: './images/baidu.png',
+            linkHead: 'https://www.baidu.com/s?wd='
+        },
+        {
+            name: '必应',
+            icon: './images/bing.png',
+            linkHead: 'https://cn.bing.com/search?q='
+        },
+        {
+            name: '谷歌',
+            icon: './images/google.png',
+            linkHead: 'http://www.goole.com/search?q='
+        },
         ],
         soIndex: 1, // 当前选中的搜索引擎
         soSelect: false, // 选择引擎界面是否打开
+        soSelectAdd: false, // 添加搜索引擎界面是否打开
+        // 准备添加的搜索引擎
+        soAdd: {
+            name: 'baidu',
+            icon: 'https://www.baidu.com/favicon.ico',
+            linkHead: 'https://www.baidu.com/s?wd='
+        },
     },
     created() {
         this.initWindow(); // 初始化
         this.getBing(1); // bing 壁纸获取
         this.gethitokoto(); // 一言
+        this.getLink(); // 获取网站列表
     },
     methods: {
         // 初始化
@@ -125,11 +64,15 @@ new Vue({
                 vm.updateStorage = true;
                 vm.soBoxlistShowNum = storageCache.soBoxlistShowNum;
                 vm.bgLink = storageCache.bgLink;
+                vm.soIndex = storageCache.soIndex;
+                vm.so = storageCache.so;
             } else if (sessionCache) {
                 vm.initDialog = false;
                 vm.updateStorage = false;
                 vm.soBoxlistShowNum = sessionCache.soBoxlistShowNum;
                 vm.bgLink = sessionCache.bgLink;
+                vm.soIndex = sessionCache.soIndex;
+                vm.so = sessionCache.so;
             }
             this.saveStorage();
         },
@@ -247,6 +190,7 @@ new Vue({
         },
         // 搜索框聚焦
         SoFocus(b) {
+            this.soSelect = false;
             if (b) {
                 document.querySelector(".soBoxlist").classList.add("soBoxlistShow");
                 document.querySelector(".bingBg").classList.add("bingBgBlack");
@@ -256,7 +200,7 @@ new Vue({
                 document.querySelector(".soBoxtext").classList.remove("soBoxtextFocus");
                 setTimeout(() => {
                     document.querySelector(".soBoxlist").classList.remove("soBoxlistShow");
-                }, 100);
+                }, 200);
             }
         },
         // 输入框内容处理
@@ -299,6 +243,78 @@ new Vue({
             vm.$message.success(`设置成功，当前显示${this.soBoxlistShowNum}个！`);
             vm.saveStorage();
         },
+        // 网站导航
+        openAppList() {
+            let vm = this;
+            vm.openApp = !vm.openApp;
+
+        },
+        // 搜索引擎打开
+        selectLink() {
+            let vm = this;
+            vm.soSelect = !vm.soSelect;
+            vm.saveStorage();
+        },
+        // 搜索引擎选择
+        soSelect1(index) {
+            let vm = this;
+            vm.soIndex = index;
+            vm.saveStorage();
+        },
+        // 搜索框引擎添加 || 删除
+        soSelectAddFc() {
+            let vm = this;
+            if (vm.soAdd.name && vm.soAdd.icon && vm.soAdd.linkHead) {
+                vm.so.push(vm.soAdd);
+                vm.soAdd = {
+                    name: '',
+                    icon: '',
+                    linkHead: ''
+                };
+                vm.$message.success("添加成功");
+                vm.saveStorage();
+                vm.soSelectAdd = false;
+            } else {
+                vm.$message.error("请填写全部选项");
+            }
+        },
+        // 获取网站列表
+        getLink() {
+            axios.get("http://192.168.1.110:8081/get_nav_link").then(res => {
+                if (res.status == 200) {
+                    this.LinkList = res.data.data;
+                }
+            }, err => {
+                console.log(err);
+            })
+        },
+        // 网站列表菜单
+        scrollMenu(index) {
+            // 需滚动的位置
+            let scrollHeight = 0;
+            // 获取各分类
+            let appListClass = document.querySelectorAll(".appListClass");
+            // 计算滚动高度
+            for (let i = 0; i < index; i++) {
+                scrollHeight += appListClass[i].clientHeight;
+            }
+            // 开始滚动
+            if (scrollHeight != 0) {
+                scrollHeight += 30;
+            }
+            document.querySelector(".appListBox").scrollTo({
+                top: scrollHeight,
+                behavior: "smooth"
+            });
+        },
+        // 滚动阴影
+        shadow() {
+            if (document.querySelector(".appListBox").scrollTop > 20) {
+                document.querySelector(".closeAppList").classList.add("closeAppListShadow");
+            } else {
+                document.querySelector(".closeAppList").classList.remove("closeAppListShadow");
+            }
+        },
         // Storage 操作
         saveStorage() {
             let vm = this;
@@ -307,6 +323,7 @@ new Vue({
                 soBoxlistShowNum: vm.soBoxlistShowNum, // 搜索结果数量
                 bgLink: vm.bgLink, // 背景图片外链
                 so: vm.so, // 搜索引擎
+                soIndex: vm.soIndex, // 当前选中的搜索引擎
                 soIndex: vm.soIndex, // 当前选中的搜索引擎
             }
             // 是否允许存入 Storage
@@ -318,17 +335,6 @@ new Vue({
                 // 存入 session
                 $stor.session.set("IceCream", saveData);
             }
-        },
-        // 网站导航
-        openAppList() {
-            let vm = this;
-            vm.openApp = !vm.openApp;
-
-        },
-        // 导航选择
-        selectLink() {
-            let vm =  this;
-            vm.soSelect = !vm.soSelect;
         },
     }
 })
