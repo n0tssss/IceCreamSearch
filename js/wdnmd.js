@@ -58,21 +58,23 @@ new Vue({
             let vm = this;
             let storageCache = $stor.storage.get("IceCream");
             let sessionCache = $stor.session.get("IceCream");
+            let cache;
             // 是否存在用户配置
             if (storageCache) {
+                cache = storageCache;
                 vm.initDialog = false;
                 vm.updateStorage = true;
-                vm.soBoxlistShowNum = storageCache.soBoxlistShowNum;
-                vm.bgLink = storageCache.bgLink;
-                vm.soIndex = storageCache.soIndex;
-                vm.so = storageCache.so;
             } else if (sessionCache) {
+                cache = sessionCache;
                 vm.initDialog = false;
                 vm.updateStorage = false;
-                vm.soBoxlistShowNum = sessionCache.soBoxlistShowNum;
-                vm.bgLink = sessionCache.bgLink;
-                vm.soIndex = sessionCache.soIndex;
-                vm.so = sessionCache.so;
+            }
+            if(cache) {
+                vm.soBoxlistShowNum = cache.soBoxlistShowNum;
+                vm.bgLink = cache.bgLink;
+                vm.soIndex = cache.soIndex;
+                vm.so = cache.so;
+                vm.bingIndex = cache.bingIndex;
             }
             this.saveStorage();
         },
@@ -280,7 +282,7 @@ new Vue({
         },
         // 获取网站列表
         getLink() {
-            axios.get("http://192.168.1.110:8081/get_nav_link").then(res => {
+            axios.get("http://192.168.1.104:8081/get_nav_link").then(res => {
                 if (res.status == 200) {
                     this.LinkList = res.data.data;
                 }
@@ -324,7 +326,7 @@ new Vue({
                 bgLink: vm.bgLink, // 背景图片外链
                 so: vm.so, // 搜索引擎
                 soIndex: vm.soIndex, // 当前选中的搜索引擎
-                soIndex: vm.soIndex, // 当前选中的搜索引擎
+                bingIndex: vm.bingIndex, // bing 背景当前显示
             }
             // 是否允许存入 Storage
             if (vm.updateStorage) {
