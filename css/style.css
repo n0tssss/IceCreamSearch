@@ -818,3 +818,18 @@ a:hover {
     width: 100%;
     height: 80%;
 }
+
+.el-drawer__body,
+.el-tabs,
+.el-tabs__content,
+.el-tab-pane {
+    height: 100%;
+}
+
+.el-tab-pane {
+    overflow-y: scroll;
+}
+
+.el-tab-pane>div:last-of-type {
+    margin-bottom: 100px;
+}

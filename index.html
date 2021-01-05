@@ -90,7 +90,7 @@
                     <img :src="so[soIndex].icon">
                 </div>
                 <!-- 搜索框本框 -->
-                <input type="text" id="soBoxtext" v-model="soBoxtext" placeholder="输入并搜索..." @focus="SoFocus(true)"
+                <input type="text" id="soBoxtext" v-model="soBoxtext" placeholder="搜点什么..." @focus="SoFocus(true)"
                     @blur="SoFocus(false)" @keyup="SoChange($event)">
             </div>
             <!-- 搜索结果 -->
@@ -194,16 +194,9 @@
                         <p class="h1">更新日志</p>
                         <div class="text">
                             <div>
-                                <p>2020-12-22</p>
+                                <p>2020-12-27</p>
                                 <ul>
-                                    <li>搜索功能已完善</li>
-                                    <li>搜索框右侧新增图标</li>
-                                    <li>搜索框聚焦效果增加</li>
-                                    <li>搜索结果动画增加</li>
-                                    <li>背景切换修复</li>
-                                    <li>背景接口失效会启用备用壁纸</li>
-                                    <li>背景外链链接存储</li>
-                                    <li>点击搜索功能</li>
+                                    <li>随机切换壁纸保存</li>
                                 </ul>
                             </div>
                             <div>

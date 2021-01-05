@@ -74,7 +74,6 @@ new Vue({
                 vm.bgLink = cache.bgLink;
                 vm.soIndex = cache.soIndex;
                 vm.so = cache.so;
-                vm.bingIndex = cache.bingIndex;
             }
             this.saveStorage();
         },
@@ -128,8 +127,6 @@ new Vue({
                         // 显示设定壁纸
                         vm.setNowBg(vm.bgLink);
                     }
-                }, err => {
-                    vm.error();
                 })
             } catch (err) {
                 vm.error();
@@ -156,11 +153,11 @@ new Vue({
             } else if (index == 2) {
                 // 随机 bing
                 if (vm.bingData.length != 0) {
-                    vm.bgLink = "";
                     if (vm.bingIndex == vm.bingData.images.length - 1) {
                         vm.bingIndex = -1;
                     }
-                    vm.setNowBg("https://cn.bing.com/" + vm.bingData.images[++vm.bingIndex].url);
+                    vm.bgLink = "https://cn.bing.com/" + vm.bingData.images[++vm.bingIndex].url;
+                    vm.setNowBg(vm.bgLink);
                     this.saveStorage();
                 } else {
                     this.getBing();
@@ -183,6 +180,7 @@ new Vue({
             bgBox.style.backgroundSize = "cover";
             bgBox.style.backgroundPosition = "center";
             bgBox.style.backgroundAttachment = "fixed";
+            this.saveStorage();
         },
         // 一言API
         gethitokoto() {
@@ -326,7 +324,6 @@ new Vue({
                 bgLink: vm.bgLink, // 背景图片外链
                 so: vm.so, // 搜索引擎
                 soIndex: vm.soIndex, // 当前选中的搜索引擎
-                bingIndex: vm.bingIndex, // bing 背景当前显示
             }
             // 是否允许存入 Storage
             if (vm.updateStorage) {
