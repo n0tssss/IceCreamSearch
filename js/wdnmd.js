@@ -280,13 +280,13 @@ new Vue({
         },
         // 获取网站列表
         getLink() {
-            axios.get("http://192.168.1.104:8081/get_nav_link").then(res => {
-                if (res.status == 200) {
-                    this.LinkList = res.data.data;
-                }
-            }, err => {
-                console.log(err);
-            })
+            // axios.get("http://192.168.1.104:8081/get_nav_link").then(res => {
+            //     if (res.status == 200) {
+            //         this.LinkList = res.data.data;
+            //     }
+            // }, err => {
+            //     console.log(err);
+            // })
         },
         // 网站列表菜单
         scrollMenu(index) {
