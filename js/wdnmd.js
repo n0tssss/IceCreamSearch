@@ -107,7 +107,7 @@ new Vue({
         getBing(index) {
             let vm = this;
             try {
-                axios.post($stor.ServerBase, {
+                axios.post($stor.getAPI, {
                     "url": "https://cn.bing.com/HPImageArchive.aspx",
                     "format": "js",
                     "idx": 0,
@@ -127,6 +127,8 @@ new Vue({
                         // 显示设定壁纸
                         vm.setNowBg(vm.bgLink);
                     }
+                }, err => {
+                    vm.error();
                 })
             } catch (err) {
                 vm.error();
@@ -280,13 +282,13 @@ new Vue({
         },
         // 获取网站列表
         getLink() {
-            // axios.get("http://192.168.1.104:8081/get_nav_link").then(res => {
-            //     if (res.status == 200) {
-            //         this.LinkList = res.data.data;
-            //     }
-            // }, err => {
-            //     console.log(err);
-            // })
+            axios.get($stor.ServerBase + "/get_nav_link").then(res => {
+                if (res.status == 200) {
+                    this.LinkList = res.data.data;
+                }
+            }, err => {
+                console.log(err);
+            })
         },
         // 网站列表菜单
         scrollMenu(index) {

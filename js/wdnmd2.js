@@ -2,8 +2,8 @@ let $stor = window.localStorage;
 let $sess = window.sessionStorage;
 
 export default {
-    ServerBase: 'https://api.xxgcteam.com/analysis',
-    // ServerBase: 'wdnmd',
+    getAPI: 'https://api.xxgcteam.com/cross/analysis',
+    ServerBase: 'https://api.xxgcteam.com/xxgcteam',
     storage: {
         set(value, params) {
             $stor.setItem(value, JSON.stringify(params));
