@@ -23,12 +23,12 @@
 
 *::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 *::-webkit-scrollbar-track {
     border-radius: 0;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 @media screen and (max-width: 425px) {
@@ -410,6 +410,10 @@ a:hover {
     cursor: pointer;
 }
 
+.optionIconNone {
+    display: none;
+}
+
 .el-icon-setting {
     display: block;
     color: rgba(255, 255, 255, .4);
@@ -560,6 +564,11 @@ a:hover {
     -ms-transition: all .3s;
     -o-transition: all .3s;
     z-index: 1;
+    overflow: hidden;
+}
+
+.footerNone {
+    display: none;
 }
 
 /* 左侧版权 */
@@ -902,11 +911,16 @@ a:hover {
         width: 50%;
         padding: 0 0 10px 10px;
     }
+
+    .appListBg {
+        background-color: rgba(0, 0, 0, .5);
+    }
 }
 
 @media screen and (max-width: 425px) {
     #soBox {
-        width: 90%;
+        width: 80%;
+        top: 25%;
     }
 
     .openAppList {

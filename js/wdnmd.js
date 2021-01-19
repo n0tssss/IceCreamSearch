@@ -249,7 +249,6 @@ new Vue({
         openAppList() {
             let vm = this;
             vm.openApp = !vm.openApp;
-
         },
         // 搜索引擎打开
         selectLink() {

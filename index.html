@@ -59,7 +59,7 @@
             </div>
 
             <!-- 页脚版权信息 -->
-            <div class="footer" v-if="saveData.footerText">
+            <div :class="{footer: true, footerNone: openApp}" v-if="saveData.footerText">
                 <div v-if="bingData.images">
                     <p>{{bingData.images[bingIndex].copyright}}</p>
                 </div>
@@ -140,7 +140,7 @@
         </el-dialog>
 
         <!-- 设置按钮 -->
-        <div class="optionIcon" @click="leftBar = true">
+        <div :class="{optionIcon: true, optionIconNone: openApp}" @click="leftBar = true">
             <i class="el-icon-setting"></i>
         </div>
 
