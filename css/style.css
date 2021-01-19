@@ -872,12 +872,20 @@ a:hover {
 
 /* 自适应 */
 @media screen and (max-width: 980px) {
+    .el-dialog {
+        width: 50% !important;
+    }
+
     #soBox {
         width: 70%;
     }
 }
 
 @media screen and (max-width: 650px) {
+    .el-dialog {
+        width: 70% !important;
+    }
+
     #soBox {
         width: 80%;
     }
