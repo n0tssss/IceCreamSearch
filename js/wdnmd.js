@@ -36,7 +36,7 @@ new Vue({
             linkHead: 'http://www.goole.com/search?q='
         },
         ],
-        soIndex: 1, // 当前选中的搜索引擎
+        soIndex: 0, // 当前选中的搜索引擎
         soSelect: false, // 选择引擎界面是否打开
         soSelectAdd: false, // 添加搜索引擎界面是否打开
         // 准备添加的搜索引擎
