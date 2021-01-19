@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
-    <title>IceCream</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <title>IceCream | 简约且有个性的导航</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
@@ -54,18 +54,18 @@
                         </div>
                     </div>
                     <!-- 撑开底部 -->
-                    <div class="Boom"></div>
+                    <div class="Boom">没有更多内容啦！</div>
                 </div>
             </div>
 
             <!-- 页脚版权信息 -->
-            <div class="footer">
+            <div class="footer" v-if="saveData.footerText">
+                <div v-if="bingData.images">
+                    <p>{{bingData.images[bingIndex].copyright}}</p>
+                </div>
                 <div>
                     <p>© 2020 YYTL | THEME MADE BY <a href="https://n0ts.cn">N0ts</a></p>
                     <p><a href="http://beian.miit.gov.cn">湘ICP备xxxxxx号</a></p>
-                </div>
-                <div v-if="bingData.images">
-                    <p>{{bingData.images[bingIndex].copyright}}</p>
                 </div>
             </div>
         </div>
@@ -87,7 +87,7 @@
                 <i class="el-icon-search rightIcon" @click="goBaidu"></i>
                 <!-- 左侧搜索引擎图标 -->
                 <div class="soImg" @click="selectLink">
-                    <img :src="so[soIndex].icon">
+                    <img :src="saveData.so[saveData.soIndex].icon">
                 </div>
                 <!-- 搜索框本框 -->
                 <input type="text" id="soBoxtext" v-model="soBoxtext" placeholder="搜点什么..." @focus="SoFocus(true)"
@@ -100,8 +100,8 @@
 
             <!-- 搜索引擎切换 -->
             <div :class="{soSelectList: true, soSelectListShow: soSelect}">
-                <div class="soSelect" v-for="(item, index) in so">
-                    <div :class="{active: index == soIndex}" @click="soSelect1(index)" @contextmenu.prevent="">
+                <div class="soSelect" v-for="(item, index) in saveData.so">
+                    <div :class="{active: index == saveData.soIndex}" @click="soSelect1(index)" @contextmenu.prevent="">
                         <img :src="item.icon">
                         <p>{{item.name}}</p>
                     </div>
@@ -146,6 +146,8 @@
 
         <!-- 侧边菜单 -->
         <el-drawer :visible.sync="leftBar" :with-header="false" direction="ltr">
+            <!-- 关闭按钮 -->
+            <i class="closeTab el-icon-close" @click="leftBar = false"></i>
             <el-tabs v-model="tabsActive">
                 <el-tab-pane label="基本设置" name="option">
                     <div class="tabBox">
@@ -154,7 +156,7 @@
                             <p>将设置存储在本地</p>
                         </div>
                         <div class="tools">
-                            <el-switch style="display: block" v-model="updateStorage" active-color="#13ce66"
+                            <el-switch style="display: block" v-model="saveData.updateStorage" active-color="#13ce66"
                                 @change="StorageStatus">
                             </el-switch>
                         </div>
@@ -165,7 +167,7 @@
                             <p>搜索结果显示的数量（1 - 10）</p>
                         </div>
                         <div class="tools">
-                            <el-input-number v-model="soBoxlistShowNum" controls-position="right"
+                            <el-input-number v-model="saveData.soBoxlistShowNum" controls-position="right"
                                 @change="soBoxlistUpdate($event)" :min="0" :max="10"></el-input-number>
                         </div>
                     </div>
@@ -176,10 +178,21 @@
                             <p>允许上传网络图片，网络地址需为图片真实地址</p>
                         </div>
                         <div class="tools">
-                            <el-input v-model="bgLink" placeholder="请输入图片链接" @change="setBgImg"></el-input>
+                            <el-input v-model="saveData.bgLink" placeholder="请输入图片链接" @change="setBgImg"></el-input>
                             <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(1)">上传图片获取链接</el-button>
                             <el-button type="primary" icon="el-icon-refresh-right" @click="selectBgImg(2)">随机一张
                             </el-button>
+                        </div>
+                    </div>
+                    <div class="tabBox">
+                        <p class="h1">底部文字显示</p>
+                        <div class="text">
+                            <p>是否显示底部文字</p>
+                        </div>
+                        <div class="tools">
+                            <el-switch style="display: block" v-model="saveData.footerText" active-color="#13ce66"
+                                @change="footerTextStatus">
+                            </el-switch>
                         </div>
                     </div>
                 </el-tab-pane>
@@ -193,6 +206,16 @@
                     <div class="tabBox updataInfo">
                         <p class="h1">更新日志</p>
                         <div class="text">
+                            <div>
+                                <p>2021-1-19</p>
+                                <ul>
+                                    <li>自适应完成</li>
+                                    <li>菜单新增关闭按钮</li>
+                                    <li>版权与图片信息文字位置更改</li>
+                                    <li>版权与图片信息文字可开关</li>
+                                    <li>数据结构代码优化</li>
+                                </ul>
+                            </div>
                             <div>
                                 <p>2020-12-27</p>
                                 <ul>

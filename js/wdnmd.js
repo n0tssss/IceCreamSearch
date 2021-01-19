@@ -4,39 +4,17 @@ new Vue({
     el: '#Search',
     data: {
         initDialog: true, // 初始化窗口显示
-        updateStorage: false, // 用户是否允许操作 Storage
         soBoxtextDom: document.querySelector("#soBoxtext"), // 输入框获取
         soBoxlistDom: document.querySelector("#soBoxlist"), // 结果获取
         soBoxtext: '', // 输入框内容
         soBoxlist: [], // 搜索结果
         soBoxlistShow: false, // 搜索结果显示
-        soBoxlistShowNum: 8, // 搜索结果数量
         leftBar: false, // 左侧菜单是否打开
         tabsActive: 'option', // 左侧菜单默认选择项
         bingData: [], // bing 背景数据
-        bgLink: '', // 背景图片链接
         bingIndex: 0, // bing 背景当前显示
         openApp: false, // 网站导航是否打开
-        // 链接数据
-        LinkList: [],
-        // 搜索引擎
-        so: [{
-            name: '百度',
-            icon: './images/baidu.png',
-            linkHead: 'https://www.baidu.com/s?wd='
-        },
-        {
-            name: '必应',
-            icon: './images/bing.png',
-            linkHead: 'https://cn.bing.com/search?q='
-        },
-        {
-            name: '谷歌',
-            icon: './images/google.png',
-            linkHead: 'http://www.goole.com/search?q='
-        },
-        ],
-        soIndex: 0, // 当前选中的搜索引擎
+        LinkList: [], // 链接数据
         soSelect: false, // 选择引擎界面是否打开
         soSelectAdd: false, // 添加搜索引擎界面是否打开
         // 准备添加的搜索引擎
@@ -45,6 +23,31 @@ new Vue({
             icon: 'https://www.baidu.com/favicon.ico',
             linkHead: 'https://www.baidu.com/s?wd='
         },
+        // 会存储的数据
+        saveData: {
+            updateStorage: false, // 用户是否允许操作 Storage
+            soBoxlistShowNum: 8, // 搜索结果数量
+            bgLink: '', // 背景图片链接
+            soIndex: 0, // 当前选中的搜索引擎
+            footerText: true, // 底部文字显示
+            // 搜索引擎
+            so: [{
+                    name: '百度',
+                    icon: './images/baidu.png',
+                    linkHead: 'https://www.baidu.com/s?wd='
+                },
+                {
+                    name: '必应',
+                    icon: './images/bing.png',
+                    linkHead: 'https://cn.bing.com/search?q='
+                },
+                {
+                    name: '谷歌',
+                    icon: './images/google.png',
+                    linkHead: 'http://www.goole.com/search?q='
+                },
+            ],
+        }
     },
     created() {
         this.initWindow(); // 初始化
@@ -63,17 +66,14 @@ new Vue({
             if (storageCache) {
                 cache = storageCache;
                 vm.initDialog = false;
-                vm.updateStorage = true;
+                vm.saveData.updateStorage = true;
             } else if (sessionCache) {
                 cache = sessionCache;
                 vm.initDialog = false;
-                vm.updateStorage = false;
+                vm.saveData.updateStorage = false;
             }
-            if(cache) {
-                vm.soBoxlistShowNum = cache.soBoxlistShowNum;
-                vm.bgLink = cache.bgLink;
-                vm.soIndex = cache.soIndex;
-                vm.so = cache.so;
+            if (cache) {
+                vm.saveData = cache;
             }
             this.saveStorage();
         },
@@ -82,10 +82,10 @@ new Vue({
             let vm = this;
             vm.initDialog = false;
             if (b) {
-                vm.updateStorage = true;
+                vm.saveData.updateStorage = true;
                 vm.$message.success("已开启本地存储设置");
             } else {
-                vm.updateStorage = false;
+                vm.saveData.updateStorage = false;
                 $stor.storage.remove("IceCream");
                 vm.$message.warning("已关闭本地存储设置，设置里面还可以开启哦");
             }
@@ -97,7 +97,7 @@ new Vue({
         // 本地存储开关
         StorageStatus() {
             let vm = this;
-            if (vm.updateStorage) {
+            if (vm.saveData.updateStorage) {
                 vm.initDialogClose(true);
             } else {
                 vm.initDialogClose(false);
@@ -118,14 +118,13 @@ new Vue({
                         vm.bingData = res.data;
                     }
                     // 如果未设定则显示 bing 壁纸
-                    if (vm.bgLink == "") {
-                        vm.bgLink = "";
+                    if (vm.saveData.bgLink == "") {
                         vm.bingIndex = index - 1;
                         let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
                         vm.setNowBg(bing);
                     } else {
                         // 显示设定壁纸
-                        vm.setNowBg(vm.bgLink);
+                        vm.setNowBg(vm.saveData.bgLink);
                     }
                 }, err => {
                     vm.error();
@@ -139,10 +138,10 @@ new Vue({
             let vm = this;
             // 如果壁纸接口拉闸则调用本地背景
             this.$message.error("壁纸有点脾气罢工了，请联系网站管理员查看");
-            if (vm.bgLink == "") {
+            if (vm.saveData.bgLink == "") {
                 vm.setNowBg("./errorBg.jpg");
             } else {
-                vm.setNowBg(vm.bgLink);
+                vm.setNowBg(vm.saveData.bgLink);
             }
         },
         // 背景图片设置
@@ -158,8 +157,8 @@ new Vue({
                     if (vm.bingIndex == vm.bingData.images.length - 1) {
                         vm.bingIndex = -1;
                     }
-                    vm.bgLink = "https://cn.bing.com/" + vm.bingData.images[++vm.bingIndex].url;
-                    vm.setNowBg(vm.bgLink);
+                    vm.saveData.bgLink = "https://cn.bing.com/" + vm.bingData.images[++vm.bingIndex].url;
+                    vm.setNowBg(vm.saveData.bgLink);
                     this.saveStorage();
                 } else {
                     this.getBing();
@@ -168,12 +167,13 @@ new Vue({
         },
         // 链接设置
         setBgImg() {
-            if (this.bgLink) {
-                this.setNowBg(this.bgLink);
+            let vm = this;
+            if (vm.saveData.bgLink) {
+                vm.setNowBg(vm.saveData.bgLink);
             } else {
-                this.getBing(1);
+                vm.getBing(1);
             }
-            this.saveStorage();
+            vm.saveStorage();
         },
         // 设置 url 背景
         setNowBg(url) {
@@ -233,7 +233,7 @@ new Vue({
         goBaidu() {
             let vm = this;
             if (vm.soBoxtext) {
-                window.open(vm.so[vm.soIndex].linkHead + vm.soBoxtext)
+                window.open(vm.saveData.so[vm.saveData.soIndex].linkHead + vm.soBoxtext)
             } else {
                 vm.$message("您还没输入内容呢");
             }
@@ -241,8 +241,8 @@ new Vue({
         // 搜索框数量设置
         soBoxlistUpdate(value) {
             let vm = this;
-            vm.soBoxlistShowNum = value;
-            vm.$message.success(`设置成功，当前显示${this.soBoxlistShowNum}个！`);
+            vm.saveData.soBoxlistShowNum = value;
+            vm.$message.success(`设置成功，当前显示${vm.saveData.soBoxlistShowNum}个！`);
             vm.saveStorage();
         },
         // 网站导航
@@ -260,14 +260,14 @@ new Vue({
         // 搜索引擎选择
         soSelect1(index) {
             let vm = this;
-            vm.soIndex = index;
+            vm.saveData.soIndex = index;
             vm.saveStorage();
         },
         // 搜索框引擎添加 || 删除
         soSelectAddFc() {
             let vm = this;
             if (vm.soAdd.name && vm.soAdd.icon && vm.soAdd.linkHead) {
-                vm.so.push(vm.soAdd);
+                vm.saveData.so.push(vm.soAdd);
                 vm.soAdd = {
                     name: '',
                     icon: '',
@@ -317,24 +317,27 @@ new Vue({
                 document.querySelector(".closeAppList").classList.remove("closeAppListShadow");
             }
         },
+        // 底部文字是否显示
+        footerTextStatus() {
+            let vm = this;
+            if (vm.saveData.footerText) {
+                vm.$message.success("底部文字已开启");
+            } else {
+                vm.$message.warning("底部文字已关闭");
+            }
+            vm.saveStorage();
+        },
         // Storage 操作
         saveStorage() {
             let vm = this;
-            let saveData = {
-                updateStorage: vm.updateStorage, // 用户是否允许操作 Storage
-                soBoxlistShowNum: vm.soBoxlistShowNum, // 搜索结果数量
-                bgLink: vm.bgLink, // 背景图片外链
-                so: vm.so, // 搜索引擎
-                soIndex: vm.soIndex, // 当前选中的搜索引擎
-            }
             // 是否允许存入 Storage
-            if (vm.updateStorage) {
-                $stor.storage.set("IceCream", saveData);
+            if (vm.saveData.updateStorage) {
+                $stor.storage.set("IceCream", vm.saveData);
             }
             // 初始化后允许存入
             if (!vm.initDialog) {
                 // 存入 session
-                $stor.session.set("IceCream", saveData);
+                $stor.session.set("IceCream", vm.saveData);
             }
         },
     }
