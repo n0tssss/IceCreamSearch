@@ -615,7 +615,7 @@ a:hover {
 }
 
 .openAppListShow {
-    height: 0;
+    height: 0 !important;
 }
 
 @keyframes openApp {
@@ -909,10 +909,6 @@ a:hover {
     .el-drawer__body {
         width: 100% !important;
         min-width: 0;
-    }
-
-    .el-tabs {
-        padding: 20px 5px;
     }
 
     .el-tabs__item {
