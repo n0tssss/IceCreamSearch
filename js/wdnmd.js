@@ -44,7 +44,7 @@ new Vue({
                 {
                     name: '谷歌',
                     icon: './images/google.png',
-                    linkHead: 'http://www.goole.com/search?q='
+                    linkHead: 'https://www.google.com/search?q='
                 },
             ],
         }
@@ -233,6 +233,7 @@ new Vue({
         goBaidu() {
             let vm = this;
             if (vm.soBoxtext) {
+                console.log(vm.saveData.so[vm.saveData.soIndex].linkHead);
                 window.open(vm.saveData.so[vm.saveData.soIndex].linkHead + vm.soBoxtext)
             } else {
                 vm.$message("您还没输入内容呢");
@@ -250,11 +251,10 @@ new Vue({
             let vm = this;
             vm.openApp = !vm.openApp;
         },
-        // 搜索引擎打开
+        // 搜索引擎打开 || 关闭
         selectLink() {
             let vm = this;
             vm.soSelect = !vm.soSelect;
-            vm.saveStorage();
         },
         // 搜索引擎选择
         soSelect1(index) {
