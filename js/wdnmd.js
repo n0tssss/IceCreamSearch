@@ -107,15 +107,20 @@ new Vue({
         getBing(index) {
             let vm = this;
             try {
-                axios.post($stor.getAPI, {
-                    "url": "https://cn.bing.com/HPImageArchive.aspx",
-                    "format": "js",
-                    "idx": 0,
-                    "n": 8,
-                    "mkt": "zh-CN"
+                https://cors.lovewml.cn/cors//
+                axios.post("https://cors.lovewml.cn/cors", {
+                    type: "get",
+                    url: "https://cn.bing.com/HPImageArchive.aspx",
+                    data: {
+                        "format": "js", 
+                        "idx": 0,
+                        "n": 1,
+                        "mkt": "zh-CN"
+                    }
                 }).then(res => {
+                    console.log(res);
                     if (res.status == 200) {
-                        vm.bingData = res.data;
+                        vm.bingData = res.data.data;
                     }
                     // 如果未设定则显示 bing 壁纸
                     if (vm.saveData.bgLink == "") {
