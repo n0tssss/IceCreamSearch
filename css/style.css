@@ -55,6 +55,10 @@ a:hover {
     color: #2a787a;
 }
 
+[v-cloak] {
+    display: none;
+}
+
 /* 统一过渡 */
 a,
 #soBox,
