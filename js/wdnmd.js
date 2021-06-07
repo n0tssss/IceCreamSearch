@@ -325,6 +325,7 @@ new Vue({
         },
         // 网站导航
         openAppList() {
+            return this.$message.warning("菜单正在维护中！耐心等等啦！");
             let vm = this;
             vm.openApp = !vm.openApp;
         },
