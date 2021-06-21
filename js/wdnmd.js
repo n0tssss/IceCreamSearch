@@ -307,7 +307,7 @@ new Vue({
                 // 动态创建script标签
                 let oScript = document.createElement("script");
                 oScript.src = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=" +
-                    escape(vm.soBoxtext) +
+                    encodeURIComponent(vm.soBoxtext) +
                     "&cb=callback";
                 // 添加链接及回调函数
                 document.body.appendChild(oScript);
@@ -318,7 +318,7 @@ new Vue({
         goBaidu() {
             let vm = this;
             if (vm.soBoxtext) {
-                window.open(vm.saveData.so[vm.saveData.soIndex].linkHead + escape(vm.soBoxtext));
+                window.open(vm.saveData.so[vm.saveData.soIndex].linkHead + encodeURIComponent(vm.soBoxtext));
             } else {
                 vm.$message("您还没输入内容呢");
             }
