@@ -14,7 +14,7 @@
     <!-- 主体框架 -->
     <div id="Search" v-cloak>
         <!-- Bing今日壁纸 -->
-        <div class="bingBg">
+        <div class="bingBg" ref="bingBg">
             <!-- 网站列表打开 -->
             <div :class="{openAppList: true, openAppListShow: openApp}" @click="openAppList">
                 <i class="el-icon-arrow-up"></i>
@@ -24,7 +24,7 @@
                 <!-- 毛玻璃背景 -->
                 <div class="appListBg"></div>
                 <!-- 关闭按钮 -->
-                <div class="closeAppList" @click="openAppList">
+                <div class="closeAppList" @click="openAppList" ref="closeAppList">
                     <i class="el-icon-arrow-down"></i>
                 </div>
                 <!-- 分类菜单 -->
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <!-- 分类框架 -->
-                <div class="appListBox" @scroll="shadow">
+                <div class="appListBox" @scroll="shadow" ref="appListBox">
                     <!-- 各种分类 -->
                     <div class="appListClass" v-for="(item, index) in LinkList" :key="index">
                         <!-- 分类标题 -->
@@ -82,7 +82,7 @@
         <!-- 搜索框 -->
         <div id="soBox" :class="{soBoxtop: openApp}">
             <!-- 主体框框 -->
-            <div class="soBoxtext">
+            <div class="soBoxtext" ref="soBoxtext">
                 <!-- 右侧搜索图标 -->
                 <i class="el-icon-search rightIcon" @click="goBaidu"></i>
                 <!-- 左侧搜索引擎图标 -->
@@ -94,8 +94,8 @@
                     @blur="SoFocus(false)" @keyup="SoChange($event)">
             </div>
             <!-- 搜索结果 -->
-            <div class="soBoxlist">
-                <div id="soBoxlist"></div>
+            <div class="soBoxlist" ref="soBoxlist">
+                <div id="soBoxlist" ref="soBoxlist2"></div>
             </div>
 
             <!-- 搜索引擎切换 -->
@@ -115,7 +115,7 @@
             </div>
 
             <!-- 一言 -->
-            <p id="hitokoto">:D 获取中...</p>
+            <p id="hitokoto" ref="hitokoto">:D 获取中...</p>
 
             <!-- <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=tv&skin=pitaya" frameborder="0" width="255" height="25" allowtransparency="true"></iframe> -->
         </div>

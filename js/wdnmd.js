@@ -4,8 +4,6 @@ new Vue({
     el: '#Search',
     data: {
         initDialog: true, // 初始化窗口显示
-        soBoxtextDom: document.querySelector("#soBoxtext"), // 输入框获取
-        soBoxlistDom: document.querySelector("#soBoxlist"), // 结果获取
         soBoxtext: '', // 输入框内容
         soBoxlist: [], // 搜索结果
         soBoxlistShow: false, // 搜索结果显示
@@ -88,6 +86,7 @@ new Vue({
                 log: [
                     "搜索特殊字符无效修复",
                     "自定义壁纸不显示图片信息修复",
+                    "元素获取代码优化",
                 ]
             }, {
                 time: "2021-6-4",
@@ -131,6 +130,8 @@ new Vue({
     },
     created() {
         this.initWindow(); // 初始化
+    },
+    mounted() {
         this.getBing(1); // bing 壁纸获取
         this.gethitokoto(); // 一言
         this.getLink(); // 获取网站列表
@@ -261,7 +262,7 @@ new Vue({
         },
         // 设置 url 背景
         setNowBg(url) {
-            let bgBox = document.querySelector(".bingBg");
+            let bgBox = this.$refs.bingBg;
             bgBox.style.background = `url(${url})`;
             bgBox.style.backgroundSize = "cover";
             bgBox.style.backgroundPosition = "center";
@@ -271,21 +272,21 @@ new Vue({
         // 一言API
         gethitokoto() {
             axios.get("https://v1.hitokoto.cn").then(res => {
-                document.querySelector("#hitokoto").innerText = res.data.hitokoto;
+                this.$refs.hitokoto.innerText = res.data.hitokoto;
             })
         },
         // 搜索框聚焦
         SoFocus(b) {
             this.soSelect = false;
             if (b) {
-                document.querySelector(".soBoxlist").classList.add("soBoxlistShow");
-                document.querySelector(".bingBg").classList.add("bingBgBlack");
-                document.querySelector(".soBoxtext").classList.add("soBoxtextFocus");
+                this.$refs.soBoxlist.classList.add("soBoxlistShow");
+                this.$refs.bingBg.classList.add("bingBgBlack");
+                this.$refs.soBoxtext.classList.add("soBoxtextFocus");
             } else {
-                document.querySelector(".bingBg").classList.remove("bingBgBlack");
-                document.querySelector(".soBoxtext").classList.remove("soBoxtextFocus");
+                this.$refs.bingBg.classList.remove("bingBgBlack");
+                this.$refs.soBoxtext.classList.remove("soBoxtextFocus");
                 setTimeout(() => {
-                    document.querySelector(".soBoxlist").classList.remove("soBoxlistShow");
+                    this.$refs.soBoxlist.classList.remove("soBoxlistShow");
                 }, 200);
             }
         },
@@ -293,10 +294,10 @@ new Vue({
         SoChange(e) {
             let vm = this;
             // 清空结果
-            document.querySelector("#soBoxlist").innerHTML = "";
+            this.$refs.soBoxlist2.innerHTML = "";
             // 没有内容则隐藏
             if (!vm.soBoxtext) {
-                document.querySelector(".soBoxlist").style.height = "0px";
+                this.$refs.soBoxlist.style.height = "0px";
             }
             // 回车跳转
             if (e.keyCode == 13) {
@@ -306,7 +307,7 @@ new Vue({
                 // 动态创建script标签
                 let oScript = document.createElement("script");
                 oScript.src = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=" +
-                    vm.soBoxtext +
+                    escape(vm.soBoxtext) +
                     "&cb=callback";
                 // 添加链接及回调函数
                 document.body.appendChild(oScript);
@@ -317,8 +318,6 @@ new Vue({
         goBaidu() {
             let vm = this;
             if (vm.soBoxtext) {
-                console.log(vm.saveData.so[vm.saveData.soIndex].linkHead);
-                console.log(escape(vm.soBoxtext));
                 window.open(vm.saveData.so[vm.saveData.soIndex].linkHead + escape(vm.soBoxtext));
             } else {
                 vm.$message("您还没输入内容呢");
@@ -390,17 +389,17 @@ new Vue({
             if (scrollHeight != 0) {
                 scrollHeight += 30;
             }
-            document.querySelector(".appListBox").scrollTo({
+            this.$refs.appListBox.scrollTo({
                 top: scrollHeight,
                 behavior: "smooth"
             });
         },
         // 滚动阴影
         shadow() {
-            if (document.querySelector(".appListBox").scrollTop > 20) {
-                document.querySelector(".closeAppList").classList.add("closeAppListShadow");
+            if (this.$refs.appListBox.scrollTop > 20) {
+                this.$refs.closeAppList.classList.add("closeAppListShadow");
             } else {
-                document.querySelector(".closeAppList").classList.remove("closeAppListShadow");
+                this.$refs.closeAppList.classList.remove("closeAppListShadow");
             }
         },
         // 底部文字是否显示
