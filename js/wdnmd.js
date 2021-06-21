@@ -84,6 +84,12 @@ new Vue({
         },
         // 更新日志
         updateLog: [{
+                time: "2021-6-21",
+                log: [
+                    "搜索特殊字符无效修复",
+                    "自定义壁纸不显示图片信息修复",
+                ]
+            }, {
                 time: "2021-6-4",
                 log: [
                     "壁纸修复",
@@ -181,31 +187,31 @@ new Vue({
         getBing(index) {
             let vm = this;
             try {
-                axios.post($stor.getAPI, {
-                    "url": "https://cn.bing.com/HPImageArchive.aspx",
-                    "type": "get",
-                    "data": {
-                        "format": "js",
-                        "idx": 0,
-                        "n": 8,
-                        "mkt": "zh-CN"
-                    }
-                }).then(res => {
-                    if (res.data.msg == 200) {
-                        vm.bingData = res.data.data;
-                    }
-                    // 如果未设定则显示 bing 壁纸
-                    if (vm.saveData.bgLink == "") {
+                // 如果未设定则显示 bing 壁纸
+                if (vm.saveData.bgLink == "") {
+                    axios.post($stor.getAPI, {
+                        "url": "https://cn.bing.com/HPImageArchive.aspx",
+                        "type": "get",
+                        "data": {
+                            "format": "js",
+                            "idx": 0,
+                            "n": 8,
+                            "mkt": "zh-CN"
+                        }
+                    }).then(res => {
+                        if (res.data.msg == 200) {
+                            vm.bingData = res.data.data;
+                        }
                         vm.bingIndex = index - 1;
                         let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
                         vm.setNowBg(bing);
-                    } else {
-                        // 显示设定壁纸
-                        vm.setNowBg(vm.saveData.bgLink);
-                    }
-                }, err => {
-                    vm.error();
-                })
+                    }, err => {
+                        vm.error();
+                    })
+                } else {
+                    // 显示设定壁纸
+                    vm.setNowBg(vm.saveData.bgLink);
+                }
             } catch (err) {
                 vm.error();
             }
@@ -247,6 +253,7 @@ new Vue({
             let vm = this;
             if (vm.saveData.bgLink) {
                 vm.setNowBg(vm.saveData.bgLink);
+                vm.bingData = [];
             } else {
                 vm.getBing(1);
             }
@@ -311,7 +318,8 @@ new Vue({
             let vm = this;
             if (vm.soBoxtext) {
                 console.log(vm.saveData.so[vm.saveData.soIndex].linkHead);
-                window.open(vm.saveData.so[vm.saveData.soIndex].linkHead + vm.soBoxtext)
+                console.log(escape(vm.soBoxtext));
+                window.open(vm.saveData.so[vm.saveData.soIndex].linkHead + escape(vm.soBoxtext));
             } else {
                 vm.$message("您还没输入内容呢");
             }
