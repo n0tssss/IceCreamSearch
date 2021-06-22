@@ -12,6 +12,7 @@ new Vue({
         bingData: [], // bing 背景数据
         bingIndex: 0, // bing 背景当前显示
         openApp: false, // 网站导航是否打开
+        searchBoxFocus: false, // 搜索框是否聚焦
         time: new Date().getFullYear(),
         LinkList: [{
                 navName: "实用工具1",
@@ -135,6 +136,7 @@ new Vue({
         this.getBing(1); // bing 壁纸获取
         this.gethitokoto(); // 一言
         this.getLink(); // 获取网站列表
+        this.checkRes(); // 上下键切换结果
     },
     methods: {
         // 初始化
@@ -279,10 +281,12 @@ new Vue({
         SoFocus(b) {
             this.soSelect = false;
             if (b) {
+                this.searchBoxFocus = true;
                 this.$refs.soBoxlist.classList.add("soBoxlistShow");
                 this.$refs.bingBg.classList.add("bingBgBlack");
                 this.$refs.soBoxtext.classList.add("soBoxtextFocus");
             } else {
+                this.searchBoxFocus = false;
                 this.$refs.bingBg.classList.remove("bingBgBlack");
                 this.$refs.soBoxtext.classList.remove("soBoxtextFocus");
                 setTimeout(() => {
@@ -293,6 +297,13 @@ new Vue({
         // 输入框内容处理
         SoChange(e) {
             let vm = this;
+            // 获取键位
+            let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
+            // 无视上下按键
+            if (e1 && e1.keyCode == 38 || e1 && e1.keyCode == 40) {
+                return;
+            }
+
             // 清空结果
             this.$refs.soBoxlist2.innerHTML = "";
             // 没有内容则隐藏
@@ -411,6 +422,25 @@ new Vue({
                 vm.$message.warning("底部文字已关闭");
             }
             vm.saveStorage();
+        },
+        // 上下键切换结果
+        checkRes() {
+            document.onkeydown = (e) => {
+                // 是否搜索
+                if(!this.searchBoxFocus) {
+                    return;
+                }
+                // 是否存在搜索结果
+                let res = this.$refs.soBoxlist2;
+                // 获取键位
+                let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
+                // 上下键检测
+                if (e1 && e1.keyCode == 38) {
+                    // 按下上箭头
+                } else if (e1 && e1.keyCode == 40) {
+                    // 按下下箭头
+                }
+            }
         },
         // Storage 操作
         saveStorage() {
