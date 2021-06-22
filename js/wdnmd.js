@@ -188,31 +188,31 @@ new Vue({
         getBing(index) {
             let vm = this;
             try {
-                // 如果未设定则显示 bing 壁纸
-                if (vm.saveData.bgLink == "") {
-                    axios.post($stor.getAPI, {
-                        "url": "https://cn.bing.com/HPImageArchive.aspx",
-                        "type": "get",
-                        "data": {
-                            "format": "js",
-                            "idx": 0,
-                            "n": 8,
-                            "mkt": "zh-CN"
-                        }
-                    }).then(res => {
-                        if (res.data.msg == 200) {
-                            vm.bingData = res.data.data;
-                        }
+                axios.post($stor.getAPI, {
+                    "url": "https://cn.bing.com/HPImageArchive.aspx",
+                    "type": "get",
+                    "data": {
+                        "format": "js",
+                        "idx": 0,
+                        "n": 8,
+                        "mkt": "zh-CN"
+                    }
+                }).then(res => {
+                    if (res.data.msg == 200) {
+                        vm.bingData = res.data.data;
+                    }
+                    // 如果未设定则显示 bing 壁纸
+                    if (vm.saveData.bgLink == "") {
                         vm.bingIndex = index - 1;
                         let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
                         vm.setNowBg(bing);
-                    }, err => {
-                        vm.error();
-                    })
-                } else {
-                    // 显示设定壁纸
-                    vm.setNowBg(vm.saveData.bgLink);
-                }
+                    } else {
+                        // 显示设定壁纸
+                        vm.setNowBg(vm.saveData.bgLink);
+                    }
+                }, err => {
+                    vm.error();
+                })
             } catch (err) {
                 vm.error();
             }
