@@ -427,7 +427,7 @@ new Vue({
         checkRes() {
             document.onkeydown = (e) => {
                 // 是否搜索
-                if(!this.searchBoxFocus) {
+                if (!this.searchBoxFocus) {
                     return;
                 }
                 // 是否存在搜索结果
