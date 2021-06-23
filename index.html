@@ -229,21 +229,34 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.min.js"></script>
     <script src="./js/wdnmd.js" type="module"></script>
     <script>
+        // 配置
+        let ice;
+        // li 高度
+        let listHeight = 40;
+        // 结果高度
+        let resultHeight = 0;
+        // 搜索引擎获取
+        let so;
+        // 结果小 li
+        let oLi;
+
         // 百度搜索框回调
         function callback(data) {
-            // li 高度
-            let listHeight = 40;
-            // 结果高度
-            let resultHeight = 0;
+            // 获取设置
+            ice = JSON.parse(window.sessionStorage.getItem("IceCream"))
+            so = ice.so[ice.soIndex].linkHead;
+
+            // 清空原本内容
+            soBoxlist.innerHTML = "";
+
+            // 遍历输出结果
             for (let i = 0; i < data.s.length; i++) {
-                let ice = JSON.parse(window.sessionStorage.getItem("IceCream"));
                 // 超过预定数量跳出
-                if (i == ice.soBoxlistShowNum) {
+                if (i >= ice.soBoxlistShowNum) {
                     break;
                 }
-                let so = ice.so[ice.soIndex].linkHead;
                 // 结果 li 添加
-                let oLi = document.createElement("li");
+                oLi = document.createElement("li");
                 oLi.innerHTML = "<a target='_blank' href=\"" + so + "" + data.s[i] + "\">" + data.s[
                     i] + "</a>";
                 soBoxlist.appendChild(oLi);

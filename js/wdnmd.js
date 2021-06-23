@@ -14,6 +14,7 @@ new Vue({
         openApp: false, // 网站导航是否打开
         searchBoxFocus: false, // 搜索框是否聚焦
         time: new Date().getFullYear(),
+        searchSelectIndex: 0, // 搜索结果选中索引
         LinkList: [{
                 navName: "实用工具1",
                 links: [{
@@ -145,6 +146,7 @@ new Vue({
             let storageCache = $stor.storage.get("IceCream");
             let sessionCache = $stor.session.get("IceCream");
             let cache;
+
             // 是否存在用户配置
             if (storageCache) {
                 cache = storageCache;
@@ -155,6 +157,8 @@ new Vue({
                 vm.initDialog = false;
                 vm.saveData.updateStorage = false;
             }
+
+            // 没有配置则初始化
             if (cache) {
                 vm.saveData = cache;
             }
@@ -163,7 +167,9 @@ new Vue({
         // 本地存储修改
         initDialogClose(b) {
             let vm = this;
+
             vm.initDialog = false;
+
             if (b) {
                 vm.saveData.updateStorage = true;
                 vm.$message.success("已开启本地存储设置");
@@ -180,6 +186,7 @@ new Vue({
         // 本地存储开关
         StorageStatus() {
             let vm = this;
+
             if (vm.saveData.updateStorage) {
                 vm.initDialogClose(true);
             } else {
@@ -189,6 +196,7 @@ new Vue({
         // bing 壁纸
         getBing(index) {
             let vm = this;
+
             try {
                 axios.post($stor.getAPI, {
                     "url": "https://cn.bing.com/HPImageArchive.aspx",
@@ -203,6 +211,7 @@ new Vue({
                     if (res.data.msg == 200) {
                         vm.bingData = res.data.data;
                     }
+
                     // 如果未设定则显示 bing 壁纸
                     if (vm.saveData.bgLink == "") {
                         vm.bingIndex = index - 1;
@@ -222,6 +231,7 @@ new Vue({
         // 壁纸错误
         error() {
             let vm = this;
+
             // 如果壁纸接口拉闸则调用本地背景
             this.$message.error("壁纸有点脾气罢工了，请联系网站管理员查看");
             if (vm.saveData.bgLink == "") {
@@ -234,6 +244,7 @@ new Vue({
         // 判断选择
         selectBgImg(index) {
             let vm = this;
+
             // 打开外链网站
             if (index == 1) {
                 window.open("https://imgchr.com/", "_blank");
@@ -297,8 +308,10 @@ new Vue({
         // 输入框内容处理
         SoChange(e) {
             let vm = this;
+
             // 获取键位
             let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
+
             // 无视上下按键
             if (e1 && e1.keyCode == 38 || e1 && e1.keyCode == 40) {
                 return;
@@ -306,6 +319,7 @@ new Vue({
 
             // 清空结果
             this.$refs.soBoxlist2.innerHTML = "";
+
             // 没有内容则隐藏
             if (!vm.soBoxtext) {
                 this.$refs.soBoxlist.style.height = "0px";
@@ -320,6 +334,7 @@ new Vue({
                 oScript.src = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=" +
                     encodeURIComponent(vm.soBoxtext) +
                     "&cb=callback";
+
                 // 添加链接及回调函数
                 document.body.appendChild(oScript);
                 document.body.removeChild(oScript);
@@ -390,12 +405,15 @@ new Vue({
         scrollMenu(index) {
             // 需滚动的位置
             let scrollHeight = 0;
+
             // 获取各分类
             let appListClass = document.querySelectorAll(".appListClass");
+
             // 计算滚动高度
             for (let i = 0; i < index; i++) {
                 scrollHeight += appListClass[i].clientHeight;
             }
+
             // 开始滚动
             if (scrollHeight != 0) {
                 scrollHeight += 30;
@@ -425,18 +443,26 @@ new Vue({
         },
         // 上下键切换结果
         checkRes() {
+            // 搜索结果
+            let res;
+            // 键位
+            let e1;
             document.onkeydown = (e) => {
                 // 是否搜索
                 if (!this.searchBoxFocus) {
                     return;
                 }
-                // 是否存在搜索结果
-                let res = this.$refs.soBoxlist2;
-                // 获取键位
-                let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
+
+                // 搜索结果获取
+                res = this.$refs.soBoxlist2;
+                // 键位获取
+                e1 = e || event || window.event || arguments.callee.caller.arguments[0];
+
                 // 上下键检测
                 if (e1 && e1.keyCode == 38) {
                     // 按下上箭头
+                    console.log(this.$refs.soBoxlist2.children);
+                    this.searchSelectIndex++;
                 } else if (e1 && e1.keyCode == 40) {
                     // 按下下箭头
                 }
