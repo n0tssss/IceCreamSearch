@@ -329,7 +329,7 @@ new Vue({
             }
             // 回车跳转
             if (e.keyCode == 13) {
-                this.goBaidu();
+                return this.goBaidu();
             }
 
             // 搜索结果选中索引修改
