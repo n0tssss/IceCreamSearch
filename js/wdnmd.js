@@ -311,7 +311,6 @@ new Vue({
 
             // 获取键位
             let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
-
             // 无视上下按键
             if (e1 && e1.keyCode == 38 || e1 && e1.keyCode == 40) {
                 return;
@@ -328,16 +327,18 @@ new Vue({
             if (e.keyCode == 13) {
                 this.goBaidu();
             }
+            // 请求
             if (vm.soBoxtext) {
-                // 动态创建script标签
-                let oScript = document.createElement("script");
-                oScript.src = "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=" +
-                    encodeURIComponent(vm.soBoxtext) +
-                    "&cb=callback";
-
-                // 添加链接及回调函数
-                document.body.appendChild(oScript);
-                document.body.removeChild(oScript);
+                this.$http.jsonp(`https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${encodeURIComponent(vm.soBoxtext)}&cb=callback`, {
+                        jsonp: 'cb'
+                    })
+                    .then(res => {
+                        this.soBoxlist = res.data.s;
+                        console.log(this.soBoxlist);
+                        // TODO 后端搜索数据处理暂未完成
+                    }, err => {
+                        console.log(err);
+                    });
             }
         },
         // 回车跳转
@@ -447,6 +448,7 @@ new Vue({
             let res;
             // 键位
             let e1;
+
             document.onkeydown = (e) => {
                 // 是否搜索
                 if (!this.searchBoxFocus) {
@@ -461,7 +463,8 @@ new Vue({
                 // 上下键检测
                 if (e1 && e1.keyCode == 38) {
                     // 按下上箭头
-                    console.log(this.$refs.soBoxlist2.children);
+                    // console.log(this.$refs.soBoxlist2.children);
+                    console.log(this.soBoxlist);
                     this.searchSelectIndex++;
                 } else if (e1 && e1.keyCode == 40) {
                     // 按下下箭头
@@ -471,10 +474,12 @@ new Vue({
         // Storage 操作
         saveStorage() {
             let vm = this;
+
             // 是否允许存入 Storage
             if (vm.saveData.updateStorage) {
                 $stor.storage.set("IceCream", vm.saveData);
             }
+
             // 初始化后允许存入
             if (!vm.initDialog) {
                 // 存入 session
