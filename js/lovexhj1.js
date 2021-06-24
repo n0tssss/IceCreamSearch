@@ -504,6 +504,10 @@ new Vue({
                 }
             }
         },
+        // hover 搜索结果
+        hoverSearch() {
+            this.searchSelectIndex = -1;
+        },
         // Storage 操作
         saveStorage() {
             let vm = this;
