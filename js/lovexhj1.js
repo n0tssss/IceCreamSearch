@@ -15,7 +15,7 @@ new Vue({
         openApp: false, // 网站导航是否打开
         searchBoxFocus: false, // 搜索框是否聚焦
         time: new Date().getFullYear(),
-        searchSelectIndex: 0, // 搜索结果选中索引
+        searchSelectIndex: -1, // 搜索结果选中索引
         LinkList: [{
                 navName: "实用工具1",
                 links: [{
@@ -88,6 +88,7 @@ new Vue({
                 time: "2021-6-24",
                 log: [
                     "搜索引擎回调重写，性能优化MAX提升",
+                    "搜索结果支持上下键切换啦！",
                 ]
             }, {
                 time: "2021-6-21",
@@ -319,7 +320,7 @@ new Vue({
             let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
             // 无视上下按键
             if (e1 && e1.keyCode == 38 || e1 && e1.keyCode == 40) {
-                return;
+                return vm.soBoxtextCache = vm.soBoxtext;
             }
 
             // 没有内容则隐藏
@@ -330,6 +331,10 @@ new Vue({
             if (e.keyCode == 13) {
                 this.goBaidu();
             }
+
+            // 搜索结果选中索引修改
+            vm.searchSelectIndex = -1;
+
             // 请求
             if (vm.soBoxtext) {
                 vm.$http.jsonp(`https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${encodeURIComponent(vm.soBoxtext)}&cb=callback`, {
@@ -463,24 +468,39 @@ new Vue({
             let e1;
 
             document.onkeydown = (e) => {
+                let vm = this;
+
                 // 是否搜索
-                if (!this.searchBoxFocus) {
+                if (!vm.searchBoxFocus) {
                     return;
                 }
 
                 // 搜索结果获取
-                res = this.$refs.soBoxlist2;
+                res = vm.$refs.soBoxlist2;
                 // 键位获取
                 e1 = e || event || window.event || arguments.callee.caller.arguments[0];
 
                 // 上下键检测
                 if (e1 && e1.keyCode == 38) {
                     // 按下上箭头
-                    // console.log(this.$refs.soBoxlist2.children);
-                    console.log(this.soBoxlist);
-                    this.searchSelectIndex++;
+                    // 索引超出判断
+                    if (vm.searchSelectIndex == 0) {
+                        vm.searchSelectIndex = vm.soBoxlist.length - 1;
+                    } else {
+                        vm.searchSelectIndex--;
+                    }
+                    // 结果修改
+                    vm.soBoxtext = vm.soBoxlist[vm.searchSelectIndex];
                 } else if (e1 && e1.keyCode == 40) {
                     // 按下下箭头
+                    // 索引超出判断
+                    if (vm.searchSelectIndex == vm.soBoxlist.length - 1) {
+                        vm.searchSelectIndex = 0;
+                    } else {
+                        vm.searchSelectIndex++;
+                    }
+                    // 结果修改
+                    vm.soBoxtext = vm.soBoxlist[vm.searchSelectIndex];
                 }
             }
         },

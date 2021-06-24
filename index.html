@@ -97,7 +97,7 @@
             <div class="soBoxlist" ref="soBoxlist">
                 <ul ref="soBoxlist2">
                     <li v-for="(item, index) in soBoxlist" :key="index">
-                        <a :href="saveData.so[saveData.soIndex].linkHead + item" target="_blank">{{item}}</a>
+                        <a :href="saveData.so[saveData.soIndex].linkHead + item" target="_blank" :class="{active: searchSelectIndex == index}">{{item}}</a>
                     </li>
                 </ul>
             </div>
