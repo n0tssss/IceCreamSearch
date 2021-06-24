@@ -5,5 +5,9 @@
 # IceCreamSearch
 
 ### 介绍
-主打简约，视觉的一个工具导航
-正在开发中...
+
+简约风格的搜索主页，内置各类网址收藏，好看才是第一生产力！
+
+开发中... ...
+
+暂时预览地址：[IceCream | 简约至上](https://n0ts.gitee.io/icecreamsearch/)
