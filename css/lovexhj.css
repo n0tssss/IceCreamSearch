@@ -266,7 +266,6 @@ a,
     padding: 0 30px;
 }
 
-.soBoxlist li:hover,
 .soBoxlist .active {
     background-color: rgb(230, 230, 230);
     transform: scale(1.02);

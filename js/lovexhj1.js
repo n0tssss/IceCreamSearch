@@ -505,8 +505,8 @@ new Vue({
             }
         },
         // hover 搜索结果
-        hoverSearch() {
-            this.searchSelectIndex = -1;
+        hoverSearch(i) {
+            this.searchSelectIndex = i;
         },
         // Storage 操作
         saveStorage() {
