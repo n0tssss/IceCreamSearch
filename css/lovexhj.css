@@ -248,7 +248,7 @@ a,
 }
 
 /* 搜索结果列表 */
-#soBoxlist li {
+.soBoxlist li {
     list-style-type: none;
     width: 100%;
     line-height: 40px;
@@ -259,14 +259,14 @@ a,
     -o-transition: all .2s;
 }
 
-#soBoxlist li a {
+.soBoxlist a {
     display: block;
     width: 100%;
     height: 100%;
     padding: 0 30px;
 }
 
-#soBoxlist li:hover {
+.soBoxlist li:hover {
     background-color: rgb(230, 230, 230);
     transform: scale(1.02);
     -webkit-transform: scale(1.02);

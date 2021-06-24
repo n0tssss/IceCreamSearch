@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>IceCream | 简约至上</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/lovexhj.css">
 </head>
 
 <body>
@@ -95,9 +95,11 @@
             </div>
             <!-- 搜索结果 -->
             <div class="soBoxlist" ref="soBoxlist">
-                <div id="soBoxlist" ref="soBoxlist2">
-                    <!-- TODO 前端搜索结果还需要渲染数据 -->
-                </div>
+                <ul ref="soBoxlist2">
+                    <li v-for="(item, index) in soBoxlist" :key="index">
+                        <a :href="saveData.so[saveData.soIndex].linkHead + item" target="_blank">{{item}}</a>
+                    </li>
+                </ul>
             </div>
 
             <!-- 搜索引擎切换 -->
@@ -230,48 +232,7 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/vue-resource/1.5.3/vue-resource.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.min.js"></script>
-    <script src="./js/wdnmd.js" type="module"></script>
-    <!-- <script>
-        // 配置
-        let ice;
-        // li 高度
-        let listHeight = 40;
-        // 结果高度
-        let resultHeight = 0;
-        // 搜索引擎获取
-        let so;
-        // 结果小 li
-        let oLi;
-
-        // 百度搜索框回调
-        function callback(data) {
-            console.log(data);
-            // 获取设置
-            ice = JSON.parse(window.sessionStorage.getItem("IceCream"))
-            so = ice.so[ice.soIndex].linkHead;
-
-            // 清空原本内容
-            soBoxlist.innerHTML = "";
-            resultHeight = 0;
-
-            // 遍历输出结果
-            for (let i = 0; i < data.s.length; i++) {
-                // 超过预定数量跳出
-                if (i >= ice.soBoxlistShowNum) {
-                    break;
-                }
-                // 结果 li 添加
-                oLi = document.createElement("li");
-                oLi.innerHTML = "<a target='_blank' href=\"" + so + "" + data.s[i] + "\">" + data.s[
-                    i] + "</a>";
-                soBoxlist.appendChild(oLi);
-                // 结果高度计算
-                resultHeight += listHeight;
-            }
-            // 结果高度设置
-            document.querySelector(".soBoxlist").style.height = resultHeight + "px";
-        }
-    </script> -->
+    <script src="./js/lovexhj1.js" type="module"></script>
 </body>
 
 </html>

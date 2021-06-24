@@ -1,10 +1,11 @@
-import $stor from './wdnmd2.js'
+import $stor from './lovexhj2.js'
 
 new Vue({
     el: '#Search',
     data: {
         initDialog: true, // 初始化窗口显示
-        soBoxtext: '', // 输入框内容
+        soBoxtext: "", // 输入框内容
+        soBoxtextCache: "", // 输入框临时内容
         soBoxlist: [], // 搜索结果
         soBoxlistShow: false, // 搜索结果显示
         leftBar: false, // 左侧菜单是否打开
@@ -84,6 +85,11 @@ new Vue({
         },
         // 更新日志
         updateLog: [{
+                time: "2021-6-24",
+                log: [
+                    "搜索引擎回调重写，性能优化MAX提升",
+                ]
+            }, {
                 time: "2021-6-21",
                 log: [
                     "搜索特殊字符无效修复",
@@ -316,9 +322,6 @@ new Vue({
                 return;
             }
 
-            // 清空结果
-            this.$refs.soBoxlist2.innerHTML = "";
-
             // 没有内容则隐藏
             if (!vm.soBoxtext) {
                 this.$refs.soBoxlist.style.height = "0px";
@@ -329,13 +332,26 @@ new Vue({
             }
             // 请求
             if (vm.soBoxtext) {
-                this.$http.jsonp(`https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${encodeURIComponent(vm.soBoxtext)}&cb=callback`, {
+                vm.$http.jsonp(`https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${encodeURIComponent(vm.soBoxtext)}&cb=callback`, {
                         jsonp: 'cb'
                     })
                     .then(res => {
-                        this.soBoxlist = res.data.s;
-                        console.log(this.soBoxlist);
-                        // TODO 后端搜索数据处理暂未完成
+                        // 是否存在结果
+                        if (res.data.s.length == 0) {
+                            return;
+                        }
+                        // 数量超过时
+                        if (res.data.s.length >= vm.saveData.soBoxlistShowNum) {
+                            // 截取到搜索数量
+                            vm.soBoxlist = res.data.s.splice(0, vm.saveData.soBoxlistShowNum);
+                            // 设置结果高度
+                            vm.$refs.soBoxlist.style.height = vm.saveData.soBoxlistShowNum * 40 + "px";
+                        } else {
+                            // 获取结果
+                            vm.soBoxlist = res.data.s;
+                            // 设置结果高度
+                            vm.$refs.soBoxlist.style.height = vm.soBoxlist.length * 40 + "px";
+                        }
                     }, err => {
                         console.log(err);
                     });
@@ -360,19 +376,16 @@ new Vue({
         // 网站导航
         openAppList() {
             return this.$message.warning("菜单正在维护中！耐心等等啦！");
-            let vm = this;
-            vm.openApp = !vm.openApp;
+            this.openApp = !this.openApp;
         },
         // 搜索引擎打开 || 关闭
         selectLink() {
-            let vm = this;
-            vm.soSelect = !vm.soSelect;
+            this.soSelect = !this.soSelect;
         },
         // 搜索引擎选择
         soSelect1(index) {
-            let vm = this;
-            vm.saveData.soIndex = index;
-            vm.saveStorage();
+            this.saveData.soIndex = index;
+            this.saveStorage();
         },
         // 搜索框引擎添加 || 删除
         soSelectAddFc() {
