@@ -291,7 +291,7 @@ new Vue({
         },
         // 一言API
         gethitokoto() {
-            axios.get("https://v1.hitokoto.cn").then(res => {
+            axios.get("https://v1.hitokoto.cn?c=d&c=h&c=i&c=j&c=l").then(res => {
                 this.$refs.hitokoto.innerText = res.data.hitokoto;
             })
         },
