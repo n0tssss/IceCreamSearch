@@ -14,7 +14,36 @@ new Vue({
         bingData: [], // bing 背景数据
         bingIndex: 0, // bing 背景当前显示
         openApp: false, // 网站导航是否打开
-        LinkList: [], // 链接数据
+        time: new Date().getFullYear(),
+        LinkList: [{
+                navName: "实用工具1",
+                links: [{
+                        name: "名字",
+                        content: "介绍",
+                        img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
+                    },
+                    {
+                        name: "名字",
+                        content: "介绍",
+                        img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
+                    }
+                ]
+            },
+            {
+                navName: "实用工具2",
+                links: [{
+                        name: "名字",
+                        content: "介绍",
+                        img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
+                    },
+                    {
+                        name: "名字",
+                        content: "介绍",
+                        img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
+                    }
+                ]
+            }
+        ], // 链接数据
         soSelect: false, // 选择引擎界面是否打开
         soSelectAdd: false, // 添加搜索引擎界面是否打开
         // 准备添加的搜索引擎
@@ -47,7 +76,52 @@ new Vue({
                     linkHead: 'https://www.google.com/search?q='
                 },
             ],
-        }
+        },
+        // 关于
+        about: {
+            name: "IceCream",
+            context: "基于 Vue 与 ElementUI实现的导航，自带搜索功能以及各种实用网站导航，目前暂未完工，尽请期待..."
+        },
+        // 更新日志
+        updateLog: [{
+                time: "2021-6-4",
+                log: [
+                    "壁纸修复",
+                    "后端更换为Node.js",
+                    "移除了毛玻璃，优化流畅体验",
+                    "部分代码更新",
+                    "自适应更新",
+                ]
+            }, {
+                time: "2021-1-19",
+                log: [
+                    "自适应完成",
+                    "菜单新增关闭按钮",
+                    "版权与图片信息文字位置更改",
+                    "版权与图片信息文字可开关",
+                    "数据结构代码优化",
+                ]
+            },
+            {
+                time: "2020-12-27",
+                log: [
+                    "随机切换壁纸保存",
+                ]
+            },
+            {
+                time: "2020-12-22",
+                log: [
+                    "搜索功能已完善",
+                    "搜索框右侧新增图标",
+                    "搜索框聚焦效果增加",
+                    "搜索结果动画增加",
+                    "背景切换修复",
+                    "背景接口失效会启用备用壁纸",
+                    "背景外链链接存储",
+                    "点击搜索功能",
+                ]
+            }
+        ]
     },
     created() {
         this.initWindow(); // 初始化
@@ -286,6 +360,7 @@ new Vue({
         },
         // 获取网站列表
         getLink() {
+            return;
             axios.get($stor.ServerBase + "/get_nav_link").then(res => {
                 if (res.status == 200) {
                     this.LinkList = res.data.data;

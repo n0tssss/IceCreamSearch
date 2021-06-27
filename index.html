@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh_CN">
 
 <head>
     <meta charset="UTF-8">
@@ -64,8 +64,8 @@
                     <p>{{bingData.images[bingIndex].copyright}}</p>
                 </div>
                 <div>
-                    <p>© 2020 YYTL | THEME MADE BY <a href="https://n0ts.cn">N0ts</a></p>
-                    <p><a href="http://beian.miit.gov.cn">湘ICP备xxxxxx号</a></p>
+                    <p>© {{time}} IceCreemSearch | THEME MADE BY <a href="https://n0ts.cn">N0ts</a></p>
+                    <p><a href="http://beian.miit.gov.cn">湘ICP备20005603号-2</a></p>
                 </div>
             </div>
         </div>
@@ -201,41 +201,18 @@
                 </el-tab-pane>
                 <el-tab-pane label="关于" name="about">
                     <div class="tabBox">
-                        <p class="h1">IceCream</p>
+                        <p class="h1">{{about.name}}</p>
                         <div class="text">
-                            <p>基于 Vue 与 ElementUI实现的导航，自带搜索功能以及各种实用网站导航，目前暂未完工，尽请期待...</p>
+                            <p>{{about.context}}</p>
                         </div>
                     </div>
                     <div class="tabBox updataInfo">
                         <p class="h1">更新日志</p>
                         <div class="text">
-                            <div>
-                                <p>2021-1-19</p>
+                            <div v-for="(item, index) in updateLog" :key="index">
+                                <p>{{item.time}}</p>
                                 <ul>
-                                    <li>自适应完成</li>
-                                    <li>菜单新增关闭按钮</li>
-                                    <li>版权与图片信息文字位置更改</li>
-                                    <li>版权与图片信息文字可开关</li>
-                                    <li>数据结构代码优化</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <p>2020-12-27</p>
-                                <ul>
-                                    <li>随机切换壁纸保存</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <p>2020-12-22</p>
-                                <ul>
-                                    <li>搜索功能已完善</li>
-                                    <li>搜索框右侧新增图标</li>
-                                    <li>搜索框聚焦效果增加</li>
-                                    <li>搜索结果动画增加</li>
-                                    <li>背景切换修复</li>
-                                    <li>背景接口失效会启用备用壁纸</li>
-                                    <li>背景外链链接存储</li>
-                                    <li>点击搜索功能</li>
+                                    <li v-for="(item2, index2) in item.log" :key="index2">{{item2}}</li>
                                 </ul>
                             </div>
                         </div>

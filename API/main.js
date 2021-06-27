@@ -4,20 +4,21 @@ const app = express();
 const port = 3000;
 
 
-app.use(cors())// 跨域
+app.use(cors()) // 跨域
 // post参数需要
 app.use(express.json());
 app.use(express.urlencoded({
     extended: false
 }));
 
+// 验证jwt 预留位置
+app.use("/api",(req,res,next)=>{
+    next();
+})
+
 // 路由
 const index = require("./router/index.js");
 app.use(index);
-
-app.get("/test",(req,res)=>{
-    res.send("get成功！")
-})
 
 app.use((req, res) => { //404页面
     res.status(404).send({

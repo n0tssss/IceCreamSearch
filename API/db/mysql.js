@@ -1,8 +1,9 @@
 const mysql_config = require('../config/mysqldb');
 const mysql = require('mysql');
 //链接数据库
+let pool;
 try {
-    const pool = mysql.createPool(mysql_config);
+    pool = mysql.createPool(mysql_config);
     console.log("数据库链接成功！");
 } catch (error) {
     console.log(error + "数据库链接失败！");

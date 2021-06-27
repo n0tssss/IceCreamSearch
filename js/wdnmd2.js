@@ -2,7 +2,7 @@ let $stor = window.localStorage;
 let $sess = window.sessionStorage;
 
 export default {
-    getAPI: 'https://api.xxgcteam.com/cross/analysis',
+    getAPI: 'https://cors.lovewml.cn/cors/',
     ServerBase: 'https://api.xxgcteam.com/xxgcteam',
     storage: {
         set(value, params) {
