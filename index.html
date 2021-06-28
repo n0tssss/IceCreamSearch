@@ -206,9 +206,7 @@
                 <el-tab-pane label="关于" name="about">
                     <div class="tabBox">
                         <p class="h1">{{about.name}}</p>
-                        <div class="text">
-                            <p>{{about.context}}</p>
-                        </div>
+                        <div class="text" v-html="about.context"></div>
                     </div>
                     <div class="tabBox updataInfo">
                         <p class="h1">更新日志</p>

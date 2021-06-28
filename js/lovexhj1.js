@@ -81,10 +81,21 @@ new Vue({
         // 关于
         about: {
             name: "IceCream",
-            context: "基于 Vue 与 ElementUI实现的导航，自带搜索功能以及各种实用网站导航，目前暂未完工，尽请期待..."
+            context: `<p>基于 Vue 与 ElementUI 的简约导航，开发中... ...</p>
+            <p>
+                开发人员：
+                <a href="https://n0ts.cn/">@N0ts</a>
+                <a href="https://lovewml.cn/">@Lu</a>
+            </p>`
         },
         // 更新日志
         updateLog: [{
+                time: "2021-6-28",
+                log: [
+                    "一言API加载失败问题修复",
+                    "介绍重写",
+                ]
+            }, {
                 time: "2021-6-24",
                 log: [
                     "搜索引擎回调重写，性能优化MAX提升",
@@ -291,8 +302,10 @@ new Vue({
         },
         // 一言API
         gethitokoto() {
-            axios.get("https://v1.hitokoto.cn?c=d&c=h&c=i&c=j&c=l").then(res => {
-                this.$refs.hitokoto.innerText = res.data.hitokoto;
+            this.$http.jsonp("https://v1.hitokoto.cn?c=d&c=h&c=i&c=j&c=l").then(res => {
+                this.$refs.hitokoto.innerText = JSON.parse(JSON.parse(res.body)).hitokoto;
+            }, err => {
+                this.gethitokoto();
             })
         },
         // 搜索框聚焦
