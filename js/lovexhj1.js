@@ -3,6 +3,7 @@ import $stor from './lovexhj2.js'
 new Vue({
     el: '#Search',
     data: {
+        version: "0.1.0", // 版本
         initDialog: true, // 初始化窗口显示
         soBoxtext: "", // 输入框内容
         soBoxtextCache: "", // 输入框临时内容
@@ -16,6 +17,7 @@ new Vue({
         searchBoxFocus: false, // 搜索框是否聚焦
         time: new Date().getFullYear(),
         searchSelectIndex: -1, // 搜索结果选中索引
+        // 链接数据
         LinkList: [{
                 navName: "实用工具1",
                 links: [{
@@ -44,7 +46,7 @@ new Vue({
                     }
                 ]
             }
-        ], // 链接数据
+        ],
         soSelect: false, // 选择引擎界面是否打开
         soSelectAdd: false, // 添加搜索引擎界面是否打开
         // 准备添加的搜索引擎
@@ -53,7 +55,8 @@ new Vue({
             icon: 'https://www.baidu.com/favicon.ico',
             linkHead: 'https://www.baidu.com/s?wd='
         },
-        // 会存储的数据
+        saveDataCache: null, // 存储数据缓存
+        // 存储数据
         saveData: {
             updateStorage: false, // 用户是否允许操作 Storage
             soBoxlistShowNum: 8, // 搜索结果数量
@@ -75,6 +78,11 @@ new Vue({
                     name: '谷歌',
                     icon: './images/google.png',
                     linkHead: 'https://www.google.com/search?q='
+                },
+                {
+                    name: 'MDN',
+                    icon: './images/mdn.png',
+                    linkHead: 'https://developer.mozilla.org/zh-CN/search?q='
                 },
             ],
         },
@@ -161,9 +169,14 @@ new Vue({
         // 初始化
         initWindow() {
             let vm = this;
+
+            // 获取配置
             let storageCache = $stor.storage.get("IceCream");
             let sessionCache = $stor.session.get("IceCream");
             let cache;
+
+            // 存储数据缓存
+            vm.saveDataCache = vm.saveData;
 
             // 是否存在用户配置
             if (storageCache) {
@@ -520,6 +533,15 @@ new Vue({
         // hover 搜索结果
         hoverSearch(i) {
             this.searchSelectIndex = i;
+        },
+        // 重置设置
+        reloadSetting() {
+            $stor.storage.remove("IceCream");
+            $stor.session.remove("IceCream");
+            console.log(this.saveDataCache);
+            this.saveData = this.saveDataCache;
+            this.saveStorage();
+            this.$message.success("重置成功");
         },
         // Storage 操作
         saveStorage() {

@@ -220,7 +220,14 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="待添加" name="load">待添加</el-tab-pane>
+                <el-tab-pane label="其他" name="load">
+                    <div class="tabBox">
+                        <p class="h1">重置全部设置</p>
+                        <div class="tools">
+                            <el-button type="primary" icon="el-icon-refresh-right" @click="reloadSetting">重置</el-button>
+                        </div>
+                    </div>
+                </el-tab-pane>
             </el-tabs>
         </el-drawer>
     </div>
