@@ -175,8 +175,9 @@ new Vue({
             let sessionCache = $stor.session.get("IceCream");
             let cache;
 
-            // 存储数据缓存
-            vm.saveDataCache = vm.saveData;
+            // 深拷贝存储数据
+            let dataCache1 = JSON.stringify(vm.saveData);
+            vm.saveDataCache = JSON.parse(dataCache1);
 
             // 是否存在用户配置
             if (storageCache) {
@@ -406,7 +407,7 @@ new Vue({
         },
         // 网站导航
         openAppList() {
-            return this.$message.warning("菜单正在维护中！耐心等等啦！");
+            // return this.$message.warning("菜单正在维护中！耐心等等啦！");
             this.openApp = !this.openApp;
         },
         // 搜索引擎打开 || 关闭
@@ -437,7 +438,7 @@ new Vue({
         },
         // 获取网站列表
         getLink() {
-            return;
+            // return;
             axios.get($stor.ServerBase + "/get_nav_link").then(res => {
                 if (res.status == 200) {
                     this.LinkList = res.data.data;
@@ -536,11 +537,20 @@ new Vue({
         },
         // 重置设置
         reloadSetting() {
-            $stor.storage.remove("IceCream");
-            $stor.session.remove("IceCream");
-            console.log(this.saveDataCache);
-            this.saveData = this.saveDataCache;
+            // 用户是否允许操作 Storage 保存
+            let updateStorage = this.saveData.updateStorage;
+
+            // 深拷贝数据
+            let cacheData = JSON.stringify(this.saveDataCache);
+            this.saveData = JSON.parse(cacheData);
+
+            this.saveData.updateStorage = updateStorage;
+
+            // bing 壁纸获取
+            this.getBing(1);
+            // 保存新数据
             this.saveStorage();
+
             this.$message.success("重置成功");
         },
         // Storage 操作

@@ -878,10 +878,6 @@ a,
         height: 150px;
     }
 
-    .appListBox {
-        width: 70%;
-    }
-
     .appListClassTitle {
         width: 50%;
         padding: 0 0 10px 10px;
@@ -889,6 +885,10 @@ a,
 
     .appListBg {
         background-color: rgba(0, 0, 0, .5);
+    }
+
+    .appListBox {
+        width: 70%;
     }
 }
 
@@ -922,14 +922,27 @@ a,
     }
 
     .appListMenu {
-        min-width: 100px;
+        min-width: 25%;
     }
 
     .appListMenu>p {
         font-size: 1rem;
     }
 
+    .appListMenu>div {
+        font-size: .8rem;
+    }
+
     .appList {
-        width: 100%;
+        width: 90%;
+    }
+
+    .appListBox {
+        width: 70%;
+    }
+
+    .footer p,
+    .footer a {
+        font-size: .8rem;
     }
 }
