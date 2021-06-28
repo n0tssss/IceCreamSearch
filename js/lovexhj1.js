@@ -92,8 +92,8 @@ new Vue({
             context: `<p>基于 Vue 与 ElementUI 的简约导航，开发中... ...</p>
             <p>
                 开发人员：
-                <a href="https://n0ts.cn/">@N0ts</a>
-                <a href="https://lovewml.cn/">@Lu</a>
+                <a href="https://n0ts.cn/" target="_blank">@N0ts</a>
+                <a href="https://lovewml.cn/" target="_blank">@Lu</a>
             </p>`
         },
         // 更新日志
