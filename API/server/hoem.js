@@ -16,7 +16,6 @@ exports.getList = async function (req, res) {
         list.forEach((element, index) => {
             if (item.id == element.navId) {
                 item.links.push(element);
-                list.splice(index, 1);
             }
         });
     });

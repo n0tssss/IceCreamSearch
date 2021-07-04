@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require('cors'); // 安装模块 
+const jwt = require("./config/jwt")
 const app = express();
 const port = 3000;
 
@@ -12,12 +13,18 @@ app.use(express.urlencoded({
 
 // 验证jwt 预留位置
 app.use("/api", (req, res, next) => {
-    return next();
-    console.log(req.path);
     let nextArr = ["/getList", "/login", "/getVerifCode"]
     if (nextArr.includes(req.path)) {
         return next();
     }
+    let vif = jwt.verifyToken(req.headers.token);
+    if (vif.iss == "lcw" && !vif.code) {
+        return next();
+    }
+    return res.send({
+        state: 401,
+        msg: vif.message
+    });
 })
 
 // 路由

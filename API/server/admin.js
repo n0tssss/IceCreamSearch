@@ -17,7 +17,7 @@ class Message {
 exports.login = (req, res) => {
     let code = req.body.code;
     if (code !== vCode.toLowerCase()) {
-        console.log(code,vCode);
+        console.log(code, vCode);
         return res.send(new Message(401, '验证码错误！'))
     }
     let userName = req.body.name;
@@ -44,14 +44,66 @@ exports.getCaptcha = (req, res) => {
     res.send(new Message(200, "成功！", captcha.data));
 }
 
-// 获取分类数据
-exports.getClass = async (req, res) => {
-    let classList = await db("SELECT * FROM `class`");
-    res.send(new Message(200, "成功！", classList));
+// 添加链接
+exports.addLink = async (req, res) => {
+    let data = req.body;
+    let rows = await db("insert into link values(null,?,?,?,?,?)", [data.name, data.img, data.link, data.content, data.navId])
+    if (rows.affectedRows > 0) {
+        res.send(new Message(200, "添加成功！"));
+    } else {
+        res.send(new Message(401, "添加失败！"));
+    }
 }
 
-// 获取链接数据
-exports.getLinks = async (req, res) => {
-    let links = await db("SELECT * FROM `link`");
-    res.send(new Message(200, "成功！", links));
+// 修改链接
+exports.updateLink = async (req, res) => {
+    let data = req.body;
+    let rows = await db("UPDATE link SET `name`=?,img=?,link=?,content=?,navId=? WHERE id = ?", [data.name, data.img, data.link, data.content, data.navId, data.id])
+    if (rows.affectedRows > 0) {
+        res.send(new Message(200, "修改成功！"));
+    } else {
+        res.send(new Message(401, "修改失败！"));
+    }
+}
+
+// 删除链接
+exports.deleteLink = async (req, res) => {
+    let linkId = req.body.id;
+    let rows = await db("DELETE FROM link WHERE id = ?", [linkId]);
+    if (rows.affectedRows > 0) {
+        res.send(new Message(200, "删除成功！"));
+    } else {
+        res.send(new Message(401, "删除失败！"));
+    }
+}
+
+// 添加分类
+exports.addClass = async (req, res) => {
+    let className = req.body.className;
+    let rows = await db("insert into class values(null,?)", [className]);
+    if (rows.affectedRows > 0) {
+        res.send(new Message(200, "添加成功！"));
+    } else {
+        res.send(new Message(401, "添加失败！"));
+    }
+}
+
+// 删除分类
+exports.deleteClass = async (req, res) => {
+    let rows = await db("DELETE FROM class WHERE id = ?", [req.body.id])
+    if (rows.affectedRows > 0) {
+        res.send(new Message(200, "删除成功！"));
+    } else {
+        res.send(new Message(401, "删除失败！"));
+    }
+}
+
+// 修改分类
+exports.updateClass = async (req, res) => {
+    let rows = await db("UPDATE class SET navName=? WHERE id = ?", [req.body.navName,req.body.id])
+    if (rows.affectedRows > 0) {
+        res.send(new Message(200, "修改成功！"));
+    } else {
+        res.send(new Message(401, "修改失败！"));
+    }
 }
