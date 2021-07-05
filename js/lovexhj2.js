@@ -3,7 +3,7 @@ let $sess = window.sessionStorage;
 
 export default {
     getAPI: 'https://cors.lovewml.cn/cors/',
-    ServerBase: 'https://api.xxgcteam.com/xxgcteam',
+    ServerBase: 'https://navigation.lovewml.cn/api/getList',
     storage: {
         set(value, params) {
             $stor.setItem(value, JSON.stringify(params));

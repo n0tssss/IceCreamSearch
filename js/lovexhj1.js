@@ -251,7 +251,6 @@ new Vue({
                             "mkt": "zh-CN"
                         }
                     }).then(res => {
-                        console.log(res);
                         if (res.status == 200) {
                             vm.bingData = res.data.data;
                         }
@@ -452,8 +451,7 @@ new Vue({
         },
         // 获取网站列表
         getLink() {
-            return;
-            axios.get($stor.ServerBase + "/get_nav_link").then(res => {
+            axios.get($stor.ServerBase).then(res => {
                 if (res.status == 200) {
                     this.LinkList = res.data.data;
                 }
