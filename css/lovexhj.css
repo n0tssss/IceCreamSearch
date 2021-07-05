@@ -130,10 +130,28 @@ a,
     left: 6%;
 }
 
-/* 天气 */
+/* 天气&&时间 */
 .weather,
 .soBoxTime {
-    color: #FFFFFF;
+    font-size: .8rem;
+    color: white;
+    text-shadow: 0 0 5px black;
+}
+
+/* 天气 */
+.weather {
+    display: flex;
+    align-items: center;
+}
+
+.weather img {
+    width: 24px;
+    height: 24px;
+    margin-right: 3px;
+}
+
+.weather p {
+    margin-right: 3px;
 }
 
 /* 搜索框架 */
@@ -499,7 +517,7 @@ a,
 
 /* 选项区块 */
 .tabBox {
-    padding: 10px;
+    padding: 10px 20px;
     margin: 20px 0;
     background-color: white;
     border-radius: 5px;

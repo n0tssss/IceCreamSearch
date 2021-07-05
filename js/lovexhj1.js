@@ -15,9 +15,10 @@ new Vue({
         bingIndex: 0, // bing 背景当前显示
         openApp: false, // 网站导航是否打开
         searchBoxFocus: false, // 搜索框是否聚焦
-        time: new Date().getFullYear(),
+        time: new Date().getFullYear(), // 页脚年份
         searchSelectIndex: -1, // 搜索结果选中索引
         soBoxTime: null, // 当前时间展示数据
+        weatherInfo: null, // 当前天气数据
         // 链接数据
         LinkList: [{
                 navName: "实用工具1",
@@ -169,6 +170,7 @@ new Vue({
         this.getLink(); // 获取网站列表
         this.checkRes(); // 上下键切换结果
         this.leftTopTime(); // 当前时间展示
+        this.getWeather(); // 获取天气
     },
     methods: {
         // 初始化
@@ -181,8 +183,9 @@ new Vue({
             let cache;
 
             // 深拷贝存储数据
-            let dataCache1 = JSON.stringify(vm.saveData);
-            vm.saveDataCache = JSON.parse(dataCache1);
+            vm.saveDataCache = {
+                ...vm.saveData
+            };
 
             // 是否存在用户配置
             if (storageCache) {
@@ -209,11 +212,19 @@ new Vue({
 
             if (b) {
                 vm.saveData.updateStorage = true;
-                vm.$message.success("已开启本地存储设置");
+                vm.$message({
+                    message: "已开启本地存储设置",
+                    type: "success",
+                    showClose: true
+                });
             } else {
                 vm.saveData.updateStorage = false;
                 $stor.storage.remove("IceCream");
-                vm.$message.warning("已关闭本地存储设置，设置里面还可以开启哦");
+                vm.$message({
+                    message: "已关闭本地存储设置，设置里面还可以开启哦",
+                    type: "warning",
+                    showClose: true
+                });
             }
             // 记住用户设置
             this.saveStorage();
@@ -230,45 +241,38 @@ new Vue({
                 vm.initDialogClose(false);
             }
         },
-        // 当前时间展示
-        leftTopTime() {
-            let date = new Date();
-            this.soBoxTime = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDay()}日`;
-        },
         // bing 壁纸
         getBing(index) {
             let vm = this;
 
             try {
-                https: //cors.lovewml.cn/cors//
-                    axios.post("https://cors.lovewml.cn/cors", {
-                        type: "get",
-                        url: "https://cn.bing.com/HPImageArchive.aspx",
-                        data: {
-                            "format": "js",
-                            "idx": 0,
-                            "n": 1,
-                            "mkt": "zh-CN"
-                        }
-                    }).then(res => {
-                        if (res.status == 200) {
-                            vm.bingData = res.data.data;
-                        }
+                axios.post("https://cors.lovewml.cn/cors", {
+                    type: "get",
+                    url: "https://cn.bing.com/HPImageArchive.aspx",
+                    data: {
+                        "format": "js",
+                        "idx": 0,
+                        "n": 8,
+                        "mkt": "zh-CN"
+                    }
+                }).then(res => {
+                    if (res.status == 200) {
+                        vm.bingData = res.data.data;
+                    }
 
-                        // 如果未设定则显示 bing 壁纸
-                        if (vm.saveData.bgLink == "") {
-                            vm.bingIndex = index - 1;
-                            let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
-                            vm.setNowBg(bing);
-                        } else {
-                            // 显示设定壁纸
-                            vm.setNowBg(vm.saveData.bgLink);
-                        }
-                    }, err => {
-                        vm.error();
-                    })
-            }
-            catch (err) {
+                    // 如果未设定则显示 bing 壁纸
+                    if (vm.saveData.bgLink == "") {
+                        vm.bingIndex = index - 1;
+                        let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
+                        vm.setNowBg(bing);
+                    } else {
+                        // 显示设定壁纸
+                        vm.setNowBg(vm.saveData.bgLink);
+                    }
+                }, () => {
+                    vm.error();
+                })
+            } catch (err) {
                 vm.error();
             }
         },
@@ -277,7 +281,11 @@ new Vue({
             let vm = this;
 
             // 如果壁纸接口拉闸则调用本地背景
-            this.$message.error("壁纸有点脾气罢工了，请联系网站管理员查看");
+            this.$message({
+                message: "壁纸有点脾气罢工了，请联系网站管理员查看",
+                type: "error",
+                showClose: true
+            });
             if (vm.saveData.bgLink == "") {
                 vm.setNowBg("./errorBg.jpg");
             } else {
@@ -291,8 +299,9 @@ new Vue({
 
             // 打开外链网站
             if (index == 1) {
-                window.open("https://imgchr.com/", "_blank");
-            } else if (index == 2) {
+                return window.open("https://imgchr.com/", "_blank");
+            }
+            if (index == 2) {
                 // 随机 bing
                 if (vm.bingData.length != 0) {
                     if (vm.bingIndex == vm.bingData.images.length - 1) {
@@ -397,8 +406,6 @@ new Vue({
                             // 设置结果高度
                             vm.$refs.soBoxlist.style.height = vm.soBoxlist.length * 40 + "px";
                         }
-                    }, err => {
-                        console.log(err);
                     });
             }
         },
@@ -408,19 +415,25 @@ new Vue({
             if (vm.soBoxtext) {
                 window.open(vm.saveData.so[vm.saveData.soIndex].linkHead + encodeURIComponent(vm.soBoxtext));
             } else {
-                vm.$message("您还没输入内容呢");
+                vm.$message({
+                    message: "您还没输入内容呢",
+                    showClose: true
+                });
             }
         },
         // 搜索框数量设置
         soBoxlistUpdate(value) {
             let vm = this;
             vm.saveData.soBoxlistShowNum = value;
-            vm.$message.success(`设置成功，当前显示${vm.saveData.soBoxlistShowNum}个！`);
+            vm.$message({
+                message: `设置成功，当前显示${vm.saveData.soBoxlistShowNum}个！`,
+                type: "success",
+                showClose: true
+            });
             vm.saveStorage();
         },
         // 网站导航
         openAppList() {
-            // return this.$message.warning("菜单正在维护中！耐心等等啦！");
             this.openApp = !this.openApp;
         },
         // 搜索引擎打开 || 关闭
@@ -442,11 +455,19 @@ new Vue({
                     icon: '',
                     linkHead: ''
                 };
-                vm.$message.success("添加成功");
+                vm.$message({
+                    message: "添加成功",
+                    type: "success",
+                    showClose: true
+                });
                 vm.saveStorage();
                 vm.soSelectAdd = false;
             } else {
-                vm.$message.error("请填写全部选项");
+                vm.$message({
+                    message: "请填写全部选项",
+                    type: "error",
+                    showClose: true
+                });
             }
         },
         // 获取网站列表
@@ -455,8 +476,6 @@ new Vue({
                 if (res.status == 200) {
                     this.LinkList = res.data.data;
                 }
-            }, err => {
-                console.log(err);
             })
         },
         // 网站列表菜单
@@ -493,9 +512,17 @@ new Vue({
         footerTextStatus() {
             let vm = this;
             if (vm.saveData.footerText) {
-                vm.$message.success("底部文字已开启");
+                vm.$message({
+                    message: "底部文字已开启",
+                    type: "success",
+                    showClose: true
+                });
             } else {
-                vm.$message.warning("底部文字已关闭");
+                vm.$message({
+                    message: "底部文字已关闭",
+                    type: "warning",
+                    showClose: true
+                });
             }
             vm.saveStorage();
         },
@@ -563,7 +590,53 @@ new Vue({
             // 保存新数据
             this.saveStorage();
 
-            this.$message.success("重置成功");
+            this.$message({
+                message: "重置成功",
+                type: 'success',
+                showClose: true
+            });
+        },
+        // 当前时间展示
+        leftTopTime() {
+            let date;
+            let year;
+            let month;
+            let day;
+            let hours;
+            let minutes;
+            let seconds;
+            setInterval(() => {
+                date = new Date();
+                year = date.getFullYear();
+                month = date.getMonth() + 1;
+                day = date.getDay();
+                hours = date.getHours();
+                minutes = date.getMinutes().toString().length == 1 ? "0" + date.getMinutes().toString() : date.getMinutes();
+                seconds = date.getSeconds().toString().length == 1 ? "0" + date.getSeconds().toString() : date.getSeconds();
+                this.soBoxTime = `${year}年${month}月${day}日`;
+                this.soBoxTime += ` ${hours}:${minutes}:${seconds}`;
+            }, 1000);
+        },
+        // 获取天气
+        getWeather() {
+            axios.get("https://tianqiapi.com/free/day", {
+                params: {
+                    appid: 75761381,
+                    appsecret: "d9ooPKO7",
+                    vue: 1
+                }
+            }).then(res => {
+                if (res.status != 200) {
+                    return this.$message({
+                        message: "天气获取失败！",
+                        type: "error",
+                        showClose: true
+                    });
+                }
+                // 图片链接替换
+                res.data.wea_img = `https://xintai.xianguomall.com/skin/durian/${res.data.wea_img}.png`;
+                this.weatherInfo = res.data;
+            })
         },
         // Storage 操作
         saveStorage() {

@@ -20,9 +20,11 @@
                 <!-- 时间 -->
                 <div class="soBoxTime">{{soBoxTime}}</div>
                 <!-- 天气 -->
-                <div class="weather">
-                    <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=yd&skin=durian&color=FFFFFF"
-                        frameborder="0" height="20" allowtransparency="true"></iframe>
+                <div class="weather" v-if="weatherInfo">
+                    <p>{{weatherInfo.city}}</p>
+                    <img :src="weatherInfo.wea_img" alt="天气logo">
+                    <p>{{weatherInfo.wea}}</p>
+                    <p>{{weatherInfo.tem}}°</p>
                 </div>
             </div>
 
@@ -52,7 +54,7 @@
                         <!-- 分类列表 -->
                         <div class="appListClassBox">
                             <div class="appListClassList" v-for="(item2, index2) in item.links" :key="index2">
-                                <a :href="item2.href" target="_blank">
+                                <a :href="item2.link" target="_blank">
                                     <el-tooltip class="item" effect="dark" :content="item2.content" placement="bottom">
                                         <div>
                                             <img :src="item2.img">
@@ -166,6 +168,7 @@
             <!-- 关闭按钮 -->
             <i class="closeTab el-icon-close" @click="leftBar = false"></i>
             <el-tabs v-model="tabsActive">
+                <!-- 基本设置 -->
                 <el-tab-pane label="基本设置" name="option">
                     <div class="tabBox">
                         <p class="h1">本地存储</p>
@@ -196,8 +199,8 @@
                         </div>
                         <div class="tools">
                             <el-input v-model="saveData.bgLink" placeholder="请输入图片链接" @change="setBgImg"></el-input>
-                            <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(1)">上传图片获取链接</el-button>
-                            <el-button type="primary" icon="el-icon-refresh-right" @click="selectBgImg(2)">随机一张
+                            <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(1)">打开图床</el-button>
+                            <el-button type="primary" icon="el-icon-right" @click="selectBgImg(2)">下一张
                             </el-button>
                         </div>
                     </div>
@@ -213,6 +216,16 @@
                         </div>
                     </div>
                 </el-tab-pane>
+                <!-- 其他设置 -->
+                <el-tab-pane label="其他" name="load">
+                    <div class="tabBox">
+                        <p class="h1">重置全部设置</p>
+                        <div class="tools">
+                            <el-button type="primary" icon="el-icon-refresh-right" @click="reloadSetting">重置</el-button>
+                        </div>
+                    </div>
+                </el-tab-pane>
+                <!-- 关于 -->
                 <el-tab-pane label="关于" name="about">
                     <div class="tabBox">
                         <p class="h1">{{about.name}}</p>
@@ -227,14 +240,6 @@
                                     <li v-for="(item2, index2) in item.log" :key="index2">{{item2}}</li>
                                 </ul>
                             </div>
-                        </div>
-                    </div>
-                </el-tab-pane>
-                <el-tab-pane label="其他" name="load">
-                    <div class="tabBox">
-                        <p class="h1">重置全部设置</p>
-                        <div class="tools">
-                            <el-button type="primary" icon="el-icon-refresh-right" @click="reloadSetting">重置</el-button>
                         </div>
                     </div>
                 </el-tab-pane>
