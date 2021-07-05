@@ -15,6 +15,17 @@
     <div id="Search" v-cloak>
         <!-- Bing今日壁纸 -->
         <div class="bingBg" ref="bingBg">
+            <!-- 左上角 -->
+            <div class="windowLeftTop">
+                <!-- 时间 -->
+                <div class="soBoxTime">{{soBoxTime}}</div>
+                <!-- 天气 -->
+                <div class="weather">
+                    <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=yd&skin=durian&color=FFFFFF"
+                        frameborder="0" height="20" allowtransparency="true"></iframe>
+                </div>
+            </div>
+
             <!-- 网站列表打开 -->
             <div :class="{openAppList: true, openAppListShow: openApp}" @click="openAppList">
                 <i class="el-icon-arrow-up"></i>
@@ -97,7 +108,8 @@
             <div class="soBoxlist" ref="soBoxlist">
                 <ul ref="soBoxlist2">
                     <li v-for="(item, index) in soBoxlist" :key="index" @mouseover="hoverSearch(index)">
-                        <a :href="saveData.so[saveData.soIndex].linkHead + item" target="_blank" :class="{active: searchSelectIndex == index}">{{item}}</a>
+                        <a :href="saveData.so[saveData.soIndex].linkHead + item" target="_blank"
+                            :class="{active: searchSelectIndex == index}">{{item}}</a>
                     </li>
                 </ul>
             </div>
@@ -120,8 +132,6 @@
 
             <!-- 一言 -->
             <p id="hitokoto" ref="hitokoto">:D 获取中...</p>
-
-            <!-- <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=tv&skin=pitaya" frameborder="0" width="255" height="25" allowtransparency="true"></iframe> -->
         </div>
 
         <!-- 搜索引擎添加 -->

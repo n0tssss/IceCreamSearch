@@ -17,6 +17,7 @@ new Vue({
         searchBoxFocus: false, // 搜索框是否聚焦
         time: new Date().getFullYear(),
         searchSelectIndex: -1, // 搜索结果选中索引
+        soBoxTime: null, // 当前时间展示数据
         // 链接数据
         LinkList: [{
                 navName: "实用工具1",
@@ -100,9 +101,10 @@ new Vue({
         updateLog: [{
                 time: "2021-6-28",
                 log: [
-                    "一言API加载失败问题修复",
-                    "介绍重写",
                     "新增重置配置功能",
+                    "修复了一言API加载失败问题",
+                    "修复了搜索结果不消失的问题",
+                    "介绍重写",
                     "菜单重写",
                 ]
             }, {
@@ -166,6 +168,7 @@ new Vue({
         this.gethitokoto(); // 一言
         this.getLink(); // 获取网站列表
         this.checkRes(); // 上下键切换结果
+        this.leftTopTime(); // 当前时间展示
     },
     methods: {
         // 初始化
@@ -226,6 +229,11 @@ new Vue({
             } else {
                 vm.initDialogClose(false);
             }
+        },
+        // 当前时间展示
+        leftTopTime() {
+            let date = new Date();
+            this.soBoxTime = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDay()}日`;
         },
         // bing 壁纸
         getBing(index) {
@@ -354,11 +362,12 @@ new Vue({
 
             // 没有内容则隐藏
             if (!vm.soBoxtext) {
-                this.$refs.soBoxlist.style.height = "0px";
+                vm.soBoxlist = [];
+                vm.$refs.soBoxlist.style.height = "0px";
             }
             // 回车跳转
             if (e.keyCode == 13) {
-                return this.goBaidu();
+                return vm.goBaidu();
             }
 
             // 搜索结果选中索引修改
@@ -440,7 +449,7 @@ new Vue({
         },
         // 获取网站列表
         getLink() {
-            // return;
+            return;
             axios.get($stor.ServerBase + "/get_nav_link").then(res => {
                 if (res.status == 200) {
                     this.LinkList = res.data.data;
