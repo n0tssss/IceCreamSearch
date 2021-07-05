@@ -240,35 +240,36 @@ new Vue({
             let vm = this;
 
             try {
-                https://cors.lovewml.cn/cors//
-                axios.post("https://cors.lovewml.cn/cors", {
-                    type: "get",
-                    url: "https://cn.bing.com/HPImageArchive.aspx",
-                    data: {
-                        "format": "js", 
-                        "idx": 0,
-                        "n": 1,
-                        "mkt": "zh-CN"
-                    }
-                }).then(res => {
-                    console.log(res);
-                    if (res.status == 200) {
-                        vm.bingData = res.data.data;
-                    }
+                https: //cors.lovewml.cn/cors//
+                    axios.post("https://cors.lovewml.cn/cors", {
+                        type: "get",
+                        url: "https://cn.bing.com/HPImageArchive.aspx",
+                        data: {
+                            "format": "js",
+                            "idx": 0,
+                            "n": 1,
+                            "mkt": "zh-CN"
+                        }
+                    }).then(res => {
+                        console.log(res);
+                        if (res.status == 200) {
+                            vm.bingData = res.data.data;
+                        }
 
-                    // 如果未设定则显示 bing 壁纸
-                    if (vm.saveData.bgLink == "") {
-                        vm.bingIndex = index - 1;
-                        let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
-                        vm.setNowBg(bing);
-                    } else {
-                        // 显示设定壁纸
-                        vm.setNowBg(vm.saveData.bgLink);
-                    }
-                }, err => {
-                    vm.error();
-                })
-            } catch (err) {
+                        // 如果未设定则显示 bing 壁纸
+                        if (vm.saveData.bgLink == "") {
+                            vm.bingIndex = index - 1;
+                            let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
+                            vm.setNowBg(bing);
+                        } else {
+                            // 显示设定壁纸
+                            vm.setNowBg(vm.saveData.bgLink);
+                        }
+                    }, err => {
+                        vm.error();
+                    })
+            }
+            catch (err) {
                 vm.error();
             }
         },
