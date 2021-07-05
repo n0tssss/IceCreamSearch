@@ -240,17 +240,19 @@ new Vue({
             let vm = this;
 
             try {
-                axios.post($stor.getAPI, {
-                    "url": "https://cn.bing.com/HPImageArchive.aspx",
-                    "type": "get",
-                    "data": {
-                        "format": "js",
+                https://cors.lovewml.cn/cors//
+                axios.post("https://cors.lovewml.cn/cors", {
+                    type: "get",
+                    url: "https://cn.bing.com/HPImageArchive.aspx",
+                    data: {
+                        "format": "js", 
                         "idx": 0,
-                        "n": 8,
+                        "n": 1,
                         "mkt": "zh-CN"
                     }
                 }).then(res => {
-                    if (res.data.msg == 200) {
+                    console.log(res);
+                    if (res.status == 200) {
                         vm.bingData = res.data.data;
                     }
 
