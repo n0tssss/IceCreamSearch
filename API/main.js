@@ -31,6 +31,10 @@ app.use("/api", (req, res, next) => {
 const index = require("./router/index.js");
 app.use(index);
 
+app.use('/test', (req, res) => {
+    res.send("接口成功！")
+})
+
 app.use((req, res) => { //404页面
     res.status(404).send({
         msg: "404 请求未找到!"
