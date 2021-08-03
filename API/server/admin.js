@@ -22,8 +22,8 @@ exports.login = (req, res) => {
     }
     let userName = req.body.name;
     let pwd = req.body.pwd;
-    if (userName !== "admin" || md5(pwd.toString()) !== md5("123456")) { // 在这里修改密码
-        res.send(new Message(401, "用户名称或密码错误!"))
+    if (userName !== "tqylcw" || md5(pwd) !== md5("lovexhj20181119")) { // 在这里修改密码
+        return res.send(new Message(401, "用户名称或密码错误!"))
     }
     let token = jwt.generateToken(userName, pwd);
     res.send(new Message(200, "登录成功！", token));
@@ -100,7 +100,7 @@ exports.deleteClass = async (req, res) => {
 
 // 修改分类
 exports.updateClass = async (req, res) => {
-    let rows = await db("UPDATE class SET navName=? WHERE id = ?", [req.body.navName,req.body.id])
+    let rows = await db("UPDATE class SET navName=? WHERE id = ?", [req.body.navName, req.body.id])
     if (rows.affectedRows > 0) {
         res.send(new Message(200, "修改成功！"));
     } else {
