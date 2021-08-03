@@ -184,7 +184,7 @@ new Vue({
     methods: {
         // 初始化
         initWindow() {
-            let vm = this;
+            let that = this;
 
             // 获取配置
             let storageCache = $stor.storage.get("IceCream");
@@ -192,44 +192,44 @@ new Vue({
             let cache;
 
             // 深拷贝存储数据
-            vm.saveDataCache = {
-                ...vm.saveData
+            that.saveDataCache = {
+                ...that.saveData
             };
 
             // 是否存在用户配置
             if (storageCache) {
                 cache = storageCache;
-                vm.initDialog = false;
-                vm.saveData.updateStorage = true;
+                that.initDialog = false;
+                that.saveData.updateStorage = true;
             } else if (sessionCache) {
                 cache = sessionCache;
-                vm.initDialog = false;
-                vm.saveData.updateStorage = false;
+                that.initDialog = false;
+                that.saveData.updateStorage = false;
             }
 
             // 没有配置则初始化
             if (cache) {
-                vm.saveData = cache;
+                that.saveData = cache;
             }
             this.saveStorage();
         },
         // 本地存储修改
         initDialogClose(b) {
-            let vm = this;
+            let that = this;
 
-            vm.initDialog = false;
+            that.initDialog = false;
 
             if (b) {
-                vm.saveData.updateStorage = true;
-                vm.$message({
+                that.saveData.updateStorage = true;
+                that.$message({
                     message: "已开启本地存储设置",
                     type: "success",
                     showClose: true
                 });
             } else {
-                vm.saveData.updateStorage = false;
+                that.saveData.updateStorage = false;
                 $stor.storage.remove("IceCream");
-                vm.$message({
+                that.$message({
                     message: "已关闭本地存储设置，设置里面还可以开启哦",
                     type: "warning",
                     showClose: true
@@ -238,21 +238,21 @@ new Vue({
             // 记住用户设置
             this.saveStorage();
             // 关闭窗口
-            vm.initDialog = false;
+            that.initDialog = false;
         },
         // 本地存储开关
         StorageStatus() {
-            let vm = this;
+            let that = this;
 
-            if (vm.saveData.updateStorage) {
-                vm.initDialogClose(true);
+            if (that.saveData.updateStorage) {
+                that.initDialogClose(true);
             } else {
-                vm.initDialogClose(false);
+                that.initDialogClose(false);
             }
         },
         // bing 壁纸
         getBing(index) {
-            let vm = this;
+            let that = this;
 
             try {
                 axios.post("https://cors.lovewml.cn/cors", {
@@ -266,28 +266,28 @@ new Vue({
                     }
                 }).then(res => {
                     if (res.status == 200) {
-                        vm.bingData = res.data.data;
+                        that.bingData = res.data.data;
                     }
 
                     // 如果未设定则显示 bing 壁纸
-                    if (vm.saveData.bgLink == "") {
-                        vm.bingIndex = index - 1;
-                        let bing = "https://cn.bing.com/" + vm.bingData.images[vm.bingIndex].url;
-                        vm.setNowBg(bing);
+                    if (that.saveData.bgLink == "") {
+                        that.bingIndex = index - 1;
+                        let bing = "https://cn.bing.com/" + that.bingData.images[that.bingIndex].url;
+                        that.setNowBg(bing);
                     } else {
                         // 显示设定壁纸
-                        vm.setNowBg(vm.saveData.bgLink);
+                        that.setNowBg(that.saveData.bgLink);
                     }
                 }, () => {
-                    vm.error();
+                    that.error();
                 })
             } catch (err) {
-                vm.error();
+                that.error();
             }
         },
         // 壁纸错误
         error() {
-            let vm = this;
+            let that = this;
 
             // 如果壁纸接口拉闸则调用本地背景
             this.$message({
@@ -295,16 +295,16 @@ new Vue({
                 type: "error",
                 showClose: true
             });
-            if (vm.saveData.bgLink == "") {
-                vm.setNowBg("./errorBg.jpg");
+            if (that.saveData.bgLink == "") {
+                that.setNowBg("./errorBg.jpg");
             } else {
-                vm.setNowBg(vm.saveData.bgLink);
+                that.setNowBg(that.saveData.bgLink);
             }
         },
         // 背景图片设置
         // 判断选择
         selectBgImg(index) {
-            let vm = this;
+            let that = this;
 
             // 打开外链网站
             if (index == 1) {
@@ -312,12 +312,12 @@ new Vue({
             }
             if (index == 2) {
                 // 随机 bing
-                if (vm.bingData.length != 0) {
-                    if (vm.bingIndex == vm.bingData.images.length - 1) {
-                        vm.bingIndex = -1;
+                if (that.bingData.length != 0) {
+                    if (that.bingIndex == that.bingData.images.length - 1) {
+                        that.bingIndex = -1;
                     }
-                    vm.saveData.bgLink = "https://cn.bing.com/" + vm.bingData.images[++vm.bingIndex].url;
-                    vm.setNowBg(vm.saveData.bgLink);
+                    that.saveData.bgLink = "https://cn.bing.com/" + that.bingData.images[++that.bingIndex].url;
+                    that.setNowBg(that.saveData.bgLink);
                     this.saveStorage();
                 } else {
                     this.getBing();
@@ -326,14 +326,14 @@ new Vue({
         },
         // 链接设置
         setBgImg() {
-            let vm = this;
-            if (vm.saveData.bgLink) {
-                vm.setNowBg(vm.saveData.bgLink);
-                vm.bingData = [];
+            let that = this;
+            if (that.saveData.bgLink) {
+                that.setNowBg(that.saveData.bgLink);
+                that.bingData = [];
             } else {
-                vm.getBing(1);
+                that.getBing(1);
             }
-            vm.saveStorage();
+            that.saveStorage();
         },
         // 设置 url 背景
         setNowBg(url) {
@@ -371,31 +371,31 @@ new Vue({
         },
         // 输入框内容处理
         SoChange(e) {
-            let vm = this;
+            let that = this;
 
             // 获取键位
             let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
             // 无视上下按键
             if (e1 && e1.keyCode == 38 || e1 && e1.keyCode == 40) {
-                return vm.soBoxtextCache = vm.soBoxtext;
+                return that.soBoxtextCache = that.soBoxtext;
             }
 
             // 没有内容则隐藏
-            if (!vm.soBoxtext) {
-                vm.soBoxlist = [];
-                vm.$refs.soBoxlist.style.height = "0px";
+            if (!that.soBoxtext) {
+                that.soBoxlist = [];
+                that.$refs.soBoxlist.style.height = "0px";
             }
             // 回车跳转
             if (e.keyCode == 13) {
-                return vm.goBaidu();
+                return that.goBaidu();
             }
 
             // 搜索结果选中索引修改
-            vm.searchSelectIndex = -1;
+            that.searchSelectIndex = -1;
 
             // 请求
-            if (vm.soBoxtext) {
-                vm.$http.jsonp(`https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${encodeURIComponent(vm.soBoxtext)}&cb=callback`, {
+            if (that.soBoxtext) {
+                that.$http.jsonp(`https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${encodeURIComponent(that.soBoxtext)}&cb=callback`, {
                         jsonp: 'cb'
                     })
                     .then(res => {
@@ -404,27 +404,27 @@ new Vue({
                             return;
                         }
                         // 数量超过时
-                        if (res.data.s.length >= vm.saveData.soBoxlistShowNum) {
+                        if (res.data.s.length >= that.saveData.soBoxlistShowNum) {
                             // 截取到搜索数量
-                            vm.soBoxlist = res.data.s.splice(0, vm.saveData.soBoxlistShowNum);
+                            that.soBoxlist = res.data.s.splice(0, that.saveData.soBoxlistShowNum);
                             // 设置结果高度
-                            vm.$refs.soBoxlist.style.height = vm.saveData.soBoxlistShowNum * 40 + "px";
+                            that.$refs.soBoxlist.style.height = that.saveData.soBoxlistShowNum * 40 + "px";
                         } else {
                             // 获取结果
-                            vm.soBoxlist = res.data.s;
+                            that.soBoxlist = res.data.s;
                             // 设置结果高度
-                            vm.$refs.soBoxlist.style.height = vm.soBoxlist.length * 40 + "px";
+                            that.$refs.soBoxlist.style.height = that.soBoxlist.length * 40 + "px";
                         }
                     });
             }
         },
         // 回车跳转
         goBaidu() {
-            let vm = this;
-            if (vm.soBoxtext) {
-                window.open(vm.saveData.so[vm.saveData.soIndex].linkHead + encodeURIComponent(vm.soBoxtext));
+            let that = this;
+            if (that.soBoxtext) {
+                window.open(that.saveData.so[that.saveData.soIndex].linkHead + encodeURIComponent(that.soBoxtext));
             } else {
-                vm.$message({
+                that.$message({
                     message: "您还没输入内容呢",
                     showClose: true
                 });
@@ -432,14 +432,14 @@ new Vue({
         },
         // 搜索框数量设置
         soBoxlistUpdate(value) {
-            let vm = this;
-            vm.saveData.soBoxlistShowNum = value;
-            vm.$message({
-                message: `设置成功，当前显示${vm.saveData.soBoxlistShowNum}个！`,
+            let that = this;
+            that.saveData.soBoxlistShowNum = value;
+            that.$message({
+                message: `设置成功，当前显示${that.saveData.soBoxlistShowNum}个！`,
                 type: "success",
                 showClose: true
             });
-            vm.saveStorage();
+            that.saveStorage();
         },
         // 网站导航
         openAppList() {
@@ -456,23 +456,23 @@ new Vue({
         },
         // 搜索框引擎添加 || 删除
         soSelectAddFc() {
-            let vm = this;
-            if (vm.soAdd.name && vm.soAdd.icon && vm.soAdd.linkHead) {
-                vm.saveData.so.push(vm.soAdd);
-                vm.soAdd = {
+            let that = this;
+            if (that.soAdd.name && that.soAdd.icon && that.soAdd.linkHead) {
+                that.saveData.so.push(that.soAdd);
+                that.soAdd = {
                     name: '',
                     icon: '',
                     linkHead: ''
                 };
-                vm.$message({
+                that.$message({
                     message: "添加成功",
                     type: "success",
                     showClose: true
                 });
-                vm.saveStorage();
-                vm.soSelectAdd = false;
+                that.saveStorage();
+                that.soSelectAdd = false;
             } else {
-                vm.$message({
+                that.$message({
                     message: "请填写全部选项",
                     type: "error",
                     showClose: true
@@ -519,21 +519,21 @@ new Vue({
         },
         // 底部文字是否显示
         footerTextStatus() {
-            let vm = this;
-            if (vm.saveData.footerText) {
-                vm.$message({
+            let that = this;
+            if (that.saveData.footerText) {
+                that.$message({
                     message: "底部文字已开启",
                     type: "success",
                     showClose: true
                 });
             } else {
-                vm.$message({
+                that.$message({
                     message: "底部文字已关闭",
                     type: "warning",
                     showClose: true
                 });
             }
-            vm.saveStorage();
+            that.saveStorage();
         },
         // 上下键切换结果
         checkRes() {
@@ -543,15 +543,15 @@ new Vue({
             let e1;
 
             document.onkeydown = (e) => {
-                let vm = this;
+                let that = this;
 
                 // 是否搜索
-                if (!vm.searchBoxFocus) {
+                if (!that.searchBoxFocus) {
                     return;
                 }
 
                 // 搜索结果获取
-                res = vm.$refs.soBoxlist2;
+                res = that.$refs.soBoxlist2;
                 // 键位获取
                 e1 = e || event || window.event || arguments.callee.caller.arguments[0];
 
@@ -559,23 +559,23 @@ new Vue({
                 if (e1 && e1.keyCode == 38) {
                     // 按下上箭头
                     // 索引超出判断
-                    if (vm.searchSelectIndex == 0) {
-                        vm.searchSelectIndex = vm.soBoxlist.length - 1;
+                    if (that.searchSelectIndex == 0) {
+                        that.searchSelectIndex = that.soBoxlist.length - 1;
                     } else {
-                        vm.searchSelectIndex--;
+                        that.searchSelectIndex--;
                     }
                     // 结果修改
-                    vm.soBoxtext = vm.soBoxlist[vm.searchSelectIndex];
+                    that.soBoxtext = that.soBoxlist[that.searchSelectIndex];
                 } else if (e1 && e1.keyCode == 40) {
                     // 按下下箭头
                     // 索引超出判断
-                    if (vm.searchSelectIndex == vm.soBoxlist.length - 1) {
-                        vm.searchSelectIndex = 0;
+                    if (that.searchSelectIndex == that.soBoxlist.length - 1) {
+                        that.searchSelectIndex = 0;
                     } else {
-                        vm.searchSelectIndex++;
+                        that.searchSelectIndex++;
                     }
                     // 结果修改
-                    vm.soBoxtext = vm.soBoxlist[vm.searchSelectIndex];
+                    that.soBoxtext = that.soBoxlist[that.searchSelectIndex];
                 }
             }
         },
@@ -649,17 +649,17 @@ new Vue({
         },
         // Storage 操作
         saveStorage() {
-            let vm = this;
+            let that = this;
 
             // 是否允许存入 Storage
-            if (vm.saveData.updateStorage) {
-                $stor.storage.set("IceCream", vm.saveData);
+            if (that.saveData.updateStorage) {
+                $stor.storage.set("IceCream", that.saveData);
             }
 
             // 初始化后允许存入
-            if (!vm.initDialog) {
+            if (!that.initDialog) {
                 // 存入 session
-                $stor.session.set("IceCream", vm.saveData);
+                $stor.session.set("IceCream", that.saveData);
             }
         },
     }

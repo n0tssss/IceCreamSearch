@@ -831,11 +831,11 @@ a,
 .appListClassList .el-tooltip>p:nth-child(2) {
     color: white;
     text-shadow: 0 0 3px rgba(0, 0, 0, .3);
-    font-size: .6rem;
+    font-size: .8rem;
 }
 
 .appListClassList .el-tooltip>p:nth-child(3) {
-    font-size: .3rem;
+    font-size: .8rem;
     color: rgb(209, 209, 209);
     display: -webkit-box;
     display: -moz-box;
