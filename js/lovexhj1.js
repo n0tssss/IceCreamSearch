@@ -108,6 +108,7 @@ new Vue({
                     "手机端菜单字体样式修改",
                     "搜索框阴影修改",
                     "所有提示样式修改",
+                    "动画优化",
                 ]
             }, {
                 time: "2021-7-5",
@@ -374,12 +375,14 @@ new Vue({
                 this.$refs.soBoxlist.classList.add("soBoxlistShow");
                 this.$refs.bingBg.classList.add("bingBgBlack");
                 this.$refs.soBoxtext.classList.add("soBoxtextFocus");
+                this.$refs.hitokoto.classList.remove("hitokotoActive");
             } else {
                 this.searchBoxFocus = false;
                 this.$refs.bingBg.classList.remove("bingBgBlack");
                 this.$refs.soBoxtext.classList.remove("soBoxtextFocus");
                 setTimeout(() => {
                     this.$refs.soBoxlist.classList.remove("soBoxlistShow");
+                    this.$refs.hitokoto.classList.add("hitokotoActive");
                 }, 200);
             }
         },
@@ -398,6 +401,7 @@ new Vue({
             if (!that.soBoxtext) {
                 that.soBoxlist = [];
                 that.$refs.soBoxlist.style.height = "0px";
+                that.$refs.hitokoto.style.transform = `translateY(0px)`;
             }
             // 回车跳转
             if (e.keyCode == 13) {
@@ -422,12 +426,16 @@ new Vue({
                             // 截取到搜索数量
                             that.soBoxlist = res.data.s.splice(0, that.saveData.soBoxlistShowNum);
                             // 设置结果高度
-                            that.$refs.soBoxlist.style.height = that.saveData.soBoxlistShowNum * 40 + "px";
+                            let heightCache = that.saveData.soBoxlistShowNum * 40;
+                            that.$refs.soBoxlist.style.height = heightCache + "px";
+                            that.$refs.hitokoto.style.transform = `translateY(${heightCache}px)`;
                         } else {
                             // 获取结果
                             that.soBoxlist = res.data.s;
                             // 设置结果高度
-                            that.$refs.soBoxlist.style.height = that.soBoxlist.length * 40 + "px";
+                            let heightCache = that.soBoxlist.length * 40;
+                            that.$refs.soBoxlist.style.height = heightCache + "px";
+                            that.$refs.hitokoto.style.transform = `translateY(${heightCache}px)`;
                         }
                     });
             }
