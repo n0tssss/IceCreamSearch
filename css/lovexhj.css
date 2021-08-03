@@ -278,13 +278,13 @@ a,
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
     -o-border-radius: 20px;
-    visibility: hidden;
+    display: none;
     opacity: 0;
 }
 
 /* 搜索结果显示 */
 .soBoxlistShow {
-    visibility: visible;
+    display: block;
     opacity: 1;
 }
 
