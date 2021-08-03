@@ -324,6 +324,7 @@ a,
 /* 搜索引擎切换 */
 .soSelectList {
     width: 90%;
+    height: 0;
     background-color: white;
     position: relative;
     top: 5px;
@@ -339,17 +340,18 @@ a,
     padding: 10px 5%;
     visibility: hidden;
     opacity: 0;
-    transform: translateY(-10px);
-    -webkit-transform: translateY(-10px);
-    -moz-transform: translateY(-10px);
-    -ms-transform: translateY(-10px);
-    -o-transform: translateY(-10px);
+    transform: translateY(-30px);
+    -webkit-transform: translateY(-30px);
+    -moz-transform: translateY(-30px);
+    -ms-transform: translateY(-30px);
+    -o-transform: translateY(-30px);
 }
 
 /* 搜索引擎切换显示 */
 .soSelectListShow {
     visibility: visible;
     opacity: 1;
+    height: auto;
     transform: translateY(0);
     -webkit-transform: translateY(0);
     -moz-transform: translateY(0);
@@ -381,7 +383,7 @@ a,
     -moz-transform: scale(1.1);
     -ms-transform: scale(1.1);
     -o-transform: scale(1.1);
-    color: #349ca0;
+    color: var(--fontColor);
 }
 
 .soSelect div>img {
@@ -399,6 +401,10 @@ a,
     font-size: 2rem;
     text-align: center;
     padding-top: 10px;
+}
+
+.soSelect i {
+    font-size: 2rem;
 }
 
 .el-form-item__content p {
