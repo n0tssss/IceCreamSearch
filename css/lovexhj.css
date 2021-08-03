@@ -14,7 +14,7 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    --fontColor: #58c4c7;
+    /* --fontColor: rgb(101, 178, 255); */
     --borderRadius: 20px;
 }
 
@@ -78,7 +78,8 @@ a,
 .closeAppList,
 .appListMenu>div,
 .appListClassList,
-.soBoxTime {
+.soBoxTime,
+.tabBox {
     transition: all .3s;
     -webkit-transition: all .3s;
     -moz-transition: all .3s;
@@ -165,7 +166,6 @@ a,
     -moz-transform: translateX(-50%);
     -ms-transform: translateX(-50%);
     -o-transform: translateX(-50%);
-    overflow: hidden;
 }
 
 .soBoxtop {
@@ -183,7 +183,6 @@ a,
     -ms-border-radius: 30px;
     -o-border-radius: 30px;
     opacity: .5;
-    overflow: hidden;
 }
 
 #soBoxtext {
@@ -200,7 +199,7 @@ a,
 /* 搜索框聚焦 */
 .soBoxtextFocus {
     opacity: 1;
-    box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
 /* 搜索框图标 */
@@ -515,16 +514,30 @@ a,
     padding-bottom: 100px;
 }
 
+.el-button--text {
+    padding: 7px 15px;
+}
+
+.el-color-dropdown__btns .el-button {
+    margin: 0 2px !important;
+}
+
 /* 选项区块 */
 .tabBox {
     padding: 10px 20px;
-    margin: 20px 0;
+    margin: 20px 10px;
     background-color: white;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    box-shadow: rgba(50, 50, 93, 0.2) 0px 2px 5px -1px, rgba(0, 0, 0, 0.2) 0px 1px 3px -1px;
+    box-sizing: border-box;
+}
+
+.tabBox:hover {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .tabBox .h1 {
@@ -534,8 +547,22 @@ a,
     margin: 10px 0;
 }
 
+.tabBox .text {
+    font-size: .9rem;
+}
+
 .tabBox .tools {
     margin: 10px 0;
+}
+
+.el-switch {
+    display: inline-block;
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    margin: 10px 0 10px 15px;
 }
 
 .tabBox .el-input-number {
@@ -550,6 +577,8 @@ a,
     background-color: var(--fontColor) !important;
     border: none !important;
     margin: 10px 10px 0 0 !important;
+    color: white;
+    padding: 8px 10px;
 }
 
 /* 更新日志 */
@@ -835,7 +864,7 @@ a,
 }
 
 .appListClassList .el-tooltip>p:nth-child(3) {
-    font-size: .8rem;
+    font-size: .7rem;
     color: rgb(209, 209, 209);
     display: -webkit-box;
     display: -moz-box;
@@ -864,6 +893,10 @@ a,
 
 .el-tab-pane {
     overflow-y: scroll;
+}
+
+.el-tab-pane::-webkit-scrollbar {
+    display: none;
 }
 
 /* 自适应 */
@@ -941,10 +974,6 @@ a,
         font-size: 1rem;
     }
 
-    .appListMenu>div {
-        font-size: .8rem;
-    }
-
     .appList {
         width: 90%;
     }
@@ -954,7 +983,9 @@ a,
     }
 
     .footer p,
-    .footer a {
-        font-size: .8rem;
+    .footer a,
+    .weather, .soBoxTime,
+    .appListMenu>div {
+        font-size: .7rem;
     }
 }

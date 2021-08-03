@@ -3,7 +3,7 @@ import $stor from './lovexhj2.js'
 new Vue({
     el: '#Search',
     data: {
-        version: "0.1.0", // 版本
+        themeColor: "rgb(101, 178, 255)", // 主题色
         initDialog: true, // 初始化窗口显示
         soBoxtext: "", // 输入框内容
         soBoxtextCache: "", // 输入框临时内容
@@ -60,6 +60,7 @@ new Vue({
         saveDataCache: null, // 存储数据缓存
         // 存储数据
         saveData: {
+            themeColor: "rgb(101, 178, 255)", // 主题色
             updateStorage: false, // 用户是否允许操作 Storage
             soBoxlistShowNum: 8, // 搜索结果数量
             bgLink: '', // 背景图片链接
@@ -180,6 +181,7 @@ new Vue({
         this.checkRes(); // 上下键切换结果
         this.leftTopTime(); // 当前时间展示
         this.getWeather(); // 获取天气
+        this.changeThemeColor(); // 默认主题色
     },
     methods: {
         // 初始化
@@ -646,6 +648,21 @@ new Vue({
                 res.data.wea_img = `https://xintai.xianguomall.com/skin/durian/${res.data.wea_img}.png`;
                 this.weatherInfo = res.data;
             })
+        },
+        // 主题色修改
+        changeThemeColor() {
+            document.documentElement.style.setProperty("--fontColor", this.saveData.themeColor);
+            this.saveStorage();
+        },
+        // 重置主题色
+        reloadThemeColor() {
+            this.saveData.themeColor = this.themeColor;
+            this.changeThemeColor();
+            this.$message({
+                message: "主题色重置成功",
+                type: "success",
+                showClose: true
+            });
         },
         // Storage 操作
         saveStorage() {

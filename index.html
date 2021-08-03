@@ -13,59 +13,73 @@
 <body>
     <!-- 主体框架 -->
     <div id="Search" v-cloak>
+
         <!-- Bing今日壁纸 -->
         <div class="bingBg" ref="bingBg">
+
             <!-- 左上角 -->
             <div class="windowLeftTop">
+
                 <!-- 时间 -->
-                <div class="soBoxTime">{{soBoxTime}}</div>
+                <div class="soBoxTime">{{ soBoxTime }}</div>
+
                 <!-- 天气 -->
                 <div class="weather" v-if="weatherInfo">
-                    <p>{{weatherInfo.city}}</p>
+                    <p>{{ weatherInfo.city }}</p>
                     <img :src="weatherInfo.wea_img" alt="天气logo">
-                    <p>{{weatherInfo.wea}}</p>
-                    <p>{{weatherInfo.tem}}°</p>
+                    <p>{{ weatherInfo.wea }}</p>
+                    <p>{{ weatherInfo.tem }}°</p>
                 </div>
+
             </div>
 
             <!-- 网站列表打开 -->
             <div :class="{openAppList: true, openAppListShow: openApp}" @click="openAppList">
                 <i class="el-icon-arrow-up"></i>
             </div>
+
             <!-- 网站列表 -->
             <div :class="{appList: true, appListShow: openApp}">
+
                 <!-- 毛玻璃背景 -->
                 <div class="appListBg"></div>
+
                 <!-- 关闭按钮 -->
                 <div class="closeAppList" @click="openAppList" ref="closeAppList">
                     <i class="el-icon-arrow-down"></i>
                 </div>
+
                 <!-- 分类菜单 -->
                 <div class="appListMenu">
-                    <div v-for="(item, index) in LinkList" :key="index" @click="scrollMenu(index)">{{item.navName}}
+                    <div v-for="(item, index) in LinkList" :key="index" @click="scrollMenu(index)">{{ item.navName }}
                     </div>
                 </div>
+
                 <!-- 分类框架 -->
                 <div class="appListBox" @scroll="shadow" ref="appListBox">
+
                     <!-- 各种分类 -->
                     <div class="appListClass" v-for="(item, index) in LinkList" :key="index">
+
                         <!-- 分类标题 -->
-                        <p class="appListClassTitle">{{item.navName}}</p>
+                        <p class="appListClassTitle">{{ item.navName }}</p>
+
                         <!-- 分类列表 -->
                         <div class="appListClassBox">
                             <div class="appListClassList" v-for="(item2, index2) in item.links" :key="index2">
                                 <a :href="item2.link" target="_blank">
                                     <el-tooltip class="item" effect="dark" :content="item2.content" placement="bottom">
                                         <div>
-                                            <img :src="item2.img">
-                                            <p>{{item2.name}}</p>
-                                            <p>{{item2.content}}</p>
+                                            <img :src="item2.img" :alt="item2.img">
+                                            <p>{{ item2.name }}</p>
+                                            <p>{{ item2.content }}</p>
                                         </div>
                                     </el-tooltip>
                                 </a>
                             </div>
                         </div>
                     </div>
+
                     <!-- 撑开底部 -->
                     <div class="Boom">没有更多内容啦！</div>
                 </div>
@@ -74,10 +88,10 @@
             <!-- 页脚版权信息 -->
             <div :class="{footer: true, footerNone: openApp}" v-if="saveData.footerText">
                 <div v-if="bingData.images">
-                    <p>{{bingData.images[bingIndex].copyright}}</p>
+                    <p>{{ bingData.images[bingIndex].copyright }}</p>
                 </div>
                 <div>
-                    <p>© {{time}} IceCreemSearch | THEME MADE BY <a href="https://n0ts.cn">N0ts</a></p>
+                    <p>© {{ time }} IceCreemSearch | THEME MADE BY <a href="https://n0ts.cn">N0ts</a></p>
                     <p><a href="http://beian.miit.gov.cn">湘ICP备20005603号-2</a></p>
                 </div>
             </div>
@@ -94,24 +108,29 @@
 
         <!-- 搜索框 -->
         <div id="soBox" :class="{soBoxtop: openApp}">
+
             <!-- 主体框框 -->
             <div class="soBoxtext" ref="soBoxtext">
+
                 <!-- 右侧搜索图标 -->
                 <i class="el-icon-search rightIcon" @click="goBaidu"></i>
+
                 <!-- 左侧搜索引擎图标 -->
                 <div class="soImg" @click="selectLink">
                     <img :src="saveData.so[saveData.soIndex].icon">
                 </div>
+
                 <!-- 搜索框本框 -->
                 <input type="text" id="soBoxtext" v-model="soBoxtext" placeholder="搜点什么..." @focus="SoFocus(true)"
                     @blur="SoFocus(false)" @keyup="SoChange($event)">
             </div>
+
             <!-- 搜索结果 -->
             <div class="soBoxlist" ref="soBoxlist">
                 <ul ref="soBoxlist2">
                     <li v-for="(item, index) in soBoxlist" :key="index" @mouseover="hoverSearch(index)">
                         <a :href="saveData.so[saveData.soIndex].linkHead + item" target="_blank"
-                            :class="{active: searchSelectIndex == index}">{{item}}</a>
+                            :class="{active: searchSelectIndex == index}">{{ item }}</a>
                     </li>
                 </ul>
             </div>
@@ -121,7 +140,7 @@
                 <div class="soSelect" v-for="(item, index) in saveData.so">
                     <div :class="{active: index == saveData.soIndex}" @click="soSelect1(index)" @contextmenu.prevent="">
                         <img :src="item.icon">
-                        <p>{{item.name}}</p>
+                        <p>{{ item.name }}</p>
                     </div>
                 </div>
                 <div class="soSelect soSelectAdd" @click="soSelectAdd = true">
@@ -165,11 +184,13 @@
 
         <!-- 侧边菜单 -->
         <el-drawer :visible.sync="leftBar" :with-header="false" direction="ltr">
+
             <!-- 关闭按钮 -->
             <i class="closeTab el-icon-close" @click="leftBar = false"></i>
             <el-tabs v-model="tabsActive">
+
                 <!-- 基本设置 -->
-                <el-tab-pane label="基本设置" name="option">
+                <el-tab-pane label="基本" name="option">
                     <div class="tabBox">
                         <p class="h1">本地存储</p>
                         <div class="text">
@@ -215,7 +236,26 @@
                             </el-switch>
                         </div>
                     </div>
+
                 </el-tab-pane>
+
+                <!-- 样式设置 -->
+                <el-tab-pane label="样式" name="css">
+                    <div class="tabBox">
+                        <p class="h1">主题色设置</p>
+                        <div class="text">
+                            <p>设置一个喜欢的主题色</p>
+                        </div>
+                        <div class="tools">
+                            <el-color-picker v-model="saveData.themeColor" color-format="rgb"
+                                @change="changeThemeColor"></el-color-picker>
+                            <br />
+                            <el-button type="primary" icon="el-icon-refresh-left" @click="reloadThemeColor">重置主题色
+                            </el-button>
+                        </div>
+                    </div>
+                </el-tab-pane>
+
                 <!-- 其他设置 -->
                 <el-tab-pane label="其他" name="load">
                     <div class="tabBox">
@@ -225,24 +265,26 @@
                         </div>
                     </div>
                 </el-tab-pane>
+
                 <!-- 关于 -->
                 <el-tab-pane label="关于" name="about">
                     <div class="tabBox">
-                        <p class="h1">{{about.name}}</p>
+                        <p class="h1">{{ about.name }}</p>
                         <div class="text" v-html="about.context"></div>
                     </div>
                     <div class="tabBox updataInfo">
                         <p class="h1">更新日志</p>
                         <div class="text">
                             <div v-for="(item, index) in updateLog" :key="index">
-                                <p>{{item.time}}</p>
+                                <p>{{ item.time }}</p>
                                 <ul>
-                                    <li v-for="(item2, index2) in item.log" :key="index2">{{item2}}</li>
+                                    <li v-for="(item2, index2) in item.log" :key="index2">{{ item2 }}</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </el-tab-pane>
+
             </el-tabs>
         </el-drawer>
     </div>
