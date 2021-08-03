@@ -3,7 +3,6 @@ import $stor from './lovexhj2.js'
 new Vue({
     el: '#Search',
     data: {
-        themeColor: "rgb(101, 178, 255)", // 主题色
         initDialog: true, // 初始化窗口显示
         soBoxtext: "", // 输入框内容
         soBoxtextCache: "", // 输入框临时内容
@@ -66,6 +65,7 @@ new Vue({
             bgLink: '', // 背景图片链接
             soIndex: 0, // 当前选中的搜索引擎
             footerText: true, // 底部文字显示
+            hitokotoShow: true, // 一言展示
             // 搜索引擎
             so: [{
                     name: '百度',
@@ -101,6 +101,15 @@ new Vue({
         },
         // 更新日志
         updateLog: [{
+                time: "2021-8-3",
+                log: [
+                    "新增主题颜色设置",
+                    "新增一言开关",
+                    "手机端菜单字体样式修改",
+                    "搜索框阴影修改",
+                    "所有提示样式修改",
+                ]
+            }, {
                 time: "2021-7-5",
                 log: [
                     "新增当前时间显示",
@@ -223,7 +232,7 @@ new Vue({
 
             if (b) {
                 that.saveData.updateStorage = true;
-                that.$message({
+                that.$notify({
                     message: "已开启本地存储设置",
                     type: "success",
                     showClose: true
@@ -231,7 +240,7 @@ new Vue({
             } else {
                 that.saveData.updateStorage = false;
                 $stor.storage.remove("IceCream");
-                that.$message({
+                that.$notify({
                     message: "已关闭本地存储设置，设置里面还可以开启哦",
                     type: "warning",
                     showClose: true
@@ -292,7 +301,7 @@ new Vue({
             let that = this;
 
             // 如果壁纸接口拉闸则调用本地背景
-            this.$message({
+            this.$notify({
                 message: "壁纸有点脾气罢工了，请联系网站管理员查看",
                 type: "error",
                 showClose: true
@@ -348,6 +357,9 @@ new Vue({
         },
         // 一言API
         gethitokoto() {
+            if (!this.saveData.hitokotoShow) {
+                return;
+            }
             this.$http.jsonp("https://v1.hitokoto.cn?c=d&c=h&c=i&c=j&c=l").then(res => {
                 this.$refs.hitokoto.innerText = JSON.parse(JSON.parse(res.body)).hitokoto;
             }, err => {
@@ -426,7 +438,7 @@ new Vue({
             if (that.soBoxtext) {
                 window.open(that.saveData.so[that.saveData.soIndex].linkHead + encodeURIComponent(that.soBoxtext));
             } else {
-                that.$message({
+                that.$notify({
                     message: "您还没输入内容呢",
                     showClose: true
                 });
@@ -436,7 +448,7 @@ new Vue({
         soBoxlistUpdate(value) {
             let that = this;
             that.saveData.soBoxlistShowNum = value;
-            that.$message({
+            that.$notify({
                 message: `设置成功，当前显示${that.saveData.soBoxlistShowNum}个！`,
                 type: "success",
                 showClose: true
@@ -466,7 +478,7 @@ new Vue({
                     icon: '',
                     linkHead: ''
                 };
-                that.$message({
+                that.$notify({
                     message: "添加成功",
                     type: "success",
                     showClose: true
@@ -474,7 +486,7 @@ new Vue({
                 that.saveStorage();
                 that.soSelectAdd = false;
             } else {
-                that.$message({
+                that.$notify({
                     message: "请填写全部选项",
                     type: "error",
                     showClose: true
@@ -521,21 +533,18 @@ new Vue({
         },
         // 底部文字是否显示
         footerTextStatus() {
-            let that = this;
-            if (that.saveData.footerText) {
-                that.$message({
-                    message: "底部文字已开启",
-                    type: "success",
-                    showClose: true
-                });
+            let msg;
+            if (this.saveData.footerText) {
+                msg = ["底部文字已开启", "success"];
             } else {
-                that.$message({
-                    message: "底部文字已关闭",
-                    type: "warning",
-                    showClose: true
-                });
+                msg = ["底部文字已关闭", "info"];
             }
-            that.saveStorage();
+            this.$notify({
+                message: msg[0],
+                type: msg[1],
+                showClose: true
+            });
+            this.saveStorage();
         },
         // 上下键切换结果
         checkRes() {
@@ -601,7 +610,7 @@ new Vue({
             // 保存新数据
             this.saveStorage();
 
-            this.$message({
+            this.$notify({
                 message: "重置成功",
                 type: 'success',
                 showClose: true
@@ -638,7 +647,7 @@ new Vue({
                 }
             }).then(res => {
                 if (res.status != 200) {
-                    return this.$message({
+                    return this.$notify({
                         message: "天气获取失败！",
                         type: "error",
                         showClose: true
@@ -656,13 +665,29 @@ new Vue({
         },
         // 重置主题色
         reloadThemeColor() {
-            this.saveData.themeColor = this.themeColor;
+            this.saveData.themeColor = "rgb(101, 178, 255)";
             this.changeThemeColor();
-            this.$message({
+            this.$notify({
                 message: "主题色重置成功",
                 type: "success",
                 showClose: true
             });
+        },
+        // 一言展示
+        changeHitokotoShow() {
+            let msg;
+            if (this.saveData.hitokotoShow) {
+                this.gethitokoto();
+                msg = ["一言已开启", "success"];
+            } else {
+                msg = ["一言已关闭", "info"];
+            }
+            this.$notify({
+                message: msg[0],
+                type: msg[1],
+                showClose: true
+            });
+            this.saveStorage();
         },
         // Storage 操作
         saveStorage() {

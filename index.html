@@ -152,7 +152,7 @@
             </div>
 
             <!-- 一言 -->
-            <p id="hitokoto" ref="hitokoto">:D 获取中...</p>
+            <p id="hitokoto" ref="hitokoto" v-if="saveData.hitokotoShow">:D 获取中...</p>
         </div>
 
         <!-- 搜索引擎添加 -->
@@ -197,8 +197,7 @@
                             <p>将设置存储在本地</p>
                         </div>
                         <div class="tools">
-                            <el-switch style="display: block" v-model="saveData.updateStorage" active-color="#13ce66"
-                                @change="StorageStatus">
+                            <el-switch v-model="saveData.updateStorage" active-color="#13ce66" @change="StorageStatus">
                             </el-switch>
                         </div>
                     </div>
@@ -231,8 +230,18 @@
                             <p>是否显示底部文字</p>
                         </div>
                         <div class="tools">
-                            <el-switch style="display: block" v-model="saveData.footerText" active-color="#13ce66"
-                                @change="footerTextStatus">
+                            <el-switch v-model="saveData.footerText" active-color="#13ce66" @change="footerTextStatus">
+                            </el-switch>
+                        </div>
+                    </div>
+                    <div class="tabBox">
+                        <p class="h1">一言显示</p>
+                        <div class="text">
+                            <p>是否展示一言</p>
+                        </div>
+                        <div class="tools">
+                            <el-switch v-model="saveData.hitokotoShow" active-color="#13ce66"
+                                @change="changeHitokotoShow">
                             </el-switch>
                         </div>
                     </div>
@@ -276,7 +285,7 @@
                         <p class="h1">更新日志</p>
                         <div class="text">
                             <div v-for="(item, index) in updateLog" :key="index">
-                                <p>{{ item.time }}</p>
+                                <p class="timeTitle">{{ item.time }}</p>
                                 <ul>
                                     <li v-for="(item2, index2) in item.log" :key="index2">{{ item2 }}</li>
                                 </ul>

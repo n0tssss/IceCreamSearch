@@ -543,7 +543,7 @@ a,
 .tabBox .h1 {
     font-size: 1.2rem;
     border-left: 3px solid var(--fontColor);
-    padding: 5px 0 5px 15px;
+    padding: 5px 0 5px 10px;
     margin: 10px 0;
 }
 
@@ -556,13 +556,12 @@ a,
 }
 
 .el-switch {
-    display: inline-block;
-    transform: scale(1.1);
-    -webkit-transform: scale(1.1);
-    -moz-transform: scale(1.1);
-    -ms-transform: scale(1.1);
-    -o-transform: scale(1.1);
-    margin: 10px 0 10px 15px;
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    margin-left: 5px;
 }
 
 .tabBox .el-input-number {
@@ -587,7 +586,11 @@ a,
 }
 
 .updataInfo .text>div {
-    margin: 20px 0;
+    margin-bottom: 30px;
+}
+
+.timeTitle {
+    font-size: 1rem;
 }
 
 /* 底部版权 */
@@ -984,8 +987,8 @@ a,
 
     .footer p,
     .footer a,
-    .weather, .soBoxTime,
-    .appListMenu>div {
+    .weather,
+    .soBoxTime {
         font-size: .7rem;
     }
 }
