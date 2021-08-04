@@ -3,6 +3,7 @@ import $stor from './lovexhj2.js'
 new Vue({
     el: '#Search',
     data: {
+        version: "beta 1.0", // 当前版本
         initDialog: true, // 初始化窗口显示
         soBoxtext: "", // 输入框内容
         soBoxtextCache: "", // 输入框临时内容
@@ -123,6 +124,7 @@ new Vue({
                 time: "2021-8-4",
                 log: [
                     "新增设置按钮位置修改",
+                    "新增版本差异数据更新",
                     "优化了部分逻辑问题",
                 ]
             }, {
@@ -244,11 +246,28 @@ new Vue({
                 that.saveData.updateStorage = false;
             }
 
+            // 是否存在更新
+            cache = this.checkVersion(cache);
+
             // 没有配置则初始化
             if (cache) {
                 that.saveData = cache;
             }
             this.saveStorage();
+        },
+        // 版本是否更新
+        checkVersion(cache) {
+            // 判断数据是否缺少
+            if (Object.keys(cache).length == Object.keys(this.saveDataCache).length) {
+                return cache;
+            }
+            // 遍历数据修复
+            for (let key in this.saveDataCache) {
+                if (!cache[key]) {
+                    cache[key] = this.saveDataCache[key]
+                }
+            }
+            return cache;
         },
         // 本地存储修改
         initDialogClose(b) {
