@@ -452,9 +452,28 @@ a,
     justify-content: center;
     align-items: center;
     position: absolute;
+    cursor: pointer;
+}
+
+/* 设置界面图标 - 各位置 */
+.optionIconLeftTop {
+    top: 80px;
+    left: 30px;
+}
+
+.optionIconRightTop {
+    top: 80px;
+    right: 30px;
+}
+
+.optionIconRightBottom {
+    bottom: 80px;
+    right: 30px;
+}
+
+.optionIconLeftBottom {
     bottom: 80px;
     left: 30px;
-    cursor: pointer;
 }
 
 .optionIconNone {

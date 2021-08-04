@@ -18,6 +18,24 @@ new Vue({
         searchSelectIndex: -1, // 搜索结果选中索引
         soBoxTime: null, // 当前时间展示数据
         weatherInfo: null, // 当前天气数据
+        // 设置按钮位置选择数据
+        settingSelect: [{
+                value: 1,
+                label: "左上"
+            },
+            {
+                value: 2,
+                label: "右上"
+            },
+            {
+                value: 3,
+                label: "右下"
+            },
+            {
+                value: 4,
+                label: "左下"
+            }
+        ],
         // 链接数据
         LinkList: [{
                 navName: "实用工具1",
@@ -66,6 +84,7 @@ new Vue({
             soIndex: 0, // 当前选中的搜索引擎
             footerText: true, // 底部文字显示
             hitokotoShow: true, // 一言展示
+            settingLocation: 4, // 设置按钮位置
             // 搜索引擎
             so: [{
                     name: '百度',
@@ -101,6 +120,12 @@ new Vue({
         },
         // 更新日志
         updateLog: [{
+                time: "2021-8-4",
+                log: [
+                    "新增设置按钮位置修改",
+                    "优化了部分逻辑问题",
+                ]
+            }, {
                 time: "2021-8-3",
                 log: [
                     "新增主题颜色设置",

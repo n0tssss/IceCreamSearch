@@ -178,7 +178,7 @@
         </el-dialog>
 
         <!-- 设置按钮 -->
-        <div :class="{optionIcon: true, optionIconNone: openApp}" @click="leftBar = true">
+        <div :class="{optionIcon: true, optionIconNone: openApp, optionIconLeftTop: saveData.settingLocation == 1, optionIconRightTop: saveData.settingLocation == 2, optionIconRightBottom: saveData.settingLocation == 3, optionIconLeftBottom: saveData.settingLocation == 4}" @click="leftBar = true">
             <i class="el-icon-setting"></i>
         </div>
 
@@ -261,6 +261,19 @@
                             <br />
                             <el-button type="primary" icon="el-icon-refresh-left" @click="reloadThemeColor">重置主题色
                             </el-button>
+                        </div>
+                    </div>
+                    <div class="tabBox">
+                        <p class="h1">设置按钮位置</p>
+                        <div class="text">
+                            <p>设置按钮的位置选择</p>
+                        </div>
+                        <div class="tools">
+                            <el-select v-model="saveData.settingLocation" size="small" @change="saveStorage">
+                                <el-option v-for="item in settingSelect" :key="item.value" :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
                         </div>
                     </div>
                 </el-tab-pane>
