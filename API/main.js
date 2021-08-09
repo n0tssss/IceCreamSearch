@@ -1,5 +1,13 @@
+/*
+ * @Author: N0ts
+ * @Date: 2021-07-05 11:41:13
+ * @LastEditTime: 2021-08-08 15:14:57
+ * @Description: 
+ * @FilePath: \IceCreamSearch\API\main.js
+ * mail@n0ts.cn
+ */
 const express = require("express");
-const cors = require('cors'); // 安装模块 
+const cors = require('cors'); // 安装模块
 const jwt = require("./config/jwt")
 const app = express();
 const port = 3000;

@@ -659,8 +659,12 @@ new Vue({
 
             // bing 壁纸获取
             this.getBing(1);
+            // 一言获取
+            this.gethitokoto();
             // 保存新数据
             this.saveStorage();
+            // 主题色修改
+            this.changeThemeColor();
 
             this.$notify({
                 message: "重置成功",
