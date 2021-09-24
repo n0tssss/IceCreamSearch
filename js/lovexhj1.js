@@ -1,7 +1,7 @@
-import $stor from './lovexhj2.js'
+import $stor from "./lovexhj2.js";
 
 new Vue({
-    el: '#Search',
+    el: "#Search",
     data: {
         version: "beta 1.0", // 当前版本
         initDialog: true, // 初始化窗口显示
@@ -10,7 +10,7 @@ new Vue({
         soBoxlist: [], // 搜索结果
         soBoxlistShow: false, // 搜索结果显示
         leftBar: false, // 左侧菜单是否打开
-        tabsActive: 'option', // 左侧菜单默认选择项
+        tabsActive: "option", // 左侧菜单默认选择项
         bingData: [], // bing 背景数据
         bingIndex: 0, // bing 背景当前显示
         openApp: false, // 网站导航是否打开
@@ -20,7 +20,8 @@ new Vue({
         soBoxTime: null, // 当前时间展示数据
         weatherInfo: null, // 当前天气数据
         // 设置按钮位置选择数据
-        settingSelect: [{
+        settingSelect: [
+            {
                 value: 1,
                 label: "左上"
             },
@@ -38,9 +39,11 @@ new Vue({
             }
         ],
         // 链接数据
-        LinkList: [{
+        LinkList: [
+            {
                 navName: "实用工具1",
-                links: [{
+                links: [
+                    {
                         name: "名字",
                         content: "介绍",
                         img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
@@ -54,7 +57,8 @@ new Vue({
             },
             {
                 navName: "实用工具2",
-                links: [{
+                links: [
+                    {
                         name: "名字",
                         content: "介绍",
                         img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
@@ -71,9 +75,9 @@ new Vue({
         soSelectAdd: false, // 添加搜索引擎界面是否打开
         // 准备添加的搜索引擎
         soAdd: {
-            name: 'baidu',
-            icon: 'https://www.baidu.com/favicon.ico',
-            linkHead: 'https://www.baidu.com/s?wd='
+            name: "baidu",
+            icon: "https://www.baidu.com/favicon.ico",
+            linkHead: "https://www.baidu.com/s?wd="
         },
         saveDataCache: null, // 存储数据缓存
         // 存储数据
@@ -81,33 +85,34 @@ new Vue({
             themeColor: "rgb(101, 178, 255)", // 主题色
             updateStorage: false, // 用户是否允许操作 Storage
             soBoxlistShowNum: 8, // 搜索结果数量
-            bgLink: '', // 背景图片链接
+            bgLink: "", // 背景图片链接
             soIndex: 0, // 当前选中的搜索引擎
             footerText: true, // 底部文字显示
             hitokotoShow: true, // 一言展示
             settingLocation: 4, // 设置按钮位置
             // 搜索引擎
-            so: [{
-                    name: '百度',
-                    icon: './images/baidu.png',
-                    linkHead: 'https://www.baidu.com/s?wd='
+            so: [
+                {
+                    name: "百度",
+                    icon: "./images/baidu.png",
+                    linkHead: "https://www.baidu.com/s?wd="
                 },
                 {
-                    name: '必应',
-                    icon: './images/bing.png',
-                    linkHead: 'https://cn.bing.com/search?q='
+                    name: "必应",
+                    icon: "./images/bing.png",
+                    linkHead: "https://cn.bing.com/search?q="
                 },
                 {
-                    name: '谷歌',
-                    icon: './images/google.png',
-                    linkHead: 'https://www.google.com/search?q='
+                    name: "谷歌",
+                    icon: "./images/google.png",
+                    linkHead: "https://www.google.com/search?q="
                 },
                 {
-                    name: 'MDN',
-                    icon: './images/mdn.png',
-                    linkHead: 'https://developer.mozilla.org/zh-CN/search?q='
-                },
-            ],
+                    name: "MDN",
+                    icon: "./images/mdn.png",
+                    linkHead: "https://developer.mozilla.org/zh-CN/search?q="
+                }
+            ]
         },
         // 关于
         about: {
@@ -120,14 +125,12 @@ new Vue({
             </p>`
         },
         // 更新日志
-        updateLog: [{
+        updateLog: [
+            {
                 time: "2021-8-4",
-                log: [
-                    "新增设置按钮位置修改",
-                    "新增版本差异数据更新",
-                    "优化了部分逻辑问题",
-                ]
-            }, {
+                log: ["新增设置按钮位置修改", "新增版本差异数据更新", "优化了部分逻辑问题"]
+            },
+            {
                 time: "2021-8-3",
                 log: [
                     "新增主题颜色设置",
@@ -135,63 +138,54 @@ new Vue({
                     "手机端菜单字体样式修改",
                     "搜索框阴影修改",
                     "所有提示样式修改",
-                    "动画优化",
+                    "动画优化"
                 ]
-            }, {
+            },
+            {
                 time: "2021-7-5",
                 log: [
                     "新增当前时间显示",
                     "新增天气获取",
                     "网址列表后端已完成",
                     "API重构已上线",
-                    "消息提示框现在可以进行关闭",
+                    "消息提示框现在可以进行关闭"
                 ]
-            }, {
+            },
+            {
                 time: "2021-6-28",
                 log: [
                     "新增重置配置功能",
                     "修复了一言API加载失败问题",
                     "修复了搜索结果不消失的问题",
                     "介绍重写",
-                    "菜单重写",
+                    "菜单重写"
                 ]
-            }, {
+            },
+            {
                 time: "2021-6-24",
-                log: [
-                    "搜索引擎回调重写，性能优化MAX提升",
-                    "搜索结果支持上下键切换啦！",
-                ]
-            }, {
+                log: ["搜索引擎回调重写，性能优化MAX提升", "搜索结果支持上下键切换啦！"]
+            },
+            {
                 time: "2021-6-21",
-                log: [
-                    "搜索特殊字符无效修复",
-                    "自定义壁纸不显示图片信息修复",
-                    "元素获取代码优化",
-                ]
-            }, {
+                log: ["搜索特殊字符无效修复", "自定义壁纸不显示图片信息修复", "元素获取代码优化"]
+            },
+            {
                 time: "2021-6-4",
-                log: [
-                    "壁纸修复",
-                    "后端更换为Node.js",
-                    "移除了毛玻璃，优化流畅体验",
-                    "部分代码更新",
-                    "自适应更新",
-                ]
-            }, {
+                log: ["壁纸修复", "后端更换为Node.js", "移除了毛玻璃，优化流畅体验", "部分代码更新", "自适应更新"]
+            },
+            {
                 time: "2021-1-19",
                 log: [
                     "自适应完成",
                     "菜单新增关闭按钮",
                     "版权与图片信息文字位置更改",
                     "版权与图片信息文字可开关",
-                    "数据结构代码优化",
+                    "数据结构代码优化"
                 ]
             },
             {
                 time: "2020-12-27",
-                log: [
-                    "随机切换壁纸保存",
-                ]
+                log: ["随机切换壁纸保存"]
             },
             {
                 time: "2020-12-22",
@@ -203,7 +197,7 @@ new Vue({
                     "背景切换修复",
                     "背景接口失效会启用备用壁纸",
                     "背景外链链接存储",
-                    "点击搜索功能",
+                    "点击搜索功能"
                 ]
             }
         ]
@@ -264,7 +258,7 @@ new Vue({
             // 遍历数据修复
             for (let key in this.saveDataCache) {
                 if (!cache[key]) {
-                    cache[key] = this.saveDataCache[key]
+                    cache[key] = this.saveDataCache[key];
                 }
             }
             return cache;
@@ -311,32 +305,37 @@ new Vue({
             let that = this;
 
             try {
-                axios.post("https://cors.lovewml.cn/cors", {
-                    type: "get",
-                    url: "https://cn.bing.com/HPImageArchive.aspx",
-                    data: {
-                        "format": "js",
-                        "idx": 0,
-                        "n": 8,
-                        "mkt": "zh-CN"
-                    }
-                }).then(res => {
-                    if (res.status == 200) {
-                        that.bingData = res.data.data;
-                    }
+                axios
+                    .post("https://cors.lovewml.cn/cors", {
+                        type: "get",
+                        url: "https://cn.bing.com/HPImageArchive.aspx",
+                        data: {
+                            format: "js",
+                            idx: 0,
+                            n: 8,
+                            mkt: "zh-CN"
+                        }
+                    })
+                    .then(
+                        (res) => {
+                            if (res.status == 200) {
+                                that.bingData = res.data.data;
+                            }
 
-                    // 如果未设定则显示 bing 壁纸
-                    if (that.saveData.bgLink == "") {
-                        that.bingIndex = index - 1;
-                        let bing = "https://cn.bing.com/" + that.bingData.images[that.bingIndex].url;
-                        that.setNowBg(bing);
-                    } else {
-                        // 显示设定壁纸
-                        that.setNowBg(that.saveData.bgLink);
-                    }
-                }, () => {
-                    that.error();
-                })
+                            // 如果未设定则显示 bing 壁纸
+                            if (that.saveData.bgLink == "") {
+                                that.bingIndex = index - 1;
+                                let bing = "https://cn.bing.com/" + that.bingData.images[that.bingIndex].url;
+                                that.setNowBg(bing);
+                            } else {
+                                // 显示设定壁纸
+                                that.setNowBg(that.saveData.bgLink);
+                            }
+                        },
+                        () => {
+                            that.error();
+                        }
+                    );
             } catch (err) {
                 that.error();
             }
@@ -405,11 +404,14 @@ new Vue({
             if (!this.saveData.hitokotoShow) {
                 return;
             }
-            this.$http.jsonp("https://v1.hitokoto.cn?c=d&c=h&c=i&c=j&c=l").then(res => {
-                this.$refs.hitokoto.innerText = JSON.parse(JSON.parse(res.body)).hitokoto;
-            }, err => {
-                this.gethitokoto();
-            })
+            this.$http.jsonp("https://v1.hitokoto.cn?c=d&c=h&c=i&c=j&c=l").then(
+                (res) => {
+                    this.$refs.hitokoto.innerText = JSON.parse(JSON.parse(res.body)).hitokoto;
+                },
+                (err) => {
+                    this.gethitokoto();
+                }
+            );
         },
         // 搜索框聚焦
         SoFocus(b) {
@@ -437,8 +439,8 @@ new Vue({
             // 获取键位
             let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
             // 无视上下按键
-            if (e1 && e1.keyCode == 38 || e1 && e1.keyCode == 40) {
-                return that.soBoxtextCache = that.soBoxtext;
+            if ((e1 && e1.keyCode == 38) || (e1 && e1.keyCode == 40)) {
+                return (that.soBoxtextCache = that.soBoxtext);
             }
 
             // 没有内容则隐藏
@@ -457,10 +459,16 @@ new Vue({
 
             // 请求
             if (that.soBoxtext) {
-                that.$http.jsonp(`https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${encodeURIComponent(that.soBoxtext)}&cb=callback`, {
-                        jsonp: 'cb'
-                    })
-                    .then(res => {
+                that.$http
+                    .jsonp(
+                        `https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${encodeURIComponent(
+                            that.soBoxtext
+                        )}&cb=callback`,
+                        {
+                            jsonp: "cb"
+                        }
+                    )
+                    .then((res) => {
                         // 是否存在结果
                         if (res.data.s.length == 0) {
                             return;
@@ -526,9 +534,9 @@ new Vue({
             if (that.soAdd.name && that.soAdd.icon && that.soAdd.linkHead) {
                 that.saveData.so.push(that.soAdd);
                 that.soAdd = {
-                    name: '',
-                    icon: '',
-                    linkHead: ''
+                    name: "",
+                    icon: "",
+                    linkHead: ""
                 };
                 that.$notify({
                     message: "添加成功",
@@ -547,11 +555,11 @@ new Vue({
         },
         // 获取网站列表
         getLink() {
-            axios.get($stor.ServerBase).then(res => {
+            axios.get($stor.ServerBase).then((res) => {
                 if (res.status == 200) {
                     this.LinkList = res.data.data;
                 }
-            })
+            });
         },
         // 网站列表菜单
         scrollMenu(index) {
@@ -640,7 +648,7 @@ new Vue({
                     // 结果修改
                     that.soBoxtext = that.soBoxlist[that.searchSelectIndex];
                 }
-            }
+            };
         },
         // hover 搜索结果
         hoverSearch(i) {
@@ -668,7 +676,7 @@ new Vue({
 
             this.$notify({
                 message: "重置成功",
-                type: 'success',
+                type: "success",
                 showClose: true
             });
         },
@@ -687,32 +695,36 @@ new Vue({
                 month = date.getMonth() + 1;
                 day = date.getDay();
                 hours = date.getHours();
-                minutes = date.getMinutes().toString().length == 1 ? "0" + date.getMinutes().toString() : date.getMinutes();
-                seconds = date.getSeconds().toString().length == 1 ? "0" + date.getSeconds().toString() : date.getSeconds();
+                minutes =
+                    date.getMinutes().toString().length == 1 ? "0" + date.getMinutes().toString() : date.getMinutes();
+                seconds =
+                    date.getSeconds().toString().length == 1 ? "0" + date.getSeconds().toString() : date.getSeconds();
                 this.soBoxTime = `${year}年${month}月${day}日`;
                 this.soBoxTime += ` ${hours}:${minutes}:${seconds}`;
             }, 1000);
         },
         // 获取天气
         getWeather() {
-            axios.get("https://tianqiapi.com/free/day", {
-                params: {
-                    appid: 75761381,
-                    appsecret: "d9ooPKO7",
-                    vue: 1
-                }
-            }).then(res => {
-                if (res.status != 200) {
-                    return this.$notify({
-                        message: "天气获取失败！",
-                        type: "error",
-                        showClose: true
-                    });
-                }
-                // 图片链接替换
-                res.data.wea_img = `https://xintai.xianguomall.com/skin/durian/${res.data.wea_img}.png`;
-                this.weatherInfo = res.data;
-            })
+            axios
+                .get("https://tianqiapi.com/free/day", {
+                    params: {
+                        appid: 75761381,
+                        appsecret: "d9ooPKO7",
+                        vue: 1
+                    }
+                })
+                .then((res) => {
+                    if (res.status != 200) {
+                        return this.$notify({
+                            message: "天气获取失败！",
+                            type: "error",
+                            showClose: true
+                        });
+                    }
+                    // 图片链接替换
+                    res.data.wea_img = `https://xintai.xianguomall.com/skin/durian/${res.data.wea_img}.png`;
+                    this.weatherInfo = res.data;
+                });
         },
         // 主题色修改
         changeThemeColor() {
@@ -759,6 +771,6 @@ new Vue({
                 // 存入 session
                 $stor.session.set("IceCream", that.saveData);
             }
-        },
+        }
     }
-})
+});
