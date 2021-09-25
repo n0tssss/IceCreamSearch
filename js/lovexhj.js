@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-09-25 18:34:13
+ * @LastEditTime: 2021-09-25 19:38:12
  * @Description: 主程序
  * @FilePath: \IceCreamSearch\js\lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -35,6 +35,24 @@ new Vue({
         soBoxTime: null, // 当前时间展示数据
         weatherInfo: null, // 当前天气数据
         updateLog, // 更新日志
+        hitokotoIndex: ["all"], // 一言类型选择
+        hitokotoLastData: "all", // 一言数据最后一个数据缓存
+        // 一言类型配置
+        hitokotoConfig: [
+            ["全部随机", "all"],
+            ["动画", "a"],
+            ["漫画", "b"],
+            ["游戏", "c"],
+            ["文学", "d"],
+            ["原创", "e"],
+            ["影视", "h"],
+            ["诗词", "i"],
+            ["网易云", "j"],
+            ["哲学", "k"],
+            ["抖机灵", "l"],
+            ["来自网络", "f"],
+            ["其他", "g"]
+        ],
         // 设置按钮位置选择数据
         settingSelect: [
             {
@@ -154,7 +172,9 @@ new Vue({
         this.changeThemeColor(); // 默认主题色
     },
     methods: {
-        // 初始化
+        /**
+         * 初始化
+         */
         initWindow() {
             let that = this;
 
@@ -188,7 +208,10 @@ new Vue({
             }
             this.saveStorage();
         },
-        // 版本是否更新
+
+        /**
+         * 版本是否更新
+         */
         checkVersion(cache) {
             // 判断数据是否缺少
             if (Object.keys(cache).length == Object.keys(this.saveDataCache).length) {
@@ -202,7 +225,10 @@ new Vue({
             }
             return cache;
         },
-        // 本地存储修改
+
+        /**
+         * 本地存储修改
+         */
         initDialogClose(b) {
             let that = this;
 
@@ -210,26 +236,21 @@ new Vue({
 
             if (b) {
                 that.saveData.updateStorage = true;
-                that.$notify({
-                    message: "已开启本地存储设置",
-                    type: "success",
-                    showClose: true
-                });
+                this.notify("已开启本地存储设置", "success");
             } else {
                 that.saveData.updateStorage = false;
                 $stor.storage.remove("IceCream");
-                that.$notify({
-                    message: "已关闭本地存储设置，设置里面还可以开启哦",
-                    type: "warning",
-                    showClose: true
-                });
+                this.notify("已关闭本地存储设置，设置里面还可以开启哦", "warning");
             }
             // 记住用户设置
             this.saveStorage();
             // 关闭窗口
             that.initDialog = false;
         },
-        // 本地存储开关
+
+        /**
+         * 本地存储开关
+         */
         StorageStatus() {
             let that = this;
 
@@ -239,7 +260,11 @@ new Vue({
                 that.initDialogClose(false);
             }
         },
-        // bing 壁纸
+
+        /**
+         * bing 壁纸
+         * @param {*} index bing 壁纸索引
+         */
         getBing(index) {
             let that = this;
 
@@ -279,24 +304,27 @@ new Vue({
                 that.error();
             }
         },
-        // 壁纸错误
+
+        /**
+         * 壁纸错误
+         */
         error() {
             let that = this;
 
             // 如果壁纸接口拉闸则调用本地背景
-            this.$notify({
-                message: "壁纸有点脾气罢工了，请联系网站管理员查看",
-                type: "error",
-                showClose: true
-            });
+            this.notify("壁纸有点脾气罢工了，请联系网站管理员查看", "error");
             if (that.saveData.bgLink == "") {
                 that.setNowBg("./errorBg.jpg");
             } else {
                 that.setNowBg(that.saveData.bgLink);
             }
         },
-        // 背景图片设置
-        // 判断选择
+
+        /**
+         * 背景图片设置，判断选择
+         * @param {*} index 背景设置选项
+         * @returns 打开图床
+         */
         selectBgImg(index) {
             let that = this;
 
@@ -318,7 +346,10 @@ new Vue({
                 }
             }
         },
-        // 链接设置
+
+        /**
+         * 链接设置
+         */
         setBgImg() {
             let that = this;
             if (that.saveData.bgLink) {
@@ -329,7 +360,11 @@ new Vue({
             }
             that.saveStorage();
         },
-        // 设置 url 背景
+
+        /**
+         * 设置 url 背景
+         * @param {*} url 图片 url
+         */
         setNowBg(url) {
             let bgBox = this.$refs.bingBg;
             bgBox.style.background = `url(${url})`;
@@ -338,12 +373,17 @@ new Vue({
             bgBox.style.backgroundAttachment = "fixed";
             this.saveStorage();
         },
-        // 一言API
+
+        /**
+         * 一言API
+         */
         gethitokoto() {
             if (!this.saveData.hitokotoShow) {
                 return;
             }
-            this.$http.jsonp("https://v1.hitokoto.cn?c=d&c=h&c=i&c=j&c=l").then(
+            // 类型判断
+            let url = "https://v1.hitokoto.cn";
+            this.$http.jsonp(url).then(
                 (res) => {
                     this.$refs.hitokoto.innerText = JSON.parse(JSON.parse(res.body)).hitokoto;
                 },
@@ -352,7 +392,26 @@ new Vue({
                 }
             );
         },
-        // 搜索框聚焦
+
+        /**
+         * 取消选择一言选项时
+         */
+        delHitokoto() {
+            let length = this.hitokotoIndex.length;
+            // 最后一项时则缓存
+            if (length == 1) {
+                return (this.hitokotoLastData = this.hitokotoIndex[0]);
+            }
+            // 只有最后一项时无法移除
+            if (length == 0) {
+                this.notify("至少得选择一个哦~", "warning");
+                this.hitokotoIndex.push(this.hitokotoLastData);
+            }
+        },
+
+        /**
+         * 搜索框聚焦
+         */
         SoFocus(b) {
             this.soSelect = false;
             if (b) {
@@ -371,7 +430,10 @@ new Vue({
                 }, 200);
             }
         },
-        // 输入框内容处理
+
+        /**
+         * 输入框内容处理
+         */
         SoChange(e) {
             let that = this;
 
@@ -431,43 +493,54 @@ new Vue({
                     });
             }
         },
-        // 回车跳转
+
+        /**
+         * 回车跳转
+         */
         goBaidu() {
             let that = this;
             if (that.soBoxtext) {
                 window.open(that.saveData.so[that.saveData.soIndex].linkHead + encodeURIComponent(that.soBoxtext));
             } else {
-                that.$notify({
-                    message: "您还没输入内容呢",
-                    showClose: true
-                });
+                this.notify("您还没输入内容呢", "info");
             }
         },
-        // 搜索框数量设置
+
+        /**
+         * 搜索框数量设置
+         */
         soBoxlistUpdate(value) {
             let that = this;
             that.saveData.soBoxlistShowNum = value;
-            that.$notify({
-                message: `设置成功，当前显示${that.saveData.soBoxlistShowNum}个！`,
-                type: "success",
-                showClose: true
-            });
+            this.notify(`设置成功，当前显示${that.saveData.soBoxlistShowNum}个！`, "success");
             that.saveStorage();
         },
-        // 网站导航
+
+        /**
+         * 网站导航
+         */
         openAppList() {
             this.openApp = !this.openApp;
         },
-        // 搜索引擎打开 || 关闭
+
+        /**
+         * 搜索引擎打开 || 关闭
+         */
         selectLink() {
             this.soSelect = !this.soSelect;
         },
-        // 搜索引擎选择
+
+        /**
+         * 搜索引擎选择
+         */
         soSelect1(index) {
             this.saveData.soIndex = index;
             this.saveStorage();
         },
-        // 搜索框引擎添加 || 删除
+
+        /**
+         * 搜索框引擎添加 || 删除
+         */
         soSelectAddFc() {
             let that = this;
             if (that.soAdd.name && that.soAdd.icon && that.soAdd.linkHead) {
@@ -477,22 +550,17 @@ new Vue({
                     icon: "",
                     linkHead: ""
                 };
-                that.$notify({
-                    message: "添加成功",
-                    type: "success",
-                    showClose: true
-                });
+                this.notify("添加成功", "success");
                 that.saveStorage();
                 that.soSelectAdd = false;
             } else {
-                that.$notify({
-                    message: "请填写全部选项",
-                    type: "error",
-                    showClose: true
-                });
+                this.notify("请填写全部选项", "error");
             }
         },
-        // 获取网站列表
+
+        /**
+         * 获取网站列表
+         */
         getLink() {
             axios.get($stor.ServerBase).then((res) => {
                 if (res.status == 200) {
@@ -500,7 +568,10 @@ new Vue({
                 }
             });
         },
-        // 网站列表菜单
+
+        /**
+         * 网站列表菜单
+         */
         scrollMenu(index) {
             // 需滚动的位置
             let scrollHeight = 0;
@@ -522,7 +593,10 @@ new Vue({
                 behavior: "smooth"
             });
         },
-        // 滚动阴影
+
+        /**
+         * 滚动阴影
+         */
         shadow() {
             if (this.$refs.appListBox.scrollTop > 20) {
                 this.$refs.closeAppList.classList.add("closeAppListShadow");
@@ -530,7 +604,10 @@ new Vue({
                 this.$refs.closeAppList.classList.remove("closeAppListShadow");
             }
         },
-        // 底部文字是否显示
+
+        /**
+         * 底部文字是否显示
+         */
         footerTextStatus() {
             let msg;
             if (this.saveData.footerText) {
@@ -538,14 +615,13 @@ new Vue({
             } else {
                 msg = ["底部文字已关闭", "info"];
             }
-            this.$notify({
-                message: msg[0],
-                type: msg[1],
-                showClose: true
-            });
+            this.notify(msg[0], msg[1]);
             this.saveStorage();
         },
-        // 上下键切换结果
+
+        /**
+         * 上下键切换结果
+         */
         checkRes() {
             // 搜索结果
             let res;
@@ -589,18 +665,24 @@ new Vue({
                 }
             };
         },
-        // hover 搜索结果
+
+        /**
+         * hover 搜索结果
+         * @param {*} i 索引
+         */
         hoverSearch(i) {
             this.searchSelectIndex = i;
         },
-        // 重置设置
+
+        /**
+         * 重置设置
+         */
         reloadSetting() {
             // 用户是否允许操作 Storage 保存
             let updateStorage = this.saveData.updateStorage;
 
             // 深拷贝数据
-            let cacheData = JSON.stringify(this.saveDataCache);
-            this.saveData = JSON.parse(cacheData);
+            this.saveData = JSON.parse(JSON.stringify(this.saveDataCache));
 
             this.saveData.updateStorage = updateStorage;
 
@@ -613,13 +695,12 @@ new Vue({
             // 主题色修改
             this.changeThemeColor();
 
-            this.$notify({
-                message: "重置成功",
-                type: "success",
-                showClose: true
-            });
+            this.notify("重置成功", "success");
         },
-        // 当前时间展示
+
+        /**
+         * 当前时间展示
+         */
         leftTopTime() {
             let date;
             let year;
@@ -642,7 +723,10 @@ new Vue({
                 this.soBoxTime += ` ${hours}:${minutes}:${seconds}`;
             }, 1000);
         },
-        // 获取天气
+
+        /**
+         * 获取天气
+         */
         getWeather() {
             axios
                 .get("https://tianqiapi.com/free/day", {
@@ -654,33 +738,34 @@ new Vue({
                 })
                 .then((res) => {
                     if (res.status != 200) {
-                        return this.$notify({
-                            message: "天气获取失败！",
-                            type: "error",
-                            showClose: true
-                        });
+                        return this.notify("天气获取失败！", "error");
                     }
                     // 图片链接替换
                     res.data.wea_img = `https://xintai.xianguomall.com/skin/durian/${res.data.wea_img}.png`;
                     this.weatherInfo = res.data;
                 });
         },
-        // 主题色修改
+
+        /**
+         * 主题色修改
+         */
         changeThemeColor() {
             document.documentElement.style.setProperty("--fontColor", this.saveData.themeColor);
             this.saveStorage();
         },
-        // 重置主题色
+
+        /**
+         * 重置主题色
+         */
         reloadThemeColor() {
             this.saveData.themeColor = "rgb(101, 178, 255)";
             this.changeThemeColor();
-            this.$notify({
-                message: "主题色重置成功",
-                type: "success",
-                showClose: true
-            });
+            this.notify("主题色重置成功", "success");
         },
-        // 一言展示
+
+        /**
+         * 一言展示
+         */
         changeHitokotoShow() {
             let msg;
             if (this.saveData.hitokotoShow) {
@@ -689,14 +774,26 @@ new Vue({
             } else {
                 msg = ["一言已关闭", "info"];
             }
-            this.$notify({
-                message: msg[0],
-                type: msg[1],
-                showClose: true
-            });
+            this.notify(msg[0], msg[1]);
             this.saveStorage();
         },
-        // Storage 操作
+
+        /**
+         * 消息弹框提示
+         * @param {String} message 消息
+         * @param {success, warning, info, error} type 类型
+         */
+        notify(message, type) {
+            this.$notify({
+                message,
+                type,
+                showClose: true
+            });
+        },
+
+        /**
+         * Storage 操作
+         */
         saveStorage() {
             let that = this;
 

@@ -1,326 +1,388 @@
 <!DOCTYPE html>
 <html lang="zh_CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        <title>IceCream | 简约至上</title>
+        <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="./css/lovexhj.css" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <title>IceCream | 简约至上</title>
-    <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/lovexhj.css">
-</head>
+    <body>
+        <!-- 主体框架 -->
+        <div id="Search" v-cloak>
+            <!-- Bing今日壁纸 -->
+            <div class="bingBg" ref="bingBg">
+                <!-- 左上角 -->
+                <div class="windowLeftTop">
+                    <!-- 时间 -->
+                    <div class="soBoxTime">{{ soBoxTime }}</div>
 
-<body>
-    <!-- 主体框架 -->
-    <div id="Search" v-cloak>
-
-        <!-- Bing今日壁纸 -->
-        <div class="bingBg" ref="bingBg">
-
-            <!-- 左上角 -->
-            <div class="windowLeftTop">
-
-                <!-- 时间 -->
-                <div class="soBoxTime">{{ soBoxTime }}</div>
-
-                <!-- 天气 -->
-                <div class="weather" v-if="weatherInfo">
-                    <p>{{ weatherInfo.city }}</p>
-                    <img :src="weatherInfo.wea_img" alt="天气logo">
-                    <p>{{ weatherInfo.wea }}</p>
-                    <p>{{ weatherInfo.tem }}°</p>
+                    <!-- 天气 -->
+                    <div class="weather" v-if="weatherInfo">
+                        <p>{{ weatherInfo.city }}</p>
+                        <img :src="weatherInfo.wea_img" alt="天气logo" />
+                        <p>{{ weatherInfo.wea }}</p>
+                        <p>{{ weatherInfo.tem }}°</p>
+                    </div>
                 </div>
 
+                <!-- 网站列表打开 -->
+                <div :class="{openAppList: true, openAppListShow: openApp}" @click="openAppList">
+                    <i class="el-icon-arrow-up"></i>
+                </div>
+
+                <!-- 网站列表 -->
+                <div :class="{appList: true, appListShow: openApp}">
+                    <!-- 毛玻璃背景 -->
+                    <div class="appListBg"></div>
+
+                    <!-- 关闭按钮 -->
+                    <div class="closeAppList" @click="openAppList" ref="closeAppList">
+                        <i class="el-icon-arrow-down"></i>
+                    </div>
+
+                    <!-- 分类菜单 -->
+                    <div class="appListMenu">
+                        <div v-for="(item, index) in LinkList" :key="index" @click="scrollMenu(index)">
+                            {{ item.navName }}
+                        </div>
+                    </div>
+
+                    <!-- 分类框架 -->
+                    <div class="appListBox" @scroll="shadow" ref="appListBox">
+                        <!-- 各种分类 -->
+                        <div class="appListClass" v-for="(item, index) in LinkList" :key="index">
+                            <!-- 分类标题 -->
+                            <p class="appListClassTitle">{{ item.navName }}</p>
+
+                            <!-- 分类列表 -->
+                            <div class="appListClassBox">
+                                <div class="appListClassList" v-for="(item2, index2) in item.links" :key="index2">
+                                    <a :href="item2.link" target="_blank">
+                                        <el-tooltip
+                                            class="item"
+                                            effect="dark"
+                                            :content="item2.content"
+                                            placement="bottom"
+                                        >
+                                            <div>
+                                                <img :src="item2.img" :alt="item2.img" />
+                                                <p>{{ item2.name }}</p>
+                                                <p>{{ item2.content }}</p>
+                                            </div>
+                                        </el-tooltip>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 撑开底部 -->
+                        <div class="Boom">没有更多内容啦！</div>
+                    </div>
+                </div>
+
+                <!-- 页脚版权信息 -->
+                <div :class="{footer: true, footerNone: openApp}" v-if="saveData.footerText">
+                    <div v-if="bingData.images">
+                        <p>{{ bingData.images[bingIndex].copyright }}</p>
+                    </div>
+                    <div>
+                        <p>© {{ time }} IceCreemSearch | THEME MADE BY <a href="https://n0ts.cn">N0ts</a></p>
+                        <p><a href="http://beian.miit.gov.cn">湘ICP备20005603号-2</a></p>
+                    </div>
+                </div>
             </div>
 
-            <!-- 网站列表打开 -->
-            <div :class="{openAppList: true, openAppListShow: openApp}" @click="openAppList">
-                <i class="el-icon-arrow-up"></i>
+            <!-- 初始化询问 -->
+            <el-dialog title="提示" :visible.sync="initDialog" width="40%">
+                <span>是否允许我们将您的设置文件存入到 localStorage(本地缓存)，这将获得完美的体验</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="initDialogClose(false)">取 消</el-button>
+                    <el-button type="primary" @click="initDialogClose(true)">确 定</el-button>
+                </span>
+            </el-dialog>
+
+            <!-- 搜索框 -->
+            <div id="soBox" :class="{soBoxtop: openApp}">
+                <!-- 主体框框 -->
+                <div class="soBoxtext" ref="soBoxtext">
+                    <!-- 右侧搜索图标 -->
+                    <i class="el-icon-search rightIcon" @click="goBaidu"></i>
+
+                    <!-- 左侧搜索引擎图标 -->
+                    <div class="soImg" @click="selectLink">
+                        <img :src="saveData.so[saveData.soIndex].icon" />
+                    </div>
+
+                    <!-- 搜索框本框 -->
+                    <input
+                        type="text"
+                        id="soBoxtext"
+                        v-model="soBoxtext"
+                        placeholder="搜点什么..."
+                        @focus="SoFocus(true)"
+                        @blur="SoFocus(false)"
+                        @keyup="SoChange($event)"
+                    />
+                </div>
+
+                <!-- 搜索结果 -->
+                <div class="soBoxlist" ref="soBoxlist">
+                    <ul ref="soBoxlist2">
+                        <li v-for="(item, index) in soBoxlist" :key="index" @mouseover="hoverSearch(index)">
+                            <a
+                                :href="saveData.so[saveData.soIndex].linkHead + item"
+                                target="_blank"
+                                :class="{active: searchSelectIndex == index}"
+                                >{{ item }}</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 搜索引擎切换 -->
+                <div :class="{soSelectList: true, soSelectListShow: soSelect}">
+                    <div class="soSelect" v-for="(item, index) in saveData.so">
+                        <div
+                            :class="{active: index == saveData.soIndex}"
+                            @click="soSelect1(index)"
+                            @contextmenu.prevent=""
+                        >
+                            <img :src="item.icon" />
+                            <p>{{ item.name }}</p>
+                        </div>
+                    </div>
+                    <div class="soSelect soSelectAdd" @click="soSelectAdd = true">
+                        <i class="el-icon-plus"></i>
+                    </div>
+                    <div class="soSelect soSelectClose" @click="selectLink">
+                        <i class="el-icon-close"></i>
+                    </div>
+                </div>
+
+                <!-- 一言 -->
+                <p id="hitokoto" ref="hitokoto" v-if="saveData.hitokotoShow">:D 获取中...</p>
             </div>
 
-            <!-- 网站列表 -->
-            <div :class="{appList: true, appListShow: openApp}">
+            <!-- 搜索引擎添加 -->
+            <el-dialog title="新增一个搜索引擎" :visible.sync="soSelectAdd">
+                <el-form label-width="80px" label-position="top">
+                    <el-form-item>
+                        <p>搜索引擎名称</p>
+                        <p>例如：百度</p>
+                        <el-input v-model="soAdd.name" placeholder="搜索引擎名称"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <p>搜索引擎图标</p>
+                        <p>例如：https://www.baidu.com/favicon.ico</p>
+                        <el-input v-model="soAdd.icon" placeholder="搜索引擎图标"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <p>搜索引擎链接</p>
+                        <p>例如：https://www.baidu.com/s?wd=</p>
+                        <el-input v-model="soAdd.linkHead" placeholder="搜索引擎链接"></el-input>
+                    </el-form-item>
+                    <el-button type="primary" @click="soSelectAddFc" style="width: 100%">添加</el-button>
+                </el-form>
+            </el-dialog>
 
-                <!-- 毛玻璃背景 -->
-                <div class="appListBg"></div>
+            <!-- 设置按钮 -->
+            <div
+                :class="{optionIcon: true, optionIconNone: openApp, optionIconLeftTop: saveData.settingLocation == 1, optionIconRightTop: saveData.settingLocation == 2, optionIconRightBottom: saveData.settingLocation == 3, optionIconLeftBottom: saveData.settingLocation == 4}"
+                @click="leftBar = true"
+            >
+                <i class="el-icon-setting"></i>
+            </div>
 
+            <!-- 侧边菜单 -->
+            <el-drawer :visible.sync="leftBar" :with-header="false" direction="ltr">
                 <!-- 关闭按钮 -->
-                <div class="closeAppList" @click="openAppList" ref="closeAppList">
-                    <i class="el-icon-arrow-down"></i>
-                </div>
-
-                <!-- 分类菜单 -->
-                <div class="appListMenu">
-                    <div v-for="(item, index) in LinkList" :key="index" @click="scrollMenu(index)">{{ item.navName }}
-                    </div>
-                </div>
-
-                <!-- 分类框架 -->
-                <div class="appListBox" @scroll="shadow" ref="appListBox">
-
-                    <!-- 各种分类 -->
-                    <div class="appListClass" v-for="(item, index) in LinkList" :key="index">
-
-                        <!-- 分类标题 -->
-                        <p class="appListClassTitle">{{ item.navName }}</p>
-
-                        <!-- 分类列表 -->
-                        <div class="appListClassBox">
-                            <div class="appListClassList" v-for="(item2, index2) in item.links" :key="index2">
-                                <a :href="item2.link" target="_blank">
-                                    <el-tooltip class="item" effect="dark" :content="item2.content" placement="bottom">
-                                        <div>
-                                            <img :src="item2.img" :alt="item2.img">
-                                            <p>{{ item2.name }}</p>
-                                            <p>{{ item2.content }}</p>
-                                        </div>
-                                    </el-tooltip>
-                                </a>
+                <i class="closeTab el-icon-close" @click="leftBar = false"></i>
+                <el-tabs v-model="tabsActive">
+                    <!-- 基本设置 -->
+                    <el-tab-pane label="基本" name="option">
+                        <div class="tabBox">
+                            <p class="h1">本地存储</p>
+                            <div class="text">
+                                <p>将设置存储在本地</p>
+                            </div>
+                            <div class="tools">
+                                <el-switch
+                                    v-model="saveData.updateStorage"
+                                    active-color="#13ce66"
+                                    @change="StorageStatus"
+                                >
+                                </el-switch>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- 撑开底部 -->
-                    <div class="Boom">没有更多内容啦！</div>
-                </div>
-            </div>
-
-            <!-- 页脚版权信息 -->
-            <div :class="{footer: true, footerNone: openApp}" v-if="saveData.footerText">
-                <div v-if="bingData.images">
-                    <p>{{ bingData.images[bingIndex].copyright }}</p>
-                </div>
-                <div>
-                    <p>© {{ time }} IceCreemSearch | THEME MADE BY <a href="https://n0ts.cn">N0ts</a></p>
-                    <p><a href="http://beian.miit.gov.cn">湘ICP备20005603号-2</a></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 初始化询问 -->
-        <el-dialog title="提示" :visible.sync="initDialog" width="40%">
-            <span>是否允许我们将您的设置文件存入到 localStorage(本地缓存)，这将获得完美的体验</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="initDialogClose(false)">取 消</el-button>
-                <el-button type="primary" @click="initDialogClose(true)">确 定</el-button>
-            </span>
-        </el-dialog>
-
-        <!-- 搜索框 -->
-        <div id="soBox" :class="{soBoxtop: openApp}">
-
-            <!-- 主体框框 -->
-            <div class="soBoxtext" ref="soBoxtext">
-
-                <!-- 右侧搜索图标 -->
-                <i class="el-icon-search rightIcon" @click="goBaidu"></i>
-
-                <!-- 左侧搜索引擎图标 -->
-                <div class="soImg" @click="selectLink">
-                    <img :src="saveData.so[saveData.soIndex].icon">
-                </div>
-
-                <!-- 搜索框本框 -->
-                <input type="text" id="soBoxtext" v-model="soBoxtext" placeholder="搜点什么..." @focus="SoFocus(true)"
-                    @blur="SoFocus(false)" @keyup="SoChange($event)">
-            </div>
-
-            <!-- 搜索结果 -->
-            <div class="soBoxlist" ref="soBoxlist">
-                <ul ref="soBoxlist2">
-                    <li v-for="(item, index) in soBoxlist" :key="index" @mouseover="hoverSearch(index)">
-                        <a :href="saveData.so[saveData.soIndex].linkHead + item" target="_blank"
-                            :class="{active: searchSelectIndex == index}">{{ item }}</a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 搜索引擎切换 -->
-            <div :class="{soSelectList: true, soSelectListShow: soSelect}">
-                <div class="soSelect" v-for="(item, index) in saveData.so">
-                    <div :class="{active: index == saveData.soIndex}" @click="soSelect1(index)" @contextmenu.prevent="">
-                        <img :src="item.icon">
-                        <p>{{ item.name }}</p>
-                    </div>
-                </div>
-                <div class="soSelect soSelectAdd" @click="soSelectAdd = true">
-                    <i class="el-icon-plus"></i>
-                </div>
-                <div class="soSelect soSelectClose" @click="selectLink">
-                    <i class="el-icon-close"></i>
-                </div>
-            </div>
-
-            <!-- 一言 -->
-            <p id="hitokoto" ref="hitokoto" v-if="saveData.hitokotoShow">:D 获取中...</p>
-        </div>
-
-        <!-- 搜索引擎添加 -->
-        <el-dialog title="新增一个搜索引擎" :visible.sync="soSelectAdd">
-            <el-form label-width="80px" label-position="top">
-                <el-form-item>
-                    <p>搜索引擎名称</p>
-                    <p>例如：百度</p>
-                    <el-input v-model="soAdd.name" placeholder="搜索引擎名称"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <p>搜索引擎图标</p>
-                    <p>例如：https://www.baidu.com/favicon.ico</p>
-                    <el-input v-model="soAdd.icon" placeholder="搜索引擎图标"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <p>搜索引擎链接</p>
-                    <p>例如：https://www.baidu.com/s?wd=</p>
-                    <el-input v-model="soAdd.linkHead" placeholder="搜索引擎链接"></el-input>
-                </el-form-item>
-                <el-button type="primary" @click="soSelectAddFc" style="width: 100%;">添加</el-button>
-            </el-form>
-        </el-dialog>
-
-        <!-- 设置按钮 -->
-        <div :class="{optionIcon: true, optionIconNone: openApp, optionIconLeftTop: saveData.settingLocation == 1, optionIconRightTop: saveData.settingLocation == 2, optionIconRightBottom: saveData.settingLocation == 3, optionIconLeftBottom: saveData.settingLocation == 4}" @click="leftBar = true">
-            <i class="el-icon-setting"></i>
-        </div>
-
-        <!-- 侧边菜单 -->
-        <el-drawer :visible.sync="leftBar" :with-header="false" direction="ltr">
-
-            <!-- 关闭按钮 -->
-            <i class="closeTab el-icon-close" @click="leftBar = false"></i>
-            <el-tabs v-model="tabsActive">
-
-                <!-- 基本设置 -->
-                <el-tab-pane label="基本" name="option">
-                    <div class="tabBox">
-                        <p class="h1">本地存储</p>
-                        <div class="text">
-                            <p>将设置存储在本地</p>
-                        </div>
-                        <div class="tools">
-                            <el-switch v-model="saveData.updateStorage" active-color="#13ce66" @change="StorageStatus">
-                            </el-switch>
-                        </div>
-                    </div>
-                    <div class="tabBox">
-                        <p class="h1">搜索框</p>
-                        <div class="text">
-                            <p>搜索结果显示的数量（1 - 10）</p>
-                        </div>
-                        <div class="tools">
-                            <el-input-number v-model="saveData.soBoxlistShowNum" controls-position="right"
-                                @change="soBoxlistUpdate($event)" :min="0" :max="10"></el-input-number>
-                        </div>
-                    </div>
-                    <div class="tabBox">
-                        <p class="h1">背景图片</p>
-                        <div class="text">
-                            <p>背景图片外链：</p>
-                            <p>允许上传网络图片，网络地址需为图片真实地址</p>
-                        </div>
-                        <div class="tools">
-                            <el-input v-model="saveData.bgLink" placeholder="请输入图片链接" @change="setBgImg"></el-input>
-                            <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(1)">打开图床</el-button>
-                            <el-button type="primary" icon="el-icon-right" @click="selectBgImg(2)">下一张
-                            </el-button>
-                        </div>
-                    </div>
-                    <div class="tabBox">
-                        <p class="h1">底部文字显示</p>
-                        <div class="text">
-                            <p>是否显示底部文字</p>
-                        </div>
-                        <div class="tools">
-                            <el-switch v-model="saveData.footerText" active-color="#13ce66" @change="footerTextStatus">
-                            </el-switch>
-                        </div>
-                    </div>
-                    <div class="tabBox">
-                        <p class="h1">一言显示</p>
-                        <div class="text">
-                            <p>是否展示一言</p>
-                        </div>
-                        <div class="tools">
-                            <el-switch v-model="saveData.hitokotoShow" active-color="#13ce66"
-                                @change="changeHitokotoShow">
-                            </el-switch>
-                        </div>
-                    </div>
-
-                </el-tab-pane>
-
-                <!-- 样式设置 -->
-                <el-tab-pane label="样式" name="css">
-                    <div class="tabBox">
-                        <p class="h1">主题色设置</p>
-                        <div class="text">
-                            <p>设置一个喜欢的主题色</p>
-                        </div>
-                        <div class="tools">
-                            <el-color-picker v-model="saveData.themeColor" color-format="rgb"
-                                @change="changeThemeColor"></el-color-picker>
-                            <br />
-                            <el-button type="primary" icon="el-icon-refresh-left" @click="reloadThemeColor">重置主题色
-                            </el-button>
-                        </div>
-                    </div>
-                    <div class="tabBox">
-                        <p class="h1">设置按钮位置</p>
-                        <div class="text">
-                            <p>设置按钮的位置选择</p>
-                        </div>
-                        <div class="tools">
-                            <el-select v-model="saveData.settingLocation" size="small" @change="saveStorage">
-                                <el-option v-for="item in settingSelect" :key="item.value" :label="item.label"
-                                    :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </div>
-                    </div>
-                </el-tab-pane>
-
-                <!-- 其他设置 -->
-                <el-tab-pane label="其他" name="load">
-                    <div class="tabBox">
-                        <p class="h1">重置全部设置</p>
-                        <div class="tools">
-                            <el-button type="primary" icon="el-icon-refresh-right" @click="reloadSetting">重置</el-button>
-                        </div>
-                    </div>
-                </el-tab-pane>
-
-                <!-- 关于 -->
-                <el-tab-pane label="关于" name="about">
-                    <div class="tabBox">
-                        <p class="h1">{{ about.name }}</p>
-                        <div class="text" v-html="about.context"></div>
-                    </div>
-                    <div class="tabBox">
-                        <p class="h1">当前版本</p>
-                        <div class="text">{{ version }}</div>
-                    </div>
-                    <div class="tabBox updataInfo">
-                        <p class="h1">更新日志</p>
-                        <div class="text">
-                            <div v-for="(item, index) in updateLog" :key="index">
-                                <p class="timeTitle">{{ item.time }}</p>
-                                <ul>
-                                    <li v-for="(item2, index2) in item.log" :key="index2">{{ item2 }}</li>
-                                </ul>
+                        <div class="tabBox">
+                            <p class="h1">搜索框</p>
+                            <div class="text">
+                                <p>搜索结果显示的数量（1 - 10）</p>
+                            </div>
+                            <div class="tools">
+                                <el-input-number
+                                    v-model="saveData.soBoxlistShowNum"
+                                    controls-position="right"
+                                    @change="soBoxlistUpdate($event)"
+                                    :min="0"
+                                    :max="10"
+                                ></el-input-number>
                             </div>
                         </div>
-                    </div>
-                </el-tab-pane>
+                        <div class="tabBox">
+                            <p class="h1">背景图片</p>
+                            <div class="text">
+                                <p>背景图片外链：</p>
+                                <p>允许上传网络图片，网络地址需为图片真实地址</p>
+                            </div>
+                            <div class="tools">
+                                <el-input
+                                    v-model="saveData.bgLink"
+                                    placeholder="请输入图片链接"
+                                    @change="setBgImg"
+                                ></el-input>
+                                <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(1)"
+                                    >打开图床</el-button
+                                >
+                                <el-button type="primary" icon="el-icon-right" @click="selectBgImg(2)"
+                                    >下一张
+                                </el-button>
+                            </div>
+                        </div>
+                        <div class="tabBox">
+                            <p class="h1">底部文字显示</p>
+                            <div class="text">
+                                <p>是否显示底部文字</p>
+                            </div>
+                            <div class="tools">
+                                <el-switch
+                                    v-model="saveData.footerText"
+                                    active-color="#13ce66"
+                                    @change="footerTextStatus"
+                                >
+                                </el-switch>
+                            </div>
+                        </div>
+                        <div class="tabBox">
+                            <p class="h1">一言显示</p>
+                            <div class="text">
+                                <p>是否展示一言</p>
+                            </div>
+                            <div class="tools">
+                                <el-switch
+                                    v-model="saveData.hitokotoShow"
+                                    active-color="#13ce66"
+                                    @change="changeHitokotoShow"
+                                >
+                                </el-switch>
+                            </div>
+                        </div>
+                        <div class="tabBox">
+                            <p class="h1">一言类型</p>
+                            <div class="text">
+                                <p>一言的类型选择</p>
+                            </div>
+                            <div class="tools">
+                                <el-select v-model="hitokotoIndex" multiple @change="delHitokoto">
+                                    <el-option
+                                        v-for="item in hitokotoConfig"
+                                        :key="item[1]"
+                                        :label="item[0]"
+                                        :value="item[1]"
+                                    >
+                                    </el-option>
+                                </el-select>
+                                <el-button type="primary" icon="el-icon-refresh-left" @click="selectBgImg(1)"
+                                    >恢复默认</el-button
+                                >
+                            </div>
+                        </div>
+                    </el-tab-pane>
 
-            </el-tabs>
-        </el-drawer>
-    </div>
+                    <!-- 样式设置 -->
+                    <el-tab-pane label="样式" name="css">
+                        <div class="tabBox">
+                            <p class="h1">主题色设置</p>
+                            <div class="text">
+                                <p>设置一个喜欢的主题色</p>
+                            </div>
+                            <div class="tools">
+                                <el-color-picker
+                                    v-model="saveData.themeColor"
+                                    color-format="rgb"
+                                    @change="changeThemeColor"
+                                ></el-color-picker>
+                                <br />
+                                <el-button type="primary" icon="el-icon-refresh-left" @click="reloadThemeColor"
+                                    >重置主题色
+                                </el-button>
+                            </div>
+                        </div>
+                        <div class="tabBox">
+                            <p class="h1">设置按钮位置</p>
+                            <div class="text">
+                                <p>设置按钮的位置选择</p>
+                            </div>
+                            <div class="tools">
+                                <el-select v-model="saveData.settingLocation" size="small" @change="saveStorage">
+                                    <el-option
+                                        v-for="item in settingSelect"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                    >
+                                    </el-option>
+                                </el-select>
+                            </div>
+                        </div>
+                    </el-tab-pane>
 
-    <!-- js引用 -->
-    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.9/vue.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/vue-resource/1.5.3/vue-resource.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.min.js"></script>
-    <script src="./js/lovexhj.js" type="module"></script>
-</body>
+                    <!-- 其他设置 -->
+                    <el-tab-pane label="其他" name="load">
+                        <div class="tabBox">
+                            <p class="h1">重置全部设置</p>
+                            <div class="tools">
+                                <el-button type="primary" icon="el-icon-refresh-right" @click="reloadSetting"
+                                    >重置</el-button
+                                >
+                            </div>
+                        </div>
+                    </el-tab-pane>
 
+                    <!-- 关于 -->
+                    <el-tab-pane label="关于" name="about">
+                        <div class="tabBox">
+                            <p class="h1">{{ about.name }}</p>
+                            <div class="text" v-html="about.context"></div>
+                        </div>
+                        <div class="tabBox">
+                            <p class="h1">当前版本</p>
+                            <div class="text">{{ version }}</div>
+                        </div>
+                        <div class="tabBox updataInfo">
+                            <p class="h1">更新日志</p>
+                            <div class="text">
+                                <div v-for="(item, index) in updateLog" :key="index">
+                                    <p class="timeTitle">{{ item.time }}</p>
+                                    <ul>
+                                        <li v-for="(item2, index2) in item.log" :key="index2">{{ item2 }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-drawer>
+        </div>
+
+        <!-- js引用 -->
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.9/vue.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue-resource/1.5.3/vue-resource.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.min.js"></script>
+        <script src="./js/lovexhj.js" type="module"></script>
+    </body>
 </html>
