@@ -186,6 +186,8 @@ a,
     opacity: .5;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    user-select: text !important;
+    -webkit-user-select: text !important;
 }
 
 #soBoxtext {
@@ -197,6 +199,8 @@ a,
     font-size: 1.1rem;
     line-height: 50px;
     background-color: transparent;
+    user-select: text !important;
+    -webkit-user-select: text !important;
 }
 
 /* 搜索框聚焦 */

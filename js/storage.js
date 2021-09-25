@@ -1,3 +1,12 @@
+/*
+ * @Author: N0ts
+ * @Date: 2020-12-21 09:34:11
+ * @LastEditTime: 2021-09-25 18:12:30
+ * @Description: 本地存储封装
+ * @FilePath: \IceCreamSearch\js\storage.js
+ * @Mail：mail@n0ts.cn
+ */
+
 let $stor = window.localStorage;
 let $sess = window.sessionStorage;
 
