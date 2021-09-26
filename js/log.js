@@ -1,13 +1,17 @@
 /*
  * @Author: N0ts
  * @Date: 2021-09-25 18:10:52
- * @LastEditTime: 2021-09-25 18:12:02
+ * @LastEditTime: 2021-09-26 22:04:28
  * @Description: 更新日志
  * @FilePath: \IceCreamSearch\js\log.js
  * @Mail：mail@n0ts.cn
  */
 
 export default [
+    {
+        time: "2021-9-26",
+        log: ["新增一言类型选择功能", "时间显示错误问题修复", "部分代码重构"]
+    },
     {
         time: "2021-8-4",
         log: ["新增设置按钮位置修改", "新增版本差异数据更新", "优化了部分逻辑问题"]
