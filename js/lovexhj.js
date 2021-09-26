@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-09-26 21:58:25
+ * @LastEditTime: 2021-09-26 22:00:58
  * @Description: 主程序
  * @FilePath: \IceCreamSearch\js\lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -385,7 +385,7 @@ new Vue({
 
             // 一言类型选择
             let type = "?";
-            this.saveData.hitokotoIndex.forEach(item => {
+            this.saveData.hitokotoIndex.forEach((item) => {
                 console.log(item);
                 type += item == "all" ? "" : `c=${item}&`;
             });
@@ -738,12 +738,14 @@ new Vue({
             let seconds;
             setInterval(() => {
                 date = new Date();
-                year = date.getFullYear();
-                month = date.getMonth() + 1;
-                day = date.getDay();
-                hours = date.getHours();
+                year = date.getFullYear(); // 年
+                month = date.getMonth() + 1; // 月
+                day = date.getDate(); // 日
+                hours = date.getHours(); // 时
+                // 分
                 minutes =
                     date.getMinutes().toString().length == 1 ? "0" + date.getMinutes().toString() : date.getMinutes();
+                // 秒
                 seconds =
                     date.getSeconds().toString().length == 1 ? "0" + date.getSeconds().toString() : date.getSeconds();
                 this.soBoxTime = `${year}年${month}月${day}日`;
