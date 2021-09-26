@@ -634,6 +634,10 @@ a,
     padding: 8px 10px;
 }
 
+.el-select {
+    width: 100%;
+}
+
 /* 更新日志 */
 .updataInfo ul {
     padding-left: 30px;

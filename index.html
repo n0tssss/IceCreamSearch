@@ -286,7 +286,7 @@
                                 <p>一言的类型选择</p>
                             </div>
                             <div class="tools">
-                                <el-select v-model="hitokotoIndex" multiple @change="delHitokoto">
+                                <el-select v-model="saveData.hitokotoIndex" multiple @change="delHitokoto">
                                     <el-option
                                         v-for="item in hitokotoConfig"
                                         :key="item[1]"
@@ -295,9 +295,10 @@
                                     >
                                     </el-option>
                                 </el-select>
-                                <el-button type="primary" icon="el-icon-refresh-left" @click="selectBgImg(1)"
+                                <el-button type="primary" icon="el-icon-refresh-left" @click="reloadHitokoto"
                                     >恢复默认</el-button
                                 >
+                                <el-button type="primary" icon="el-icon-check" @click="saveHitokoto">保存</el-button>
                             </div>
                         </div>
                     </el-tab-pane>

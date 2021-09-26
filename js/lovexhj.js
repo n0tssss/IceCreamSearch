@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-09-25 19:38:12
+ * @LastEditTime: 2021-09-26 21:58:25
  * @Description: 主程序
  * @FilePath: \IceCreamSearch\js\lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -35,8 +35,6 @@ new Vue({
         soBoxTime: null, // 当前时间展示数据
         weatherInfo: null, // 当前天气数据
         updateLog, // 更新日志
-        hitokotoIndex: ["all"], // 一言类型选择
-        hitokotoLastData: "all", // 一言数据最后一个数据缓存
         // 一言类型配置
         hitokotoConfig: [
             ["全部随机", "all"],
@@ -123,6 +121,8 @@ new Vue({
             soIndex: 0, // 当前选中的搜索引擎
             footerText: true, // 底部文字显示
             hitokotoShow: true, // 一言展示
+            hitokotoIndex: ["all"], // 一言类型选择
+            hitokotoLastData: "all", // 一言数据最后一个数据缓存
             settingLocation: 4, // 设置按钮位置
             // 搜索引擎
             so: [
@@ -378,11 +378,20 @@ new Vue({
          * 一言API
          */
         gethitokoto() {
+            // 一言是否展示
             if (!this.saveData.hitokotoShow) {
                 return;
             }
+
+            // 一言类型选择
+            let type = "?";
+            this.saveData.hitokotoIndex.forEach(item => {
+                console.log(item);
+                type += item == "all" ? "" : `c=${item}&`;
+            });
+
             // 类型判断
-            let url = "https://v1.hitokoto.cn";
+            let url = "https://v1.hitokoto.cn" + type;
             this.$http.jsonp(url).then(
                 (res) => {
                     this.$refs.hitokoto.innerText = JSON.parse(JSON.parse(res.body)).hitokoto;
@@ -397,16 +406,34 @@ new Vue({
          * 取消选择一言选项时
          */
         delHitokoto() {
-            let length = this.hitokotoIndex.length;
+            let length = this.saveData.hitokotoIndex.length;
             // 最后一项时则缓存
             if (length == 1) {
-                return (this.hitokotoLastData = this.hitokotoIndex[0]);
+                return (this.saveData.hitokotoLastData = this.saveData.hitokotoIndex[0]);
             }
             // 只有最后一项时无法移除
             if (length == 0) {
                 this.notify("至少得选择一个哦~", "warning");
-                this.hitokotoIndex.push(this.hitokotoLastData);
+                this.saveData.hitokotoIndex.push(this.saveData.hitokotoLastData);
             }
+        },
+
+        /**
+         * 重置一言选项
+         */
+        reloadHitokoto() {
+            this.saveData.hitokotoIndex = ["all"];
+            this.gethitokoto();
+            this.notify("一言选项重置成功", "success");
+        },
+
+        /**
+         * 保存一言选项
+         */
+        saveHitokoto() {
+            this.gethitokoto();
+            this.saveStorage();
+            this.notify("一言选项保存成功", "success");
         },
 
         /**
