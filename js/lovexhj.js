@@ -1,9 +1,9 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-09-26 22:00:58
+ * @LastEditTime: 2021-10-01 23:49:15
  * @Description: 主程序
- * @FilePath: \IceCreamSearch\js\lovexhj.js
+ * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
  */
 
@@ -410,6 +410,10 @@ new Vue({
             // 最后一项时则缓存
             if (length == 1) {
                 return (this.saveData.hitokotoLastData = this.saveData.hitokotoIndex[0]);
+            }
+            // 选择了其他时不选择默认选项
+            if(length != 1 && this.saveData.hitokotoIndex) {
+
             }
             // 只有最后一项时无法移除
             if (length == 0) {
