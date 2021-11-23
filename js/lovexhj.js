@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-10-02 00:04:18
+ * @LastEditTime: 2021-11-23 19:28:08
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -213,6 +213,9 @@ new Vue({
          * 版本是否更新
          */
         checkVersion(cache) {
+            if (!cache) {
+                return cache;
+            }
             // 判断数据是否缺少
             if (Object.keys(cache).length == Object.keys(this.saveDataCache).length) {
                 return cache;
@@ -386,7 +389,6 @@ new Vue({
             // 一言类型选择
             let type = "?";
             this.saveData.hitokotoIndex.forEach((item) => {
-                console.log(item);
                 type += item == "all" ? "" : `c=${item}&`;
             });
 
