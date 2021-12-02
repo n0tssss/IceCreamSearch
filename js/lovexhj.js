@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-11-23 19:28:08
+ * @LastEditTime: 2021-12-02 23:38:58
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -18,7 +18,6 @@ import updateLog from "./log.js";
 new Vue({
     el: "#Search",
     data: {
-        version: "beta 1.0", // 当前版本
         initDialog: true, // 初始化窗口显示
         soBoxtext: "", // 输入框内容
         soBoxtextCache: "", // 输入框临时内容
@@ -107,9 +106,9 @@ new Vue({
         soSelectAdd: false, // 添加搜索引擎界面是否打开
         // 准备添加的搜索引擎
         soAdd: {
-            name: "baidu",
-            icon: "https://www.baidu.com/favicon.ico",
-            linkHead: "https://www.baidu.com/s?wd="
+            name: "",
+            icon: "",
+            linkHead: ""
         },
         saveDataCache: null, // 存储数据缓存
         // 存储数据
@@ -124,6 +123,7 @@ new Vue({
             hitokotoIndex: ["all"], // 一言类型选择
             hitokotoLastData: "all", // 一言数据最后一个数据缓存
             settingLocation: 4, // 设置按钮位置
+            AeroState: true, // 毛玻璃是否开启
             // 搜索引擎
             so: [
                 {
@@ -414,10 +414,10 @@ new Vue({
                 return (this.saveData.hitokotoLastData = this.saveData.hitokotoIndex[0]);
             }
             // 选择了其他时不选择默认选项
-            if(length > 1 && this.saveData.hitokotoIndex.includes("all")) {
+            if (length > 1 && this.saveData.hitokotoIndex.includes("all")) {
                 this.notify("点击恢复默认即可随机", "warning");
-                for(let i = 0; i < length; i++) {
-                    if(this.saveData.hitokotoIndex[i] == "all") {
+                for (let i = 0; i < length; i++) {
+                    if (this.saveData.hitokotoIndex[i] == "all") {
                         this.saveData.hitokotoIndex.splice(i, 1);
                         break;
                     }
@@ -808,13 +808,16 @@ new Vue({
          * 一言展示
          */
         changeHitokotoShow() {
-            let msg;
-            if (this.saveData.hitokotoShow) {
-                this.gethitokoto();
-                msg = ["一言已开启", "success"];
-            } else {
-                msg = ["一言已关闭", "info"];
-            }
+            let msg = this.saveData.AeroState ? ["一言已开启", "success"] : ["一言已关闭", "info"];
+            this.notify(msg[0], msg[1]);
+            this.saveStorage();
+        },
+
+        /**
+         * 毛玻璃特效开关
+         */
+        changeAeroState() {
+            let msg = this.saveData.AeroState ? ["毛玻璃已开启", "success"] : ["毛玻璃已关闭", "info"];
             this.notify(msg[0], msg[1]);
             this.saveStorage();
         },

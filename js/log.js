@@ -1,13 +1,17 @@
 /*
  * @Author: N0ts
  * @Date: 2021-09-25 18:10:52
- * @LastEditTime: 2021-09-26 22:04:28
+ * @LastEditTime: 2021-12-01 22:42:15
  * @Description: 更新日志
- * @FilePath: \IceCreamSearch\js\log.js
+ * @FilePath: /IceCreamSearch/js/log.js
  * @Mail：mail@n0ts.cn
  */
 
 export default [
+    {
+        time: "2021-12-1",
+        log: ["分类样式重构", "新增毛玻璃开关", "CSS优化"]
+    },
     {
         time: "2021-9-26",
         log: ["新增一言类型选择功能", "时间显示错误问题修复", "部分代码重构"]

@@ -13,7 +13,7 @@
         <!-- 主体框架 -->
         <div id="Search" v-cloak>
             <!-- Bing今日壁纸 -->
-            <div class="bingBg" ref="bingBg">
+            <div :class="{ bingBg: true, bingBgBlackBlur: saveData.AeroState && searchBoxFocus, bingBgBlack: searchBoxFocus }" ref="bingBg">
                 <!-- 左上角 -->
                 <div class="windowLeftTop">
                     <!-- 时间 -->
@@ -34,52 +34,55 @@
                 </div>
 
                 <!-- 网站列表 -->
-                <div :class="{appList: true, appListShow: openApp}">
+                <div :class="{ appList: true, appListShow: openApp }">
                     <!-- 毛玻璃背景 -->
-                    <div class="appListBg"></div>
+                    <div :class="{ appListBg: true, appListBgBlur: saveData.AeroState }"></div>
 
                     <!-- 关闭按钮 -->
                     <div class="closeAppList" @click="openAppList" ref="closeAppList">
                         <i class="el-icon-arrow-down"></i>
                     </div>
 
-                    <!-- 分类菜单 -->
-                    <div class="appListMenu">
-                        <div v-for="(item, index) in LinkList" :key="index" @click="scrollMenu(index)">
-                            {{ item.navName }}
-                        </div>
-                    </div>
-
-                    <!-- 分类框架 -->
-                    <div class="appListBox" @scroll="shadow" ref="appListBox">
-                        <!-- 各种分类 -->
-                        <div class="appListClass" v-for="(item, index) in LinkList" :key="index">
-                            <!-- 分类标题 -->
-                            <p class="appListClassTitle">{{ item.navName }}</p>
-
-                            <!-- 分类列表 -->
-                            <div class="appListClassBox">
-                                <div class="appListClassList" v-for="(item2, index2) in item.links" :key="index2">
-                                    <a :href="item2.link" target="_blank">
-                                        <el-tooltip
-                                            class="item"
-                                            effect="dark"
-                                            :content="item2.content"
-                                            placement="bottom"
-                                        >
-                                            <div>
-                                                <img :src="item2.img" :alt="item2.img" />
-                                                <p>{{ item2.name }}</p>
-                                                <p>{{ item2.content }}</p>
-                                            </div>
-                                        </el-tooltip>
-                                    </a>
-                                </div>
+                    <!-- 分类 -->
+                    <div class="appListFather">
+                        <!-- 分类菜单 -->
+                        <div class="appListMenu">
+                            <div v-for="(item, index) in LinkList" :key="index" @click="scrollMenu(index)">
+                                {{ item.navName }}
                             </div>
                         </div>
 
-                        <!-- 撑开底部 -->
-                        <div class="Boom">没有更多内容啦！</div>
+                        <!-- 分类框架 -->
+                        <div class="appListBox" @scroll="shadow" ref="appListBox">
+                            <!-- 各种分类 -->
+                            <div class="appListClass" v-for="(item, index) in LinkList" :key="index">
+                                <!-- 分类标题 -->
+                                <p class="appListClassTitle">{{ item.navName }}</p>
+
+                                <!-- 分类列表 -->
+                                <div class="appListClassBox">
+                                    <div class="appListClassList" v-for="(item2, index2) in item.links" :key="index2">
+                                        <a :href="item2.link" target="_blank">
+                                            <el-tooltip
+                                                class="item"
+                                                effect="dark"
+                                                :content="item2.content"
+                                                placement="bottom"
+                                            >
+                                                <div>
+                                                    <img :src="item2.img" :alt="item2.img" />
+                                                    <p>{{ item2.name }}</p>
+                                                    <p>{{ item2.content }}</p>
+                                                </div>
+                                            </el-tooltip>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 撑开底部 -->
+                            <div class="Boom">没有更多内容啦！</div>
+                        </div>
                     </div>
                 </div>
 
@@ -339,6 +342,20 @@
                                 </el-select>
                             </div>
                         </div>
+                        <div class="tabBox">
+                            <p class="h1">是否开启毛玻璃</p>
+                            <div class="text">
+                                <p>开启毛玻璃特效</p>
+                            </div>
+                            <div class="tools">
+                                <el-switch
+                                    v-model="saveData.AeroState"
+                                    active-color="#13ce66"
+                                    @change="changeAeroState"
+                                >
+                                </el-switch>
+                            </div>
+                        </div>
                     </el-tab-pane>
 
                     <!-- 其他设置 -->
@@ -358,10 +375,6 @@
                         <div class="tabBox">
                             <p class="h1">{{ about.name }}</p>
                             <div class="text" v-html="about.context"></div>
-                        </div>
-                        <div class="tabBox">
-                            <p class="h1">当前版本</p>
-                            <div class="text">{{ version }}</div>
                         </div>
                         <div class="tabBox updataInfo">
                             <p class="h1">更新日志</p>
