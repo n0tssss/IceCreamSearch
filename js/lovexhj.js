@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-10-02 00:04:18
+ * @LastEditTime: 2021-10-02 00:15:16
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -386,7 +386,6 @@ new Vue({
             // 一言类型选择
             let type = "?";
             this.saveData.hitokotoIndex.forEach((item) => {
-                console.log(item);
                 type += item == "all" ? "" : `c=${item}&`;
             });
 
