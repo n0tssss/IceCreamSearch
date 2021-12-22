@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-12-03 14:43:50
+ * @LastEditTime: 2021-12-22 10:56:02
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -167,8 +167,8 @@ new Vue({
         this.gethitokoto(); // 一言
         this.getLink(); // 获取网站列表
         this.checkRes(); // 上下键切换结果
-        this.leftTopTime(); // 当前时间展示
-        this.getWeather(); // 获取天气
+        // this.leftTopTime(); // 当前时间展示
+        // this.getWeather(); // 获取天气
         this.changeThemeColor(); // 默认主题色
     },
     methods: {
@@ -274,9 +274,9 @@ new Vue({
             try {
                 axios
                     .post("https://cors.lovewml.cn/cors", {
-                        type: "get",
+                        method: "get",
                         url: "https://cn.bing.com/HPImageArchive.aspx",
-                        data: {
+                        params: {
                             format: "js",
                             idx: 0,
                             n: 8,
