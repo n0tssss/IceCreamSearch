@@ -83,7 +83,8 @@ a,
 .tabBox,
 #hitokoto,
 .soItem,
-.soItem .el-icon-close {
+.soItem .el-icon-close,
+.soItem i {
     transition: all 0.3s;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
@@ -1023,6 +1024,16 @@ a,
 
 .soItem .el-icon-close {
     color: #F56C6C;
+}
+
+.soItem .el-icon-check {
+    color: #67C23A;
+    margin-left: 3px;
+    opacity: 0;
+}
+
+.soItem .el-icon-check-action {
+    opacity: 1;
 }
 
 .soItem .el-icon-close:hover {

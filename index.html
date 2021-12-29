@@ -394,7 +394,10 @@
                                     :class="{soItemAction: saveData.soIndex == index}"
                                     @click="saveData.soIndex = index"
                                 >
-                                    <p>{{ item.name }}</p>
+                                    <div>
+                                        <p>{{ item.name }}</p>
+                                        <i class="el-icon-check" :class="{'el-icon-check-action': saveData.soIndex == index}"></i>
+                                    </div>
                                     <i class="el-icon-close"></i>
                                 </div>
                             </div>

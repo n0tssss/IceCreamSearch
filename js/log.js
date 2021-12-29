@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2021-09-25 18:10:52
- * @LastEditTime: 2021-12-29 17:55:31
+ * @LastEditTime: 2021-12-29 18:02:58
  * @Description: 更新日志
  * @FilePath: /IceCreamSearch/js/log.js
  * @Mail：mail@n0ts.cn
@@ -10,7 +10,13 @@
 export default [
     {
         time: "2021-12-29",
-        log: ["点击一言即可快速复制", "菜单分类重构", "新增搜索设置菜单", "修复一言隐藏失败问题"]
+        log: [
+            "点击一言即可快速复制",
+            "菜单分类重构",
+            "新增搜索设置菜单",
+            "修复一言隐藏失败问题",
+            "搜索引擎删除按钮样式重写"
+        ]
     },
     {
         time: "2021-12-1",
