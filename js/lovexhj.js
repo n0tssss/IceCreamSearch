@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-12-22 10:56:02
+ * @LastEditTime: 2021-12-29 14:27:12
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -34,6 +34,7 @@ new Vue({
         soBoxTime: null, // 当前时间展示数据
         weatherInfo: null, // 当前天气数据
         updateLog, // 更新日志
+        hitokoto: ":D 获取中...", // 一言内容
         // 一言类型配置
         hitokotoConfig: [
             ["全部随机", "all"],
@@ -170,6 +171,7 @@ new Vue({
         // this.leftTopTime(); // 当前时间展示
         // this.getWeather(); // 获取天气
         this.changeThemeColor(); // 默认主题色
+        this.copyHitokoto();
     },
     methods: {
         /**
@@ -235,14 +237,12 @@ new Vue({
         initDialogClose(b) {
             let that = this;
 
-            that.initDialog = false;
-
             if (b) {
                 that.saveData.updateStorage = true;
                 this.notify("已开启本地存储设置", "success");
             } else {
                 that.saveData.updateStorage = false;
-                $stor.storage.remove("IceCream");
+                $stor.storage.remove("IceCream")
                 this.notify("已关闭本地存储设置，设置里面还可以开启哦", "warning");
             }
             // 记住用户设置
@@ -396,7 +396,7 @@ new Vue({
             let url = "https://v1.hitokoto.cn" + type;
             this.$http.jsonp(url).then(
                 (res) => {
-                    this.$refs.hitokoto.innerText = JSON.parse(JSON.parse(res.body)).hitokoto;
+                    this.hitokoto = JSON.parse(JSON.parse(res.body)).hitokoto;
                 },
                 (err) => {
                     this.gethitokoto();
@@ -808,9 +808,22 @@ new Vue({
          * 一言展示
          */
         changeHitokotoShow() {
+            this.saveData.AeroState = !this.saveData.AeroState;
             let msg = this.saveData.AeroState ? ["一言已开启", "success"] : ["一言已关闭", "info"];
             this.notify(msg[0], msg[1]);
             this.saveStorage();
+        },
+
+        /**
+         * 复制一言
+         */
+        copyHitokoto() {
+            new ClipboardJS("#hitokoto", {
+                text: () => {
+                    this.notify("一言已复制！", "success");
+                    return this.hitokoto;
+                }
+            });
         },
 
         /**

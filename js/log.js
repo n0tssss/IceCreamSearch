@@ -1,13 +1,17 @@
 /*
  * @Author: N0ts
  * @Date: 2021-09-25 18:10:52
- * @LastEditTime: 2021-12-01 22:42:15
+ * @LastEditTime: 2021-12-29 17:53:14
  * @Description: 更新日志
  * @FilePath: /IceCreamSearch/js/log.js
  * @Mail：mail@n0ts.cn
  */
 
 export default [
+    {
+        time: "2021-12-29",
+        log: ["点击一言即可快速复制", "菜单分类重构", "新增搜索设置菜单"]
+    },
     {
         time: "2021-12-1",
         log: ["分类样式重构", "新增毛玻璃开关", "CSS优化"]
