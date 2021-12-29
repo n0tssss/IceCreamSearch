@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-12-29 14:27:12
+ * @LastEditTime: 2021-12-29 17:55:03
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -808,8 +808,7 @@ new Vue({
          * 一言展示
          */
         changeHitokotoShow() {
-            this.saveData.AeroState = !this.saveData.AeroState;
-            let msg = this.saveData.AeroState ? ["一言已开启", "success"] : ["一言已关闭", "info"];
+            let msg = this.saveData.hitokotoShow ? ["一言已开启", "success"] : ["一言已关闭", "info"];
             this.notify(msg[0], msg[1]);
             this.saveStorage();
         },
