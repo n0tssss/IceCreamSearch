@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-12-30 17:28:47
+ * @LastEditTime: 2021-12-30 17:34:14
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -167,6 +167,10 @@ new Vue({
                 开发人员：
                 <a href="https://n0ts.cn/" target="_blank">@N0ts</a>
                 <a href="https://lovewml.cn/" target="_blank">@Lu</a>
+            </p>
+            <p>
+                本项目已开源：
+                <a href="https://gitee.com/n0ts/IceCreamSearch/" target="_blank">N0ts/IceCreamSearch</a>
             </p>`
         }
     },
