@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-12-29 17:55:03
+ * @LastEditTime: 2021-12-30 17:28:47
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -35,6 +35,8 @@ new Vue({
         weatherInfo: null, // 当前天气数据
         updateLog, // 更新日志
         hitokoto: ":D 获取中...", // 一言内容
+        // 主题色预制
+        defaultColors: ["#1e90ff", "#ff4757", "#ff7f50", "#eccc68", "#2ed573", "#5352ed", "#747d8c", "#2f3542"],
         // 一言类型配置
         hitokotoConfig: [
             ["全部随机", "all"],
@@ -114,10 +116,12 @@ new Vue({
         saveDataCache: null, // 存储数据缓存
         // 存储数据
         saveData: {
-            themeColor: "rgb(101, 178, 255)", // 主题色
+            themeColor: "#1e90ff", // 主题色
             updateStorage: false, // 用户是否允许操作 Storage
             soBoxlistShowNum: 8, // 搜索结果数量
             bgLink: "", // 背景图片链接
+            bgLinkContent: "", // 背景图片介绍
+            bgLinkHref: "", // 背景图片跳转
             soIndex: 0, // 当前选中的搜索引擎
             footerText: true, // 底部文字显示
             hitokotoShow: true, // 一言展示
@@ -125,6 +129,7 @@ new Vue({
             hitokotoLastData: "all", // 一言数据最后一个数据缓存
             settingLocation: 4, // 设置按钮位置
             AeroState: true, // 毛玻璃是否开启
+            openAppListShow: true, // 下方网址导航是否显示
             // 搜索引擎
             so: [
                 {
@@ -146,13 +151,18 @@ new Vue({
                     name: "MDN",
                     icon: "./images/mdn.png",
                     linkHead: "https://developer.mozilla.org/zh-CN/search?q="
+                },
+                {
+                    name: "哔哩哔哩",
+                    icon: "./images/bilibili-fill.png",
+                    linkHead: "https://search.bilibili.com/all?keyword="
                 }
             ]
         },
         // 关于
         about: {
             name: "IceCream",
-            context: `<p>基于 Vue 与 ElementUI 的简约导航，开发中... ...</p>
+            context: `<p>基于 Vue 与 ElementUI 的简约起始页，正在开发中... ...</p>
             <p>
                 开发人员：
                 <a href="https://n0ts.cn/" target="_blank">@N0ts</a>
@@ -171,7 +181,8 @@ new Vue({
         // this.leftTopTime(); // 当前时间展示
         // this.getWeather(); // 获取天气
         this.changeThemeColor(); // 默认主题色
-        this.copyHitokoto();
+        this.copyHitokoto(); // 一言复制启用
+        this.updateLogData(); // 日志格式更正
     },
     methods: {
         /**
@@ -242,7 +253,7 @@ new Vue({
                 this.notify("已开启本地存储设置", "success");
             } else {
                 that.saveData.updateStorage = false;
-                $stor.storage.remove("IceCream")
+                $stor.storage.remove("IceCream");
                 this.notify("已关闭本地存储设置，设置里面还可以开启哦", "warning");
             }
             // 记住用户设置
@@ -265,12 +276,60 @@ new Vue({
         },
 
         /**
+         * 日志格式更正
+         * 1：新增；2：修改；3：修复；4：移除；5：重构；
+         */
+        updateLogData() {
+            this.updateLog = this.updateLog.map((item1) => {
+                item1.log = item1.log.map((item2) => {
+                    // 分割日志
+                    let cache = item2.split("；");
+                    // 类型
+                    let type = "";
+                    // 颜色
+                    let color = "background: ";
+                    switch (cache[0]) {
+                        case "1":
+                            type = "新增";
+                            color += "#00cec9;";
+                            break;
+                        case "2":
+                            type = "修改";
+                            color += "#fdcb6e;";
+                            break;
+                        case "3":
+                            type = "修复";
+                            color += "#fab1a0;";
+                            break;
+                        case "4":
+                            type = "移除";
+                            color += "#d63031;";
+                            break;
+                        case "5":
+                            type = "重构";
+                            color += "#636e72;";
+                            break;
+                        default:
+                            break;
+                    }
+                    // 返回
+                    return {
+                        type,
+                        color,
+                        text: cache[1]
+                    };
+                });
+                // 返回每天日志
+                return item1;
+            });
+            // console.log("日志：", this.updateLog);
+        },
+
+        /**
          * bing 壁纸
          * @param {*} index bing 壁纸索引
          */
         getBing(index) {
-            let that = this;
-
             try {
                 axios
                     .post("https://cors.lovewml.cn/cors", {
@@ -286,25 +345,30 @@ new Vue({
                     .then(
                         (res) => {
                             if (res.status == 200) {
-                                that.bingData = res.data.data;
+                                this.bingData = res.data.data;
                             }
-
+                            // console.log("bing壁纸：", this.bingData);
                             // 如果未设定则显示 bing 壁纸
-                            if (that.saveData.bgLink == "") {
-                                that.bingIndex = index - 1;
-                                let bing = "https://cn.bing.com/" + that.bingData.images[that.bingIndex].url;
-                                that.setNowBg(bing);
+                            if (this.saveData.bgLink == "") {
+                                this.bingIndex = index - 1;
+                                // 获取图片信息
+                                let img = this.bingData.images[this.bingIndex];
+                                // 获取介绍与链接
+                                this.saveData.bgLinkContent = img.copyright;
+                                this.saveData.bgLinkHref = img.copyrightlink;
+                                // 设置壁纸
+                                this.setNowBg("https://cn.bing.com/" + img.url);
                             } else {
                                 // 显示设定壁纸
-                                that.setNowBg(that.saveData.bgLink);
+                                this.setNowBg(this.saveData.bgLink);
                             }
                         },
                         () => {
-                            that.error();
+                            this.error();
                         }
                     );
             } catch (err) {
-                that.error();
+                this.error();
             }
         },
 
@@ -312,14 +376,12 @@ new Vue({
          * 壁纸错误
          */
         error() {
-            let that = this;
-
             // 如果壁纸接口拉闸则调用本地背景
             this.notify("壁纸有点脾气罢工了，请联系网站管理员查看", "error");
-            if (that.saveData.bgLink == "") {
-                that.setNowBg("./errorBg.jpg");
+            if (this.saveData.bgLink == "") {
+                this.setNowBg("./errorBg.jpg");
             } else {
-                that.setNowBg(that.saveData.bgLink);
+                this.setNowBg(this.saveData.bgLink);
             }
         },
 
@@ -329,39 +391,33 @@ new Vue({
          * @returns 打开图床
          */
         selectBgImg(index) {
-            let that = this;
-
             // 打开外链网站
             if (index == 1) {
                 return window.open("https://imgchr.com/", "_blank");
             }
-            if (index == 2) {
-                // 随机 bing
-                if (that.bingData.length != 0) {
-                    if (that.bingIndex == that.bingData.images.length - 1) {
-                        that.bingIndex = -1;
-                    }
-                    that.saveData.bgLink = "https://cn.bing.com/" + that.bingData.images[++that.bingIndex].url;
-                    that.setNowBg(that.saveData.bgLink);
-                    this.saveStorage();
-                } else {
-                    this.getBing();
-                }
-            }
-        },
 
-        /**
-         * 链接设置
-         */
-        setBgImg() {
-            let that = this;
-            if (that.saveData.bgLink) {
-                that.setNowBg(that.saveData.bgLink);
-                that.bingData = [];
-            } else {
-                that.getBing(1);
+            // 切换下一张 bing
+            if (index == 2) {
+                // 是否为最后一张
+                if (this.bingIndex == this.bingData.images.length - 1) {
+                    this.bingIndex = -1;
+                }
+                // 获取图片信息
+                let img = this.bingData.images[++this.bingIndex];
+                // 获取介绍与链接
+                this.saveData.bgLinkContent = img.copyright;
+                this.saveData.bgLinkHref = img.copyrightlink;
+                this.saveData.bgLink = "https://cn.bing.com/" + img.url;
+                // 设置壁纸
+                this.setNowBg(this.saveData.bgLink);
+                this.saveStorage();
             }
-            that.saveStorage();
+
+            // 切换第一涨 bing
+            if (index == 3) {
+                this.saveData.bgLink = "";
+                this.getBing(1);
+            }
         },
 
         /**
@@ -369,6 +425,9 @@ new Vue({
          * @param {*} url 图片 url
          */
         setNowBg(url) {
+            if (!url) {
+                return this.getBing(1);
+            }
             let bgBox = this.$refs.bingBg;
             bgBox.style.background = `url(${url})`;
             bgBox.style.backgroundSize = "cover";
@@ -474,35 +533,33 @@ new Vue({
          * 输入框内容处理
          */
         SoChange(e) {
-            let that = this;
-
             // 获取键位
             let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
             // 无视上下按键
             if ((e1 && e1.keyCode == 38) || (e1 && e1.keyCode == 40)) {
-                return (that.soBoxtextCache = that.soBoxtext);
+                return (this.soBoxtextCache = this.soBoxtext);
             }
 
             // 没有内容则隐藏
-            if (!that.soBoxtext) {
-                that.soBoxlist = [];
-                that.$refs.soBoxlist.style.height = "0px";
-                that.$refs.hitokoto.style.transform = `translateY(0px)`;
+            if (!this.soBoxtext) {
+                this.soBoxlist = [];
+                this.$refs.soBoxlist.style.height = "0px";
+                this.$refs.hitokoto.style.transform = `translateY(0px)`;
             }
             // 回车跳转
             if (e.keyCode == 13) {
-                return that.goBaidu();
+                return this.goBaidu();
             }
 
             // 搜索结果选中索引修改
-            that.searchSelectIndex = -1;
+            this.searchSelectIndex = -1;
 
             // 请求
-            if (that.soBoxtext) {
-                that.$http
+            if (this.soBoxtext) {
+                this.$http
                     .jsonp(
                         `https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=${encodeURIComponent(
-                            that.soBoxtext
+                            this.soBoxtext
                         )}&cb=callback`,
                         {
                             jsonp: "cb"
@@ -514,20 +571,20 @@ new Vue({
                             return;
                         }
                         // 数量超过时
-                        if (res.data.s.length >= that.saveData.soBoxlistShowNum) {
+                        if (res.data.s.length >= this.saveData.soBoxlistShowNum) {
                             // 截取到搜索数量
-                            that.soBoxlist = res.data.s.splice(0, that.saveData.soBoxlistShowNum);
+                            this.soBoxlist = res.data.s.splice(0, this.saveData.soBoxlistShowNum);
                             // 设置结果高度
-                            let heightCache = that.saveData.soBoxlistShowNum * 40;
-                            that.$refs.soBoxlist.style.height = heightCache + "px";
-                            that.$refs.hitokoto.style.transform = `translateY(${heightCache}px)`;
+                            let heightCache = this.saveData.soBoxlistShowNum * 40;
+                            this.$refs.soBoxlist.style.height = heightCache + "px";
+                            this.$refs.hitokoto.style.transform = `translateY(${heightCache}px)`;
                         } else {
                             // 获取结果
-                            that.soBoxlist = res.data.s;
+                            this.soBoxlist = res.data.s;
                             // 设置结果高度
-                            let heightCache = that.soBoxlist.length * 40;
-                            that.$refs.soBoxlist.style.height = heightCache + "px";
-                            that.$refs.hitokoto.style.transform = `translateY(${heightCache}px)`;
+                            let heightCache = this.soBoxlist.length * 40;
+                            this.$refs.soBoxlist.style.height = heightCache + "px";
+                            this.$refs.hitokoto.style.transform = `translateY(${heightCache}px)`;
                         }
                     });
             }
@@ -578,30 +635,49 @@ new Vue({
         },
 
         /**
-         * 搜索框引擎添加 || 删除
+         * 搜索框引擎添加
          */
         soSelectAddFc() {
-            let that = this;
-            if (that.soAdd.name && that.soAdd.icon && that.soAdd.linkHead) {
-                that.saveData.so.push(that.soAdd);
-                that.soAdd = {
+            if (this.soAdd.name && this.soAdd.icon && this.soAdd.linkHead) {
+                this.saveData.so.push(this.soAdd);
+                this.soAdd = {
                     name: "",
                     icon: "",
                     linkHead: ""
                 };
                 this.notify("添加成功", "success");
-                that.saveStorage();
-                that.soSelectAdd = false;
-            } else {
-                this.notify("请填写全部选项", "error");
+                this.saveStorage();
+                return (this.soSelectAdd = false);
             }
+            this.notify("请填写全部选项", "error");
+        },
+
+        /**
+         * 搜索引擎删除
+         */
+        soSelectDelFc(i) {
+            // 是否允许删除
+            if (this.saveData.so.length == 1) {
+                return this.notify("只有最后一个啦！", "warning");
+            }
+            if (i == this.saveData.soIndex) {
+                return this.notify("不能删除当前正在使用的搜索引擎哦！", "warning");
+            }
+            // 删除索引判断
+            if (this.saveData.soIndex > i) {
+                this.saveData.soIndex -= 1;
+            }
+            // 删除
+            this.saveData.so.splice(i, 1);
+            this.notify("删除成功", "success");
+            this.saveStorage();
         },
 
         /**
          * 获取网站列表
          */
         getLink() {
-            axios.get($stor.ServerBase).then((res) => {
+            axios.get("https://navigation.lovewml.cn/api/getList").then((res) => {
                 if (res.status == 200) {
                     this.LinkList = res.data.data;
                 }
@@ -609,7 +685,7 @@ new Vue({
         },
 
         /**
-         * 网站列表菜单
+         * 网站列表菜单滚动
          */
         scrollMenu(index) {
             // 需滚动的位置
@@ -622,11 +698,9 @@ new Vue({
             for (let i = 0; i < index; i++) {
                 scrollHeight += appListClass[i].clientHeight;
             }
+            console.log(scrollHeight);
 
             // 开始滚动
-            if (scrollHeight != 0) {
-                scrollHeight += 30;
-            }
             this.$refs.appListBox.scrollTo({
                 top: scrollHeight,
                 behavior: "smooth"
@@ -662,8 +736,6 @@ new Vue({
          * 上下键切换结果
          */
         checkRes() {
-            // 搜索结果
-            let res;
             // 键位
             let e1;
 
@@ -675,8 +747,6 @@ new Vue({
                     return;
                 }
 
-                // 搜索结果获取
-                res = that.$refs.soBoxlist2;
                 // 键位获取
                 e1 = e || event || window.event || arguments.callee.caller.arguments[0];
 
@@ -790,7 +860,10 @@ new Vue({
         /**
          * 主题色修改
          */
-        changeThemeColor() {
+        changeThemeColor(color) {
+            if (color) {
+                this.saveData.themeColor = color;
+            }
             document.documentElement.style.setProperty("--fontColor", this.saveData.themeColor);
             this.saveStorage();
         },
@@ -830,6 +903,15 @@ new Vue({
          */
         changeAeroState() {
             let msg = this.saveData.AeroState ? ["毛玻璃已开启", "success"] : ["毛玻璃已关闭", "info"];
+            this.notify(msg[0], msg[1]);
+            this.saveStorage();
+        },
+
+        /**
+         * 下方网址导航显示开关
+         */
+        changeOpenAppListShow() {
+            let msg = this.saveData.openAppListShow ? ["网址导航已开启", "success"] : ["网址导航已关闭", "info"];
             this.notify(msg[0], msg[1]);
             this.saveStorage();
         },

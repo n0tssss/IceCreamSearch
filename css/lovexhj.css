@@ -15,7 +15,7 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    /* --fontColor: rgb(101, 178, 255); */
+    /* --fontColor: #409EFF; */
     --borderRadius: 20px;
 }
 
@@ -84,7 +84,8 @@ a,
 #hitokoto,
 .soItem,
 .soItem .el-icon-close,
-.soItem i {
+.soItem i,
+.colors > div {
     transition: all 0.3s;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
@@ -139,9 +140,13 @@ a,
 /* 天气&&时间 */
 .weather,
 .soBoxTime {
-    font-size: 0.8rem;
+    font-size: .9rem;
     color: white;
     text-shadow: 0 0 5px black;
+}
+
+.soBoxTime {
+    padding-left: 5px;
 }
 
 /* 天气 */
@@ -158,6 +163,10 @@ a,
 
 .weather p {
     margin-right: 3px;
+}
+
+.s-sticker {
+    padding: 0 !important;
 }
 
 /* 搜索框架 */
@@ -398,7 +407,8 @@ a,
 }
 
 .soSelect div > p {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
 }
 
 /* 增加搜索引擎按钮 */
@@ -415,10 +425,12 @@ a,
 
 .el-form-item__content p {
     line-height: 20px;
+    color: gray;
 }
 
 .el-form-item__content p:nth-child(1) {
     font-weight: bold;
+    color: black;
 }
 
 .el-dialog__body {
@@ -542,7 +554,7 @@ a,
 
 .el-tabs {
     padding: 20px;
-    color: var(--fontColor);
+    /* color: var(--fontColor); */
 }
 
 .el-tabs__item {
@@ -584,6 +596,11 @@ a,
     font-size: 1rem;
 }
 
+.el-switch.is-checked .el-switch__core {
+    border-color: var(--fontColor) !important;
+    background-color: var(--fontColor) !important;
+}
+
 /* 选项区块 */
 .tabBox {
     padding: 10px 20px;
@@ -608,13 +625,14 @@ a,
 }
 
 .tabBox .h1 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     padding: 5px 0 5px 0px;
     margin: 3px 0;
 }
 
 .tabBox .text {
     font-size: 0.9rem;
+    color: gray;
 }
 
 .tabBox .tools {
@@ -654,17 +672,62 @@ a,
     width: 100%;
 }
 
-/* 更新日志 */
-.updataInfo ul {
-    padding-left: 30px;
+/* 颜色预制 */
+.colors {
+    display: flex;
+    margin-bottom: 5px;
 }
 
+.colors > div {
+    width: 25px;
+    height: 25px;
+    margin-right: 8px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    cursor: pointer;
+}
+
+.colors > div:hover {
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+}
+
+/* 更新日志 */
 .updataInfo .text > div {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .timeTitle {
     font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.logBox > div {
+    display: flex;
+    margin-bottom: 3px;
+}
+
+.logBox > div > p {
+    padding: 1px 5px;
+}
+
+.logType {
+    color: white;
+    padding: 1px 5px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    font-size: 0.8rem;
+    height: 1.2rem;
+    white-space: nowrap;
 }
 
 /* 底部版权 */
@@ -883,7 +946,7 @@ a,
     width: 100%;
     position: relative;
     z-index: 1;
-    margin: 20px 0;
+    padding: 15px 0;
 }
 
 /* 分类标题 */
@@ -992,20 +1055,21 @@ a,
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 10px 5px 0px;
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     cursor: pointer;
-    color: rgb(152, 203, 255);
+    color: gray;
+    font-size: 0.9rem;
 }
 
 .soItemAction {
     background: rgb(245, 245, 245);
-    padding: 5px 10px 5px 20px;
-    color: rgb(101, 178, 255);
+    padding: 5px 10px;
+    color: var(--fontColor);
 }
 
 .soItem img {
@@ -1013,7 +1077,7 @@ a,
     height: 20px;
 }
 
-.soItem>div {
+.soItem > div {
     display: flex;
     align-items: center;
 }
@@ -1023,11 +1087,11 @@ a,
 }
 
 .soItem .el-icon-close {
-    color: #F56C6C;
+    color: #f56c6c;
 }
 
 .soItem .el-icon-check {
-    color: #67C23A;
+    color: #67c23a;
     margin-left: 3px;
     opacity: 0;
 }

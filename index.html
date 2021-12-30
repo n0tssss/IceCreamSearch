@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-        <title>IceCream | 简约至上</title>
+        <title>IceCream 冰激凌 | 简约至上</title>
         <link href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="./css/lovexhj.css" />
     </head>
@@ -20,24 +20,25 @@
                 <!-- 左上角 -->
                 <div class="windowLeftTop">
                     <!-- 时间 -->
-                    <div class="soBoxTime">{{ soBoxTime }}</div>
+                    <!-- <div class="soBoxTime">{{ soBoxTime }}</div> -->
 
                     <!-- 天气 -->
-                    <div class="weather" v-if="weatherInfo">
+                    <div id="he-plugin-simple"></div>
+                    <!-- <div class="weather" v-if="weatherInfo">
                         <p>{{ weatherInfo.city }}</p>
                         <img :src="weatherInfo.wea_img" alt="天气logo" />
                         <p>{{ weatherInfo.wea }}</p>
                         <p>{{ weatherInfo.tem }}°</p>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- 网站列表打开 -->
-                <div :class="{openAppList: true, openAppListShow: openApp}" @click="openAppList">
+                <div :class="{openAppList: true, openAppListShow: openApp}" @click="openAppList" v-if="saveData.openAppListShow">
                     <i class="el-icon-arrow-up"></i>
                 </div>
 
                 <!-- 网站列表 -->
-                <div :class="{ appList: true, appListShow: openApp }">
+                <div :class="{ appList: true, appListShow: openApp }" v-if="saveData.openAppListShow">
                     <!-- 毛玻璃背景 -->
                     <div :class="{ appListBg: true, appListBgBlur: saveData.AeroState }"></div>
 
@@ -91,12 +92,14 @@
 
                 <!-- 页脚版权信息 -->
                 <div :class="{footer: true, footerNone: openApp}" v-if="saveData.footerText">
-                    <div v-if="bingData.images">
-                        <p>{{ bingData.images[bingIndex].copyright }}</p>
+                    <div v-if="saveData.bgLinkHref && saveData.bgLinkContent">
+                        <p>
+                            <a :href="saveData.bgLinkHref" target="_blank">{{ saveData.bgLinkContent }}</a>
+                        </p>
                     </div>
                     <div>
-                        <p>© {{ time }} IceCreemSearch | THEME MADE BY <a href="https://n0ts.cn">N0ts</a></p>
-                        <p><a href="http://beian.miit.gov.cn">湘ICP备20005603号-2</a></p>
+                        <p>© {{ time }} IceCreemSearch | THEME MADE BY <a href="https://n0ts.cn" target="_blank">N0ts</a></p>
+                        <p><a href="http://beian.miit.gov.cn" target="_blank">湘ICP备20005603号-2</a></p>
                     </div>
                 </div>
             </div>
@@ -272,6 +275,20 @@
                                 <el-button type="primary" icon="el-icon-check" @click="saveHitokoto">保存</el-button>
                             </div>
                         </div>
+                        <div class="tabBox">
+                            <p class="h1">网址导航展示</p>
+                            <div class="text">
+                                <p>是否展示下方的网址导航</p>
+                            </div>
+                            <div class="tools">
+                                <el-switch
+                                    v-model="saveData.openAppListShow"
+                                    active-color="#13ce66"
+                                    @change="changeOpenAppListShow"
+                                >
+                                </el-switch>
+                            </div>
+                        </div>
                     </el-tab-pane>
 
                     <!-- 样式设置 -->
@@ -282,6 +299,15 @@
                                 <p>设置一个喜欢的主题色</p>
                             </div>
                             <div class="tools">
+                                <!-- 颜色预制 -->
+                                <div class="colors">
+                                    <div
+                                        v-for="(item, index) in defaultColors"
+                                        :key="index"
+                                        @click="changeThemeColor(item)"
+                                        :style="'background: ' + item + ';'"
+                                    ></div>
+                                </div>
                                 <el-color-picker
                                     v-model="saveData.themeColor"
                                     color-format="rgb"
@@ -296,7 +322,7 @@
                         <div class="tabBox">
                             <p class="h1">Bing 壁纸</p>
                             <div class="text">
-                                <p>自动获取 Bing 的每日壁纸</p>
+                                <p>自动获取 Bing 的每日壁纸，如果设置了「外链壁纸」将会覆盖此设置</p>
                             </div>
                             <div class="tools">
                                 <el-button type="primary" icon="el-icon-right" @click="selectBgImg(2)"
@@ -313,10 +339,13 @@
                                 <el-input
                                     v-model="saveData.bgLink"
                                     placeholder="请输入图片链接"
-                                    @change="setBgImg"
+                                    @change="setNowBg(saveData.bgLink)"
                                 ></el-input>
                                 <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(1)"
                                     >打开图床</el-button
+                                >
+                                <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(3)"
+                                    >清空</el-button
                                 >
                             </div>
                         </div>
@@ -395,10 +424,13 @@
                                     @click="saveData.soIndex = index"
                                 >
                                     <div>
+                                        <i
+                                            class="el-icon-check"
+                                            :class="{'el-icon-check-action': saveData.soIndex == index}"
+                                        ></i>
                                         <p>{{ item.name }}</p>
-                                        <i class="el-icon-check" :class="{'el-icon-check-action': saveData.soIndex == index}"></i>
                                     </div>
-                                    <i class="el-icon-close"></i>
+                                    <i class="el-icon-close" @click.stop="soSelectDelFc(index)"></i>
                                 </div>
                             </div>
                         </div>
@@ -430,9 +462,12 @@
                             <div class="text">
                                 <div v-for="(item, index) in updateLog" :key="index">
                                     <p class="timeTitle">{{ item.time }}</p>
-                                    <ul>
-                                        <li v-for="(item2, index2) in item.log" :key="index2">{{ item2 }}</li>
-                                    </ul>
+                                    <div class="logBox">
+                                        <div v-for="(item2, index2) in item.log" :key="index2">
+                                            <p :style="item2.color" class="logType">{{ item2.type }}</p>
+                                            <p>{{ item2.text }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -442,11 +477,36 @@
         </div>
 
         <!-- js引用 -->
+        <script>
+            WIDGET = {
+                CONFIG: {
+                    modules: "01234",
+                    background: "5",
+                    tmpColor: "FFFFFF",
+                    tmpSize: "16",
+                    cityColor: "FFFFFF",
+                    citySize: "16",
+                    aqiColor: "FFFFFF",
+                    aqiSize: "16",
+                    weatherIconSize: "24",
+                    alertIconSize: "18",
+                    // padding: "10px 10px 10px 10px",
+                    shadow: "1",
+                    language: "auto",
+                    borderRadius: "10",
+                    fixed: "false",
+                    vertical: "top",
+                    horizontal: "left",
+                    key: "830640491aae49549ec6a348d34f9ffc"
+                }
+            };
+        </script>
         <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.9/vue.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/vue-resource/1.5.3/vue-resource.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
         <script src="./js/lovexhj.js" type="module"></script>
+        <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script>
     </body>
 </html>
