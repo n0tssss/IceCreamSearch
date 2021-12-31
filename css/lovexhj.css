@@ -1138,6 +1138,19 @@ a,
     -o-transform: scale(1.5) rotate(90deg);
 }
 
+.headImg {
+    width: 80px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.userText {
+    margin: 10px 0 5px;
+}
+
 /* 自适应 */
 @media screen and (max-width: 980px) {
     .el-dialog {

@@ -443,20 +443,41 @@
 
                     <!-- 用户同步设置 -->
                     <el-tab-pane label="用户" name="user">
-                        <div class="tabBox" v-if="!saveData.userId">
+                        <div class="tabBox" v-if="!saveData.giteeName">
                             <p class="h1">登陆</p>
                             <div class="text">
-                                <p>注册 <a href="https://gitee.n0ts.cn/" target="_blank">Gitee AccessToken</a> 账号来设置你的码云 AccessToken</p>
+                                <p>
+                                    注册
+                                    <a href="https://gitee.n0ts.cn/" target="_blank">Gitee AccessToken</a>
+                                    账号来设置你的码云 AccessToken
+                                </p>
                                 <p>将利用码云的仓库 Issues 来同步您的配置数据</p>
                             </div>
                             <div class="tools">
                                 <el-input placeholder="邮箱" prefix-icon="el-icon-user" v-model="userMail"></el-input>
-                                <el-input placeholder="密码" prefix-icon="el-icon-key" v-model="userPwd" type="password"></el-input>
+                                <el-input
+                                    placeholder="密码"
+                                    prefix-icon="el-icon-key"
+                                    v-model="userPwd"
+                                    type="password"
+                                ></el-input>
                                 <el-button type="primary" @click="login">登陆</el-button>
                             </div>
                         </div>
                         <div class="tabBox" v-else>
                             <p class="h1">欢迎您！{{ saveData.giteeName }}</p>
+                            <img :src="saveData.giteeAvatar" alt="headImg" class="headImg" />
+                            <p class="userText">选择您的仓库：</p>
+                            <el-select v-model="saveData.giteeReposSelect" placeholder="请选择">
+                                <el-option
+                                    v-for="item in saveData.giteeRepos"
+                                    :key="item.id"
+                                    :label="item.human_name"
+                                    :value="item.human_name"
+                                >
+                                </el-option>
+                            </el-select>
+                            <el-button type="primary" @click="getRepos">获取仓库列表</el-button>
                         </div>
                     </el-tab-pane>
 

@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-12-31 14:48:37
+ * @LastEditTime: 2021-12-31 17:19:33
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -11,6 +11,30 @@
 import $stor from "./storage.js";
 // 更新日志
 import updateLog from "./log.js";
+
+// 添加请求拦截器
+axios.interceptors.request.use(
+    function (config) {
+        // 在发送请求之前做些什么
+        return config;
+    },
+    function (error) {
+        // 对请求错误做些什么
+        return Promise.reject(error);
+    }
+);
+
+// 添加响应拦截器
+axios.interceptors.response.use(
+    function (response) {
+        // 对响应数据做点什么
+        return response.data;
+    },
+    function (error) {
+        // 对响应错误做点什么
+        return Promise.reject(error);
+    }
+);
 
 /**
  * Vue
@@ -123,6 +147,8 @@ new Vue({
             giteeName: null, // 码云昵称
             giteeAvatar: null, // 码云头像
             giteeUser: null, // 码云账号
+            giteeRepos: [], // 码云仓库列表
+            giteeReposSelect: "", // 码云仓库选择索引
             themeColor: "#1e90ff", // 主题色
             updateStorage: false, // 用户是否允许操作 Storage
             soBoxlistShowNum: 8, // 搜索结果数量
@@ -194,30 +220,6 @@ new Vue({
         this.changeThemeColor(); // 默认主题色
         this.copyHitokoto(); // 一言复制启用
         this.updateLogData(); // 日志格式更正
-
-        // 添加请求拦截器
-        axios.interceptors.request.use(
-            function (config) {
-                // 在发送请求之前做些什么
-                return config;
-            },
-            function (error) {
-                // 对请求错误做些什么
-                return Promise.reject(error);
-            }
-        );
-
-        // 添加响应拦截器
-        axios.interceptors.response.use(
-            function (response) {
-                // 对响应数据做点什么
-                return response.data;
-            },
-            function (error) {
-                // 对响应错误做点什么
-                return Promise.reject(error);
-            }
-        );
     },
     methods: {
         /**
@@ -379,11 +381,10 @@ new Vue({
                     })
                     .then(
                         (res) => {
-                            console.log(res);
                             if (res.status == 200) {
-                                this.bingData = res.data.data;
+                                this.bingData = res.data;
                             }
-                            console.log("bing壁纸：", this.bingData);
+                            // console.log("bing壁纸：", this.bingData);
                             // 如果未设定则显示 bing 壁纸
                             if (this.saveData.bgLink == "") {
                                 this.bingIndex = index - 1;
@@ -714,8 +715,8 @@ new Vue({
          */
         getLink() {
             axios.get("https://navigation.lovewml.cn/api/getList").then((res) => {
-                if (res.status == 200) {
-                    this.LinkList = res.data.data;
+                if (res.state == 200) {
+                    this.LinkList = res.data;
                 }
             });
         },
@@ -1006,7 +1007,6 @@ new Vue({
             // 存储 id 与 密码
             this.saveData.userId = loginRes.data.id;
             this.saveData.userPwd = this.userPwd;
-            this.saveStorage();
 
             // 获取码云信息
             let giteeRes = await axios.get(`https://giteeapi.n0ts.cn/${this.saveData.userId}`, {
@@ -1015,19 +1015,34 @@ new Vue({
                 }
             });
             // 存储码云昵称与头像
-            console.log(giteeRes);
             this.saveData.giteeName = giteeRes.name;
             this.saveData.giteeAvatar = giteeRes.avatar_url;
             this.saveData.giteeUser = giteeRes.avatar_url;
 
+            this.saveStorage();
+
             this.notify("登陆成功！", "success");
+            this.getRepos();
         },
 
         /**
-         * 获取
+         * 获取仓库列表
          */
-        async getIssues() {
-
-        },
+        async getRepos() {
+            let res = await axios.get(`https://giteeapi.n0ts.cn/${this.saveData.userId}`, {
+                params: {
+                    path: `api/v5/user/repos?access_token={0}&sort=full_name&page=1&per_page=100`
+                }
+            });
+            console.log(res);
+            this.saveData.giteeRepos = res.map((item) => {
+                return {
+                    id: item.id,
+                    human_name: item.human_name,
+                    path: item.path
+                };
+            });
+            this.saveData.giteeReposSelect = res[0].human_name;
+        }
     }
 });
