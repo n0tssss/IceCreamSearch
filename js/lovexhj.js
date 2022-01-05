@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2021-12-31 17:19:33
+ * @LastEditTime: 2022-01-05 22:42:23
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -1015,9 +1015,10 @@ new Vue({
                 }
             });
             // 存储码云昵称与头像
+            console.log(giteeRes);
             this.saveData.giteeName = giteeRes.name;
             this.saveData.giteeAvatar = giteeRes.avatar_url;
-            this.saveData.giteeUser = giteeRes.avatar_url;
+            this.saveData.giteeUser = giteeRes.login;
 
             this.saveStorage();
 
@@ -1043,6 +1044,26 @@ new Vue({
                 };
             });
             this.saveData.giteeReposSelect = res[0].human_name;
+        },
+
+        /**
+         * 同步数据
+         */
+        saveUserData() {
+            // 数据验证
+            if (!this.saveData.giteeReposSelect) {
+                return this.notify("必须选择一个仓库哦！", "warning");
+            }
+            console.log(this.saveData.giteeReposSelect);
+
+            // 获取 Issues
+            axios.get(`https://giteeapi.n0ts.cn/${this.saveData.userId}`, {
+                params: {
+                    path: `api/v5/repos/${this.saveData.giteeUser}/${this.saveData.giteeReposSelect}/issues?access_token={0}&state=open&sort=created&direction=desc&page=1&per_page=20`
+                }
+            }).then(res => {
+                console.log(res);
+            });
         }
     }
 });

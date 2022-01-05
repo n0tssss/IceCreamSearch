@@ -467,17 +467,18 @@
                         <div class="tabBox" v-else>
                             <p class="h1">欢迎您！{{ saveData.giteeName }}</p>
                             <img :src="saveData.giteeAvatar" alt="headImg" class="headImg" />
-                            <p class="userText">选择您的仓库：</p>
+                            <p class="userText">选择您的仓库来保存您的数据：</p>
                             <el-select v-model="saveData.giteeReposSelect" placeholder="请选择">
                                 <el-option
                                     v-for="item in saveData.giteeRepos"
                                     :key="item.id"
                                     :label="item.human_name"
-                                    :value="item.human_name"
+                                    :value="item.path"
                                 >
                                 </el-option>
                             </el-select>
                             <el-button type="primary" @click="getRepos">获取仓库列表</el-button>
+                            <el-button type="primary" @click="saveUserData">同步数据</el-button>
                         </div>
                     </el-tab-pane>
 
