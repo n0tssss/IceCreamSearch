@@ -10,4 +10,4 @@
 
 开发中... ...
 
-暂时预览地址：[IceCream | 简约至上](https://n0ts.gitee.io/icecreamsearch/)
+暂时预览地址：[IceCream 冰激凌 | 简约至上 (n0ts.cn)](https://search.n0ts.cn/)

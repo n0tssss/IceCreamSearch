@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2022-01-06 17:58:57
+ * @LastEditTime: 2022-01-06 18:03:18
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -994,7 +994,6 @@ new Vue({
             let clientId = "c41beff69a847a4ee82b1c0db28fa70ada5aa4f6546543ebee70e284dd992deb";
             let scope = "projects issues";
             let redirectUri = "https://search.n0ts.cn/";
-            redirectUri = window.location.href;
             window.location.href = `https://gitee.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
         },
 
@@ -1007,8 +1006,7 @@ new Vue({
                     grant_type: "authorization_code",
                     code,
                     client_id: "c41beff69a847a4ee82b1c0db28fa70ada5aa4f6546543ebee70e284dd992deb",
-                    // redirect_uri: "https://search.n0ts.cn/",
-                    redirect_uri: window.location.href,
+                    redirect_uri: "https://search.n0ts.cn/",
                     client_secret: "90fc5270dd78bf9d709bd31033134933c572f6e3b513aef9ffed89af6e687bc7"
                 })
                 .then((res) => {
