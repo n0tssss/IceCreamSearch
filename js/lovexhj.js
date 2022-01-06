@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2022-01-05 22:42:23
+ * @LastEditTime: 2022-01-06 17:58:57
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -59,8 +59,6 @@ new Vue({
         weatherInfo: null, // 当前天气数据
         updateLog, // 更新日志
         hitokoto: ":D 获取中...", // 一言内容
-        userMail: "", // Gitee AccessToken 邮箱
-        userPwd: "", // Gitee AccessToken 密码
         // 主题色预制
         defaultColors: ["#1e90ff", "#ff4757", "#ff7f50", "#eccc68", "#2ed573", "#5352ed", "#747d8c", "#2f3542"],
         // 一言类型配置
@@ -142,8 +140,7 @@ new Vue({
         saveDataCache: null, // 存储数据缓存
         // 存储数据
         saveData: {
-            userId: null, // Gitee AccessToken 用户 Id
-            userPwd: null, // Gitee AccessToken 密码
+            GiteeToken: null, // Gitee Access Token
             giteeName: null, // 码云昵称
             giteeAvatar: null, // 码云头像
             giteeUser: null, // 码云账号
@@ -220,6 +217,12 @@ new Vue({
         this.changeThemeColor(); // 默认主题色
         this.copyHitokoto(); // 一言复制启用
         this.updateLogData(); // 日志格式更正
+
+        // 是否存在 code 参数
+        let code = window.location.search.match(/[^\?code=].+/g);
+        if (code && !this.saveData.GiteeToken) {
+            this.getGiteeToken(code[0]);
+        }
     },
     methods: {
         /**
@@ -985,35 +988,46 @@ new Vue({
         },
 
         /**
+         * 前往码云授权
+         */
+        goGitee() {
+            let clientId = "c41beff69a847a4ee82b1c0db28fa70ada5aa4f6546543ebee70e284dd992deb";
+            let scope = "projects issues";
+            let redirectUri = "https://search.n0ts.cn/";
+            redirectUri = window.location.href;
+            window.location.href = `https://gitee.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+        },
+
+        /**
+         * 获取码云用户 Token
+         */
+        getGiteeToken(code) {
+            axios
+                .post("https://gitee.com/oauth/token", {
+                    grant_type: "authorization_code",
+                    code,
+                    client_id: "c41beff69a847a4ee82b1c0db28fa70ada5aa4f6546543ebee70e284dd992deb",
+                    // redirect_uri: "https://search.n0ts.cn/",
+                    redirect_uri: window.location.href,
+                    client_secret: "90fc5270dd78bf9d709bd31033134933c572f6e3b513aef9ffed89af6e687bc7"
+                })
+                .then((res) => {
+                    this.saveData.GiteeToken = res.access_token;
+                    this.saveStorage();
+                    // 登陆获取用户信息
+                    this.getUserInfo();
+                })
+                .catch((err) => {
+                    this.notify("授权失败！请联系管理员！", "error");
+                });
+        },
+
+        /**
          * 登陆
          */
-        async login() {
-            // 数据验证
-            if (!this.userMail || !this.userPwd) {
-                return this.notify("这俩都是必填哦！", "warning");
-            }
-
-            // 登陆
-            let loginRes = await axios.post("https://giteeapi.n0ts.cn/api/User/Login", {
-                email: this.userMail,
-                password: this.userPwd
-            });
-
-            // 错误验证
-            if (!loginRes || loginRes.code == 0) {
-                return this.notify(loginRes.message, "error");
-            }
-
-            // 存储 id 与 密码
-            this.saveData.userId = loginRes.data.id;
-            this.saveData.userPwd = this.userPwd;
-
+        async getUserInfo() {
             // 获取码云信息
-            let giteeRes = await axios.get(`https://giteeapi.n0ts.cn/${this.saveData.userId}`, {
-                params: {
-                    path: `api/v5/user?access_token={0}`
-                }
-            });
+            let giteeRes = await axios.get(`https://gitee.com/api/v5/user?access_token=${this.saveData.GiteeToken}`);
             // 存储码云昵称与头像
             console.log(giteeRes);
             this.saveData.giteeName = giteeRes.name;
@@ -1030,11 +1044,9 @@ new Vue({
          * 获取仓库列表
          */
         async getRepos() {
-            let res = await axios.get(`https://giteeapi.n0ts.cn/${this.saveData.userId}`, {
-                params: {
-                    path: `api/v5/user/repos?access_token={0}&sort=full_name&page=1&per_page=100`
-                }
-            });
+            let res = await axios.get(
+                `https://gitee.com/api/v5/user/repos?access_token=${this.saveData.GiteeToken}&sort=full_name&page=1&per_page=100`
+            );
             console.log(res);
             this.saveData.giteeRepos = res.map((item) => {
                 return {
@@ -1057,13 +1069,13 @@ new Vue({
             console.log(this.saveData.giteeReposSelect);
 
             // 获取 Issues
-            axios.get(`https://giteeapi.n0ts.cn/${this.saveData.userId}`, {
-                params: {
-                    path: `api/v5/repos/${this.saveData.giteeUser}/${this.saveData.giteeReposSelect}/issues?access_token={0}&state=open&sort=created&direction=desc&page=1&per_page=20`
-                }
-            }).then(res => {
-                console.log(res);
-            });
+            axios
+                .get(
+                    `https://gitee.com/api/v5/repos/${this.saveData.giteeUser}/${this.saveData.giteeReposSelect}/issues?access_token=${this.saveData.GiteeToken}&state=open&sort=created&direction=desc&page=1&per_page=20`
+                )
+                .then((res) => {
+                    console.log(res);
+                });
         }
     }
 });

@@ -444,24 +444,12 @@
                     <!-- 用户同步设置 -->
                     <el-tab-pane label="用户" name="user">
                         <div class="tabBox" v-if="!saveData.giteeName">
-                            <p class="h1">登陆</p>
+                            <p class="h1">登陆 Gitee-码云</p>
                             <div class="text">
-                                <p>
-                                    注册
-                                    <a href="https://gitee.n0ts.cn/" target="_blank">Gitee AccessToken</a>
-                                    账号来设置你的码云 AccessToken
-                                </p>
-                                <p>将利用码云的仓库 Issues 来同步您的配置数据</p>
+                                <p>登陆来同步您的数据配置！</p>
                             </div>
                             <div class="tools">
-                                <el-input placeholder="邮箱" prefix-icon="el-icon-user" v-model="userMail"></el-input>
-                                <el-input
-                                    placeholder="密码"
-                                    prefix-icon="el-icon-key"
-                                    v-model="userPwd"
-                                    type="password"
-                                ></el-input>
-                                <el-button type="primary" @click="login">登陆</el-button>
+                                <el-button type="primary" @click="goGitee">前往授权</el-button>
                             </div>
                         </div>
                         <div class="tabBox" v-else>
