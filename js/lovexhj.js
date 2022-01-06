@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2022-01-06 18:03:18
+ * @LastEditTime: 2022-01-06 18:05:26
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -419,7 +419,7 @@ new Vue({
             // 如果壁纸接口拉闸则调用本地背景
             this.notify("壁纸有点脾气罢工了，请联系网站管理员查看", "error");
             if (this.saveData.bgLink == "") {
-                this.setNowBg("./errorBg.jpg");
+                this.setNowBg("./images/errorBg.jpg");
             } else {
                 this.setNowBg(this.saveData.bgLink);
             }
