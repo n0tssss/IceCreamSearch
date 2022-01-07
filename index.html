@@ -213,7 +213,15 @@
             </div>
 
             <!-- 侧边菜单 -->
-            <el-drawer :visible.sync="leftBar" :with-header="false" direction="ltr">
+            <el-drawer
+                :visible.sync="leftBar"
+                :with-header="false"
+                direction="ltr"
+                v-loading="loading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+            >
                 <!-- 关闭按钮 -->
                 <i class="closeTab el-icon-close" @click="leftBar = false"></i>
                 <el-tabs v-model="tabsActive">
@@ -443,7 +451,7 @@
 
                     <!-- 用户同步设置 -->
                     <el-tab-pane label="用户" name="user">
-                        <div class="tabBox" v-if="!saveData.giteeName">
+                        <div class="tabBox" v-if="!saveData.gitee.giteeName">
                             <p class="h1">登陆 Gitee-码云</p>
                             <div class="text">
                                 <p>登陆来同步您的数据配置！</p>
@@ -453,20 +461,18 @@
                             </div>
                         </div>
                         <div class="tabBox" v-else>
-                            <p class="h1">欢迎您！{{ saveData.giteeName }}</p>
-                            <img :src="saveData.giteeAvatar" alt="headImg" class="headImg" />
-                            <p class="userText">选择您的仓库来保存您的数据：</p>
-                            <el-select v-model="saveData.giteeReposSelect" placeholder="请选择">
-                                <el-option
-                                    v-for="item in saveData.giteeRepos"
-                                    :key="item.id"
-                                    :label="item.human_name"
-                                    :value="item.path"
-                                >
-                                </el-option>
-                            </el-select>
-                            <el-button type="primary" @click="getRepos">获取仓库列表</el-button>
-                            <el-button type="primary" @click="saveUserData">同步数据</el-button>
+                            <p class="h1">欢迎您！{{ saveData.gitee.giteeName }}</p>
+                            <img :src="saveData.gitee.giteeAvatar" alt="headImg" class="headImg" />
+                            <div class="text">
+                                <p>我们会创建一个名为「IceCreamSearchData」的仓库用来存储您的数据</p>
+                                <p>改完任何设置记得来这里上传数据哦！</p>
+                            </div>
+                            <div class="tools">
+                                <el-button type="primary" @click="checkRepos">创建仓库</el-button>
+                                <el-button type="primary" @click="pushDataToGitee">上传数据</el-button>
+                                <el-button type="primary" @click="pullDataToGitee">获取数据</el-button>
+                                <el-button type="primary" @click="logout">注销</el-button>
+                            </div>
                         </div>
                     </el-tab-pane>
 
@@ -478,7 +484,7 @@
                                 <p>将全部配置还原到最初</p>
                             </div>
                             <div class="tools">
-                                <el-button type="primary" icon="el-icon-refresh-right" @click="reloadSetting"
+                                <el-button type="primary" icon="el-icon-refresh-right" @click="reloadSetting(true)"
                                     >重置</el-button
                                 >
                             </div>
@@ -540,7 +546,8 @@
         <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
-        <script src="./js/lovexhj.js" type="module"></script>
         <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.2/base64.min.js"></script>
+        <script src="./js/lovexhj.js" type="module"></script>
     </body>
 </html>

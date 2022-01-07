@@ -49,8 +49,8 @@ html {
 }
 
 a {
-    text-decoration: underline var(--fontColor);
-    color: var(--fontColor);
+    text-decoration: underline #1e90ff;
+    color: #1e90ff;
 }
 
 a:hover {
@@ -138,7 +138,7 @@ a,
 }
 
 /* 天气&&时间 */
-.weather,
+/* .weather,
 .soBoxTime {
     font-size: 0.9rem;
     color: white;
@@ -147,6 +147,9 @@ a,
 
 .soBoxTime {
     padding-left: 5px;
+} */
+.s-sticker > div:last-child {
+    width: 0 !important;
 }
 
 /* 天气 */
@@ -663,7 +666,7 @@ a,
 .el-button {
     background-color: var(--fontColor) !important;
     border: none !important;
-    margin: 0 10px 0 0 !important;
+    margin: 0 5px 5px 0 !important;
     color: white;
     padding: 8px 10px;
 }
@@ -1145,10 +1148,14 @@ a,
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
+    display: block;
+    margin-bottom: 10px;
 }
 
-.userText {
-    margin: 10px 0 5px;
+/* 加载遮罩 */
+.el-loading-spinner i,
+.el-loading-spinner p {
+    color: var(--fontColor) !important;
 }
 
 /* 自适应 */

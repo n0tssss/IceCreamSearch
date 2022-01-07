@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2022-01-06 18:05:26
+ * @LastEditTime: 2022-01-07 14:23:17
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -12,29 +12,26 @@ import $stor from "./storage.js";
 // 更新日志
 import updateLog from "./log.js";
 
-// 添加请求拦截器
+// axios 拦截器
 axios.interceptors.request.use(
     function (config) {
-        // 在发送请求之前做些什么
         return config;
     },
     function (error) {
-        // 对请求错误做些什么
+        return Promise.reject(error);
+    }
+);
+axios.interceptors.response.use(
+    function (response) {
+        return response.data;
+    },
+    function (error) {
         return Promise.reject(error);
     }
 );
 
-// 添加响应拦截器
-axios.interceptors.response.use(
-    function (response) {
-        // 对响应数据做点什么
-        return response.data;
-    },
-    function (error) {
-        // 对响应错误做点什么
-        return Promise.reject(error);
-    }
-);
+// 转圈圈的 axios - $http
+const $http = axios;
 
 /**
  * Vue
@@ -59,6 +56,7 @@ new Vue({
         weatherInfo: null, // 当前天气数据
         updateLog, // 更新日志
         hitokoto: ":D 获取中...", // 一言内容
+        loading: false, // 加载转圈圈
         // 主题色预制
         defaultColors: ["#1e90ff", "#ff4757", "#ff7f50", "#eccc68", "#2ed573", "#5352ed", "#747d8c", "#2f3542"],
         // 一言类型配置
@@ -140,12 +138,14 @@ new Vue({
         saveDataCache: null, // 存储数据缓存
         // 存储数据
         saveData: {
-            GiteeToken: null, // Gitee Access Token
-            giteeName: null, // 码云昵称
-            giteeAvatar: null, // 码云头像
-            giteeUser: null, // 码云账号
-            giteeRepos: [], // 码云仓库列表
-            giteeReposSelect: "", // 码云仓库选择索引
+            // 码云数据
+            gitee: {
+                GiteeToken: "", // Gitee Access Token
+                giteeName: null, // 码云昵称
+                giteeAvatar: null, // 码云头像
+                giteeUser: null, // 码云账号
+                giteeRepos: null // 码云仓库
+            },
             themeColor: "#1e90ff", // 主题色
             updateStorage: false, // 用户是否允许操作 Storage
             soBoxlistShowNum: 8, // 搜索结果数量
@@ -201,11 +201,33 @@ new Vue({
             <p>
                 本项目已开源：
                 <a href="https://gitee.com/n0ts/IceCreamSearch/" target="_blank">N0ts/IceCreamSearch</a>
-            </p>`
+            </p>
+            <p>有问题或者建议欢迎前往仓库给我们留言！</p>`
         }
     },
     created() {
         this.initWindow(); // 初始化
+
+        $http.interceptors.request.use(
+            (config) => {
+                this.loading = true;
+                return config;
+            },
+            (error) => {
+                this.loading = false;
+                return Promise.reject(error);
+            }
+        );
+        $http.interceptors.response.use(
+            (response) => {
+                this.loading = false;
+                return response;
+            },
+            (error) => {
+                this.loading = false;
+                return Promise.reject(error);
+            }
+        );
     },
     mounted() {
         this.getBing(1); // bing 壁纸获取
@@ -220,7 +242,7 @@ new Vue({
 
         // 是否存在 code 参数
         let code = window.location.search.match(/[^\?code=].+/g);
-        if (code && !this.saveData.GiteeToken) {
+        if (code && !this.saveData.gitee.GiteeToken) {
             this.getGiteeToken(code[0]);
         }
     },
@@ -384,9 +406,7 @@ new Vue({
                     })
                     .then(
                         (res) => {
-                            if (res.status == 200) {
-                                this.bingData = res.data;
-                            }
+                            this.bingData = res.data;
                             // console.log("bing壁纸：", this.bingData);
                             // 如果未设定则显示 bing 壁纸
                             if (this.saveData.bgLink == "") {
@@ -826,14 +846,17 @@ new Vue({
         /**
          * 重置设置
          */
-        reloadSetting() {
-            // 用户是否允许操作 Storage 保存
+        reloadSetting(notify) {
+            // 部分数据不需要清除
             let updateStorage = this.saveData.updateStorage;
+            let gitee = this.saveData.gitee;
 
             // 深拷贝数据
             this.saveData = JSON.parse(JSON.stringify(this.saveDataCache));
 
+            // 还原备份数据
             this.saveData.updateStorage = updateStorage;
+            this.saveData.gitee = gitee;
 
             // bing 壁纸获取
             this.getBing(1);
@@ -844,7 +867,9 @@ new Vue({
             // 主题色修改
             this.changeThemeColor();
 
-            this.notify("重置成功", "success");
+            if (notify) {
+                this.notify("重置成功", "success");
+            }
         },
 
         /**
@@ -912,7 +937,7 @@ new Vue({
          * 重置主题色
          */
         reloadThemeColor() {
-            this.saveData.themeColor = "rgb(101, 178, 255)";
+            this.saveData.themeColor = this.saveDataCache.themeColor;
             this.changeThemeColor();
             this.notify("主题色重置成功", "success");
         },
@@ -992,7 +1017,7 @@ new Vue({
          */
         goGitee() {
             let clientId = "c41beff69a847a4ee82b1c0db28fa70ada5aa4f6546543ebee70e284dd992deb";
-            let scope = "projects issues";
+            let scope = "projects issues user_info";
             let redirectUri = "https://search.n0ts.cn/";
             window.location.href = `https://gitee.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
         },
@@ -1001,7 +1026,7 @@ new Vue({
          * 获取码云用户 Token
          */
         getGiteeToken(code) {
-            axios
+            $http
                 .post("https://gitee.com/oauth/token", {
                     grant_type: "authorization_code",
                     code,
@@ -1010,7 +1035,7 @@ new Vue({
                     client_secret: "90fc5270dd78bf9d709bd31033134933c572f6e3b513aef9ffed89af6e687bc7"
                 })
                 .then((res) => {
-                    this.saveData.GiteeToken = res.access_token;
+                    this.saveData.gitee.GiteeToken = res.access_token;
                     this.saveStorage();
                     // 登陆获取用户信息
                     this.getUserInfo();
@@ -1023,57 +1048,130 @@ new Vue({
         /**
          * 登陆
          */
-        async getUserInfo() {
+        getUserInfo() {
             // 获取码云信息
-            let giteeRes = await axios.get(`https://gitee.com/api/v5/user?access_token=${this.saveData.GiteeToken}`);
-            // 存储码云昵称与头像
-            console.log(giteeRes);
-            this.saveData.giteeName = giteeRes.name;
-            this.saveData.giteeAvatar = giteeRes.avatar_url;
-            this.saveData.giteeUser = giteeRes.login;
+            $http.get(`https://gitee.com/api/v5/user?access_token=${this.saveData.gitee.GiteeToken}`).then((res) => {
+                // 存储码云昵称与头像
+                this.saveData.gitee.giteeName = res.name;
+                this.saveData.gitee.giteeAvatar = res.avatar_url;
+                this.saveData.gitee.giteeUser = res.login;
+                this.saveStorage();
 
-            this.saveStorage();
+                // 检查仓库是否存在 & 创建
+                this.checkRepos();
 
-            this.notify("登陆成功！", "success");
-            this.getRepos();
-        },
-
-        /**
-         * 获取仓库列表
-         */
-        async getRepos() {
-            let res = await axios.get(
-                `https://gitee.com/api/v5/user/repos?access_token=${this.saveData.GiteeToken}&sort=full_name&page=1&per_page=100`
-            );
-            console.log(res);
-            this.saveData.giteeRepos = res.map((item) => {
-                return {
-                    id: item.id,
-                    human_name: item.human_name,
-                    path: item.path
-                };
+                this.notify("登陆成功！", "success");
             });
-            this.saveData.giteeReposSelect = res[0].human_name;
         },
 
         /**
-         * 同步数据
+         * 检查仓库是否存在 & 创建
          */
-        saveUserData() {
-            // 数据验证
-            if (!this.saveData.giteeReposSelect) {
-                return this.notify("必须选择一个仓库哦！", "warning");
-            }
-            console.log(this.saveData.giteeReposSelect);
-
-            // 获取 Issues
-            axios
-                .get(
-                    `https://gitee.com/api/v5/repos/${this.saveData.giteeUser}/${this.saveData.giteeReposSelect}/issues?access_token=${this.saveData.GiteeToken}&state=open&sort=created&direction=desc&page=1&per_page=20`
-                )
-                .then((res) => {
-                    console.log(res);
+        async checkRepos() {
+            try {
+                // 创建仓库
+                let createRes = await $http.post("https://gitee.com/api/v5/user/repos", {
+                    access_token: this.saveData.gitee.GiteeToken,
+                    name: "IceCreamSearchData",
+                    description: "IceCreamSearch 起始页数据同步用",
+                    has_issues: "false",
+                    has_wiki: "false",
+                    can_comment: "false",
+                    auto_init: "true",
+                    private: "true"
                 });
+                this.saveData.gitee.giteeRepos = createRes.name;
+
+                // 上传数据
+                this.pushDataToGitee();
+            } catch (err) {
+                // 仓库已存在
+                if (err.message.includes("422")) {
+                    // 获取数据
+                    this.pullDataToGitee();
+                } else {
+                    // 其他报错
+                    this.notify("创建仓库异常！请联系管理员！", "error");
+                    console.log(err);
+                }
+            }
+        },
+
+        /**
+         * 获取 README 文件内容
+         */
+        getREADME() {
+            return new Promise((resolve, reject) => {
+                // 获取仓库 README
+                $http
+                    .get(`https://gitee.com/api/v5/repos/${this.saveData.gitee.giteeUser}/IceCreamSearchData/readme`, {
+                        params: {
+                            access_token: this.saveData.gitee.GiteeToken
+                        }
+                    })
+                    .then((res) => {
+                        resolve(res);
+                    })
+                    .catch((err) => {
+                        reject(err);
+                    });
+            });
+        },
+
+        /**
+         * 上传数据
+         */
+        async pushDataToGitee() {
+            try {
+                // 获取 README 文件内容
+                let readme = await this.getREADME();
+
+                // 上传 README
+                await $http.put(
+                    `https://gitee.com/api/v5/repos/${this.saveData.gitee.giteeUser}/IceCreamSearchData/contents/README.md`,
+                    {
+                        access_token: this.saveData.gitee.GiteeToken,
+                        content: Base64.encode(JSON.stringify(this.saveData)),
+                        sha: readme.sha,
+                        message: "IceCreamSearch Data Update"
+                    }
+                );
+                this.notify("数据上传成功！", "success");
+            } catch (err) {
+                this.notify("数据上传失败！", "error");
+                console.log(err);
+            }
+        },
+
+        /**
+         * 获取数据
+         */
+        async pullDataToGitee() {
+            try {
+                // 获取 README 文件内容
+                let readme = await this.getREADME();
+
+                // 重置数据
+                const cacheData = this.saveDataCache;
+                this.saveDataCache = JSON.parse(Base64.decode(readme.content));
+                // 重置设置
+                this.reloadSetting();
+                this.saveDataCache = cacheData;
+
+                this.notify("数据获取成功！", "success");
+            } catch (err) {
+                this.notify("数据获取失败！", "error");
+                console.log(err);
+            }
+        },
+
+        /**
+         * 注销
+         */
+        logout() {
+            this.saveData.gitee = this.saveDataCache.gitee;
+            this.saveStorage();
+            this.notify("已注销！", "success");
         }
     }
 });
