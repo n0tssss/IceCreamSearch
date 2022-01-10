@@ -115,8 +115,17 @@
             <el-dialog title="提示" :visible.sync="initDialog" width="40%">
                 <span>是否允许我们将您的设置信息存入到本地缓存，这将获得完美的体验</span>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="initDialogClose(false)">取 消</el-button>
+                    <el-button type="primary" @click="initDialogClose(false)">取 消</el-button>
                     <el-button type="primary" @click="initDialogClose(true)">确 定</el-button>
+                </span>
+            </el-dialog>
+
+            <!-- 更新提示 -->
+            <el-dialog :title="updateLog[0].time + '更新'" :visible.sync="updateDialog" width="40%">
+                <span>又更新了一些新功能，是否前往更新日志查看？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="goLog">立即查看</el-button>
+                    <el-button type="primary" @click="updateDialog = false">算了算了</el-button>
                 </span>
             </el-dialog>
 
@@ -359,7 +368,7 @@
                                 <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(1)"
                                     >打开图床</el-button
                                 >
-                                <el-button type="primary" icon="el-icon-upload" @click="selectBgImg(3)">清空</el-button>
+                                <el-button type="primary" icon="el-icon-refresh" @click="selectBgImg(3)">清空</el-button>
                             </div>
                         </div>
                         <div class="tabBox">
@@ -531,7 +540,7 @@
                     weatherIconSize: "24",
                     alertIconSize: "18",
                     // padding: "10px 10px 10px 10px",
-                    shadow: "1",
+                    shadow: "5",
                     language: "auto",
                     borderRadius: "10",
                     fixed: "false",

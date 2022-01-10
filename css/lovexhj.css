@@ -170,6 +170,7 @@ a,
 
 .s-sticker {
     padding: 0 !important;
+    text-shadow: 0 0 5px black;
 }
 
 /* 搜索框架 */
@@ -220,7 +221,7 @@ a,
 /* 搜索框聚焦 */
 .soBoxtextFocus {
     opacity: 1;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
 }
 
 /* 搜索框图标 */
@@ -298,6 +299,7 @@ a,
     -o-border-radius: 20px;
     display: none;
     opacity: 0;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
 }
 
 /* 搜索结果显示 */

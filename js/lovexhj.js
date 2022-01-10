@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2020-12-20 21:46:10
- * @LastEditTime: 2022-01-07 14:23:17
+ * @LastEditTime: 2022-01-10 09:58:59
  * @Description: 主程序
  * @FilePath: /IceCreamSearch/js/lovexhj.js
  * @Mail：mail@n0ts.cn
@@ -40,6 +40,7 @@ new Vue({
     el: "#Search",
     data: {
         initDialog: true, // 初始化窗口显示
+        updateDialog: false, // 更新提示弹窗显示
         soBoxtext: "", // 输入框内容
         soBoxtextCache: "", // 输入框临时内容
         soBoxlist: [], // 搜索结果
@@ -160,6 +161,7 @@ new Vue({
             settingLocation: 4, // 设置按钮位置
             AeroState: true, // 毛玻璃是否开启
             openAppListShow: true, // 下方网址导航是否显示
+            updateTime: "", // 最后一次更新时间
             // 搜索引擎
             so: [
                 {
@@ -281,7 +283,34 @@ new Vue({
             if (cache) {
                 that.saveData = cache;
             }
+
+            // 日志是否更新
+            this.checkLogUpdate();
+
             this.saveStorage();
+        },
+
+        /**
+         * 日志是否更新
+         */
+        checkLogUpdate() {
+            // 如果时间不存在 或 与最新日志时间不一致
+            if (!this.saveData.updateTime || this.saveData.updateTime != updateLog[0].time) {
+                // 提示
+                this.updateDialog = true;
+                // 保存最新时间
+                this.saveData.updateTime = updateLog[0].time;
+                this.saveStorage();
+            }
+        },
+
+        /**
+         * 查看日志
+         */
+        goLog() {
+            this.updateDialog = false;
+            this.tabsActive = "about";
+            this.leftBar = true;
         },
 
         /**
@@ -1017,7 +1046,7 @@ new Vue({
          */
         goGitee() {
             let clientId = "c41beff69a847a4ee82b1c0db28fa70ada5aa4f6546543ebee70e284dd992deb";
-            let scope = "projects issues user_info";
+            let scope = "projects user_info";
             let redirectUri = "https://search.n0ts.cn/";
             window.location.href = `https://gitee.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
         },
@@ -1113,6 +1142,10 @@ new Vue({
                         resolve(res);
                     })
                     .catch((err) => {
+                        if (err.message.includes("401")) {
+                            this.notify("登陆已过期！请重新登陆！", "error");
+                            return this.logout(true);
+                        }
                         reject(err);
                     });
             });
@@ -1168,10 +1201,12 @@ new Vue({
         /**
          * 注销
          */
-        logout() {
+        logout(log) {
             this.saveData.gitee = this.saveDataCache.gitee;
             this.saveStorage();
-            this.notify("已注销！", "success");
+            if (!log) {
+                this.notify("已注销！", "success");
+            }
         }
     }
 });
