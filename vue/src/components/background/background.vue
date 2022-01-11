@@ -1,0 +1,162 @@
+<!--
+ * @Author: N0ts
+ * @Date: 2022-01-11 10:01:25
+ * @LastEditTime: 2022-01-11 18:05:15
+ * @Description: 背景
+ * @FilePath: /vue/src/components/background/background.vue
+ * @Mail：mail@n0ts.cn
+-->
+
+<template>
+    <!-- 背景 -->
+    <div id="background" :ref="setRef" :class="{ active: data.searchBoxFocus }">
+        <!-- 天气 -->
+        <weather></weather>
+    </div>
+</template>
+
+<script setup>
+import { onBeforeUpdate, onMounted } from "vue";
+import axios from "../../utils/http/axios";
+
+/**
+ * 组件
+ */
+// 天气
+import weather from "../weather/weather.vue";
+
+/**
+ * 数据
+ */
+import data from "../../hooks/publicData/data";
+
+/**
+ * 元素节点
+ */
+let nodes = {};
+
+/**
+ * setup
+ */
+loadBg(); // 加载壁纸
+
+/**
+ * 更新
+ */
+onMounted(() => {
+    // console.log("node节点", nodes);
+});
+
+/**
+ * 改变前
+ */
+onBeforeUpdate(() => {
+    nodes = [];
+});
+
+/**
+ * 获取 ref 元素
+ */
+function setRef(item) {
+    // 如果元素不存在 或 id 与 refname 都不存在的话
+    if (!item || (!item.id && !item.attributes.refname.value)) {
+        return;
+    }
+
+    // 添加到元素节点 优先取 id
+    nodes[item.id ? item.id : item.attributes.refname.value] = item;
+}
+
+/**
+ * 加载壁纸
+ */
+function loadBg() {
+    // 是否已经设置壁纸
+    if (data.saveData.bgLink) {
+        return setBg(data.saveData.bgLink);
+    }
+
+    // 获取 Bing 壁纸
+    getBing();
+}
+
+/**
+ * 获取 Bing 壁纸
+ */
+function getBing() {
+    axios
+        .post("https://cors.lovewml.cn/cors", {
+            method: "get",
+            url: "https://cn.bing.com/HPImageArchive.aspx",
+            params: {
+                format: "js",
+                idx: 0,
+                n: 8,
+                mkt: "zh-CN"
+            }
+        })
+        .then((res) => {
+            data.bingData = res.data.images;
+            console.log("Bing 壁纸", data.bingData);
+
+            setBg("https://cn.bing.com/" + data.bingData[0].url);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+/**
+ * 设置背景
+ */
+function setBg(url) {
+    nodes.background.style.background = `url(${url})`;
+    nodes.background.style.backgroundSize = "cover";
+    nodes.background.style.backgroundPosition = "center";
+    nodes.background.style.backgroundAttachment = "fixed";
+}
+
+// watch(
+//     () => data.searchBoxFocus,
+//     (val) => {
+//         console.log(val);
+//     }
+// );
+
+// 搜索
+// const cacheSearch = "wdnmd";
+// axios
+//     .post("https://cors.lovewml.cn/cors", {
+//         url: `https://suggestion.baidu.com/su?wd=${cacheSearch}`,
+//         method: "GET",
+//         responseType: "arraybuffer"
+//     })
+//     .then((res) => {
+//         res.data = res.data.match(/\[.+\]/g)[0];
+//         if (res.data) {
+//             res.data = JSON.parse(res.data);
+//         }
+//         console.log(res.data);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
+</script>
+
+<style scoped lang="stylus">
+#background
+    width: 100%
+    height: 100%
+    position: absolute
+    top: 0
+    left: 0
+
+.active
+    opacity: 0.5
+    transform: scale(1.05)
+    -webkit-transform: scale(1.05)
+    -moz-transform: scale(1.05)
+    -ms-transform: scale(1.05)
+    -o-transform: scale(1.05)
+    filter: blur(5px)
+</style>
