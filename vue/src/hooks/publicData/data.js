@@ -1,9 +1,9 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-11 10:28:43
- * @LastEditTime: 2022-01-11 10:41:32
+ * @LastEditTime: 2022-01-12 17:24:33
  * @Description: 存入缓存的数据
- * @FilePath: /vue/src/hooks/publicData/saveData.js
+ * @FilePath: /vue/src/hooks/publicData/data.js
  * @Mail：mail@n0ts.cn
  */
 
@@ -17,6 +17,9 @@ export default reactive({
     soBoxtextCache: "", // 输入框临时内容
     soBoxlist: [], // 搜索结果
     soBoxlistShow: false, // 搜索结果显示
+    soSelect: false, // 选择引擎界面是否打开
+    soSelectAdd: false, // 添加搜索引擎界面是否打开
+    soBoxHeight: 0, // 搜索框高度
     leftBar: false, // 左侧菜单是否打开
     tabsActive: "option", // 左侧菜单默认选择项
     bingData: [], // bing 背景数据
@@ -109,8 +112,6 @@ export default reactive({
             ]
         }
     ],
-    soSelect: false, // 选择引擎界面是否打开
-    soSelectAdd: false, // 添加搜索引擎界面是否打开
     // 准备添加的搜索引擎
     soAdd: {
         name: "",
@@ -144,33 +145,7 @@ export default reactive({
         openAppListShow: true, // 下方网址导航是否显示
         updateTime: "", // 最后一次更新时间
         // 搜索引擎
-        so: [
-            {
-                name: "百度",
-                icon: "./images/baidu.png",
-                linkHead: "https://www.baidu.com/s?wd="
-            },
-            {
-                name: "必应",
-                icon: "./images/bing.png",
-                linkHead: "https://cn.bing.com/search?q="
-            },
-            {
-                name: "谷歌",
-                icon: "./images/google.png",
-                linkHead: "https://www.google.com/search?q="
-            },
-            {
-                name: "MDN",
-                icon: "./images/mdn.png",
-                linkHead: "https://developer.mozilla.org/zh-CN/search?q="
-            },
-            {
-                name: "哔哩哔哩",
-                icon: "./images/bilibili-fill.png",
-                linkHead: "https://search.bilibili.com/all?keyword="
-            }
-        ]
+        so: null
     },
     // 关于
     about: {

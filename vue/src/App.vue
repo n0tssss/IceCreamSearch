@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-01-11 18:04:08
+ * @LastEditTime: 2022-01-12 18:04:32
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -15,21 +15,27 @@
 </template>
 
 <script setup>
+import data from "./hooks/publicData/data";
+
 /**
  * 组件
  */
-// 背景
 import background from "./components/background/background.vue";
-// 搜索框
 import search from "./components/search/search.vue";
+
+document.documentElement.style.setProperty(
+    "--fontColor",
+    data.saveData.themeColor
+);
 </script>
 
 <style lang="stylus">
 *
     margin: 0
     padding: 0
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,
-        sans-serif
+    font-family: -apple-system, "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC",
+        "Hiragino Sans GB", "Source Han Sans CN", "Source Han Sans SC", "Microsoft YaHei", "Wenquanyi Micro Hei",
+        "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif
 
 html,
 body,
@@ -67,7 +73,6 @@ a
     text-decoration: underline #1e90ff
     color: #1e90ff
 
-
 a:hover
     opacity: 0.5
 
@@ -75,22 +80,23 @@ a:hover
     display: none
 
 // 统一过渡
-#weather iframe
+#weather iframe,
+#search .input,
+#search .input img,
+#search .input .el-icon,
+.searchResult,
+.searchResult a,
+.searchChange>div
     transition: all .3s
-    -webkit-transition: all .3s
-    -moz-transition: all .3s
-    -ms-transition: all .3s
-    -o-transition: all .3s
 
-#background
+#background,
+#search .input
     transition: all .5s
-    -webkit-transition: all .5s
-    -moz-transition: all .5s
-    -ms-transition: all .5s
-    -o-transition: all .5s
 
 // 统一圆角
 #weather iframe
+.searchResult,
+.searchChange
     border-radius: 10px
 
 // 卡片阴影
@@ -102,8 +108,11 @@ a:hover
     position: absolute
     left: 50%
     transform: translateX(-50%)
-    -webkit-transform: translateX(-50%)
-    -moz-transform: translateX(-50%)
-    -ms-transform: translateX(-50%)
-    -o-transform: translateX(-50%)
+
+// 白色字体阴影
+#weather *,
+.hitokoto
+    line-height: 1.5rem
+    text-shadow: 0 0 3px black
+    color: white
 </style>

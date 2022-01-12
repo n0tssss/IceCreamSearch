@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-11 09:08:32
- * @LastEditTime: 2022-01-11 09:45:31
+ * @LastEditTime: 2022-01-12 18:05:29
  * @Description: Vue 配置
  * @FilePath: /vue/vue.config.js
  * @Mail：mail@n0ts.cn

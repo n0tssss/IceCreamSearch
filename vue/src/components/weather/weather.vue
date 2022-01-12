@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 13:20:00
- * @LastEditTime: 2022-01-11 17:45:25
+ * @LastEditTime: 2022-01-12 11:25:19
  * @Description: 天气组件
  * @FilePath: /vue/src/components/weather/weather.vue
  * @Mail：mail@n0ts.cn
@@ -141,7 +141,6 @@ function getWeather(location) {
 <style scoped lang="stylus">
 #weather
     display: inline-block
-    color: white
     padding: 10px 30px
     position: fixed
     left: 0
@@ -156,8 +155,6 @@ function getWeather(location) {
     *
         padding: 0 3px
         float: left
-        line-height: 1.5rem
-        text-shadow: 0 0 3px black
 
     iframe
         position: absolute

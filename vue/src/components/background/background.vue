@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:01:25
- * @LastEditTime: 2022-01-11 18:05:15
+ * @LastEditTime: 2022-01-12 16:40:18
  * @Description: 背景
  * @FilePath: /vue/src/components/background/background.vue
  * @Mail：mail@n0ts.cn
@@ -9,14 +9,18 @@
 
 <template>
     <!-- 背景 -->
-    <div id="background" :ref="setRef" :class="{ active: data.searchBoxFocus }">
+    <div
+        id="background"
+        refname="background"
+        :ref="setRef"
+        :class="{ active: data.searchBoxFocus }"
+    >
         <!-- 天气 -->
         <weather></weather>
     </div>
 </template>
 
 <script setup>
-import { onBeforeUpdate, onMounted } from "vue";
 import axios from "../../utils/http/axios";
 
 /**
@@ -31,40 +35,26 @@ import weather from "../weather/weather.vue";
 import data from "../../hooks/publicData/data";
 
 /**
- * 元素节点
- */
-let nodes = {};
-
-/**
  * setup
  */
 loadBg(); // 加载壁纸
 
 /**
- * 更新
+ * 元素节点
  */
-onMounted(() => {
-    // console.log("node节点", nodes);
-});
-
-/**
- * 改变前
- */
-onBeforeUpdate(() => {
-    nodes = [];
-});
+let nodes = {};
 
 /**
  * 获取 ref 元素
  */
 function setRef(item) {
     // 如果元素不存在 或 id 与 refname 都不存在的话
-    if (!item || (!item.id && !item.attributes.refname.value)) {
+    if (!item || !item.attributes.refname.value) {
         return;
     }
 
     // 添加到元素节点 优先取 id
-    nodes[item.id ? item.id : item.attributes.refname.value] = item;
+    nodes[item.attributes.refname.value] = item;
 }
 
 /**
@@ -97,7 +87,7 @@ function getBing() {
         })
         .then((res) => {
             data.bingData = res.data.images;
-            console.log("Bing 壁纸", data.bingData);
+            // console.log("Bing 壁纸", data.bingData);
 
             setBg("https://cn.bing.com/" + data.bingData[0].url);
         })
@@ -115,32 +105,6 @@ function setBg(url) {
     nodes.background.style.backgroundPosition = "center";
     nodes.background.style.backgroundAttachment = "fixed";
 }
-
-// watch(
-//     () => data.searchBoxFocus,
-//     (val) => {
-//         console.log(val);
-//     }
-// );
-
-// 搜索
-// const cacheSearch = "wdnmd";
-// axios
-//     .post("https://cors.lovewml.cn/cors", {
-//         url: `https://suggestion.baidu.com/su?wd=${cacheSearch}`,
-//         method: "GET",
-//         responseType: "arraybuffer"
-//     })
-//     .then((res) => {
-//         res.data = res.data.match(/\[.+\]/g)[0];
-//         if (res.data) {
-//             res.data = JSON.parse(res.data);
-//         }
-//         console.log(res.data);
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
 </script>
 
 <style scoped lang="stylus">
