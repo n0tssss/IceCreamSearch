@@ -1,9 +1,9 @@
 /*
  * @Author: N0ts
- * @Date: 2020-12-21 09:34:11
- * @LastEditTime: 2022-01-13 11:09:47
- * @Description: 本地存储封装
- * @FilePath: /IceCreamSearch/js/storage.js
+ * @Date: 2022-01-13 11:10:14
+ * @LastEditTime: 2022-01-13 11:10:14
+ * @Description: Storage 缓存操作
+ * @FilePath: /vue/src/hooks/storage/storage.js
  * @Mail：mail@n0ts.cn
  */
 

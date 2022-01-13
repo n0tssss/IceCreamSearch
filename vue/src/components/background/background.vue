@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:01:25
- * @LastEditTime: 2022-01-12 16:40:18
+ * @LastEditTime: 2022-01-13 11:07:12
  * @Description: 背景
  * @FilePath: /vue/src/components/background/background.vue
  * @Mail：mail@n0ts.cn
@@ -21,17 +21,8 @@
 </template>
 
 <script setup>
-import axios from "../../utils/http/axios";
-
-/**
- * 组件
- */
-// 天气
+import axios from "../../hooks/http/axios";
 import weather from "../weather/weather.vue";
-
-/**
- * 数据
- */
 import data from "../../hooks/publicData/data";
 
 /**

@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:23:17
- * @LastEditTime: 2022-01-12 17:42:09
+ * @LastEditTime: 2022-01-13 11:49:47
  * @Description: 搜索框组件
  * @FilePath: /vue/src/components/search/search.vue
  * @Mail：mail@n0ts.cn
@@ -28,7 +28,7 @@
                 @keyup="searchGo"
             />
             <!-- 搜索图标 -->
-            <el-icon><Search /></el-icon>
+            <el-icon @click="enter"><Search /></el-icon>
         </div>
 
         <!-- 搜索结果 -->
@@ -37,17 +37,21 @@
             refname="searchResult"
             :ref="setRef"
             :style="'height:' + data.soBoxHeight + 'px;'"
-            :class="{ searchResultAction: data.soBoxHeight != 0 }"
+            :class="{
+                searchResultAction: data.soBoxHeight != 0,
+                searchResultClose: !data.searchBoxFocus
+            }"
         >
-            <a
-                href="#"
+            <div
+                @mousedown="goHref(item)"
                 @mouseover="data.searchSelectIndex = index"
                 @mouseout="data.searchSelectIndex = -1"
                 :class="{ searchResultActive: data.searchSelectIndex == index }"
                 v-for="(item, index) in data.soBoxlist"
                 :key="index"
-                >{{ item }}</a
             >
+                {{ item }}
+            </div>
         </div>
 
         <!-- 搜索引擎切换 -->
@@ -79,11 +83,11 @@
 
 <script setup>
 import { Search } from "@element-plus/icons-vue";
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import { ElIcon } from "element-plus";
 import data from "../../hooks/publicData/data";
-import axios from "../../utils/http/axios";
-import notify from "../../utils/notify/notify";
+import axios from "../../hooks/http/axios";
+import notify from "../../hooks/notify/notify";
 
 /**
  * 元素节点
@@ -195,7 +199,7 @@ function searchGo(e) {
 
     // 回车跳转搜索
     if (e.keyCode == 13) {
-        return;
+        return enter();
     }
 
     // 搜索结果选中索引修改
@@ -210,9 +214,7 @@ function searchGo(e) {
     // 请求百度获取搜索匹配结果
     axios
         .post("https://cors.lovewml.cn/cors", {
-            url: `https://suggestion.baidu.com/su?wd=${encodeURIComponent(
-                data.soBoxtext
-            )}`,
+            url: `https://suggestion.baidu.com/su?wd=${data.soBoxtext}`,
             method: "GET",
             responseType: "arraybuffer"
         })
@@ -243,6 +245,38 @@ function searchGo(e) {
             return (data.soBoxlist = []);
         });
 }
+
+/**
+ * 回车跳转搜索
+ */
+function enter() {
+    if (!data.soBoxtext) {
+        return notify("您还没有输入搜索内容呢", 3);
+    }
+    goHref(data.soBoxtext);
+}
+
+/**
+ * 跳转搜索
+ */
+function goHref(item) {
+    window.open(
+        data.saveData.so[data.saveData.soIndex].linkHead +
+            encodeURIComponent(item)
+    );
+}
+
+/**
+ * 当搜索框聚焦时关闭搜索引擎选择框
+ */
+watch(
+    () => data.searchBoxFocus,
+    () => {
+        if (data.searchBoxFocus) {
+            data.soSelect = false;
+        }
+    }
+);
 </script>
 
 <style scoped lang="stylus">
@@ -309,13 +343,12 @@ function searchGo(e) {
         overflow: hidden
         opacity: 0
 
-        a
+        div
             height: 40px
             line-height: 40px
-            display: block
-            text-decoration: none
             padding: 0 20px
             color: #424242
+            cursor: pointer
 
             &:hover
                 opacity: 1
@@ -328,6 +361,9 @@ function searchGo(e) {
     .searchResultAction
         margin-top: 10px
         opacity: 1
+
+    .searchResultClose
+        height: 0 !important
 
     // 搜索引擎切换
     .searchChange
@@ -365,7 +401,7 @@ function searchGo(e) {
                 opacity: 1
 
         .searchChangeDivActive
-            color: var(--fontColor)
+            color: var(--themeColor)
             transform: scale(1)
             opacity: 1
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-01-12 18:04:32
+ * @LastEditTime: 2022-01-13 13:18:31
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -12,19 +12,43 @@
     <background></background>
     <!-- 搜索框 -->
     <search></search>
+
+    <!-- 初始化询问 -->
+    <el-dialog title="提示" v-model="data.initDialog" width="40%">
+        <span
+            >是否允许我们将您的设置信息存入到本地缓存，这将获得完美的体验</span
+        >
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button type="primary" @click="local.initSave(false)"
+                    >取 消</el-button
+                >
+                <el-button type="primary" @click="local.initSave(true)"
+                    >确 定</el-button
+                >
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup>
 import data from "./hooks/publicData/data";
-
-/**
- * 组件
- */
 import background from "./components/background/background.vue";
 import search from "./components/search/search.vue";
+import local from "./hooks/localStorage/local";
+import { ElDialog, ElButton } from "element-plus";
 
+/**
+ * 初始化
+ */
+import init from "./hooks/initLocalStorage/init";
+init.go();
+
+/**
+ * 设置主题色
+ */
 document.documentElement.style.setProperty(
-    "--fontColor",
+    "--themeColor",
     data.saveData.themeColor
 );
 </script>
@@ -85,7 +109,7 @@ a:hover
 #search .input img,
 #search .input .el-icon,
 .searchResult,
-.searchResult a,
+.searchResult div,
 .searchChange>div
     transition: all .3s
 
@@ -115,4 +139,22 @@ a:hover
     line-height: 1.5rem
     text-shadow: 0 0 3px black
     color: white
+
+// element ui
+.el-dialog
+    width: 600px
+</style>
+
+<style>
+@media screen and (max-width: 980px) {
+    .el-dialog {
+        width: 50% !important;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .el-dialog {
+        width: 80% !important;
+    }
+}
 </style>

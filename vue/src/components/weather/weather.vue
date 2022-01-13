@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 13:20:00
- * @LastEditTime: 2022-01-12 11:25:19
+ * @LastEditTime: 2022-01-13 11:07:23
  * @Description: 天气组件
  * @FilePath: /vue/src/components/weather/weather.vue
  * @Mail：mail@n0ts.cn
@@ -32,11 +32,7 @@
 </template>
 
 <script setup>
-import axios from "../../utils/http/axios";
-
-/**
- * 数据初始化
- */
+import axios from "../../hooks/http/axios";
 import data from "../../hooks/publicData/data";
 
 goWeather();
