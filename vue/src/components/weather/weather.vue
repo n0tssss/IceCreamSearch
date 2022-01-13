@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 13:20:00
- * @LastEditTime: 2022-01-13 11:07:23
+ * @LastEditTime: 2022-01-13 16:29:30
  * @Description: 天气组件
  * @FilePath: /vue/src/components/weather/weather.vue
  * @Mail：mail@n0ts.cn
@@ -142,7 +142,7 @@ function getWeather(location) {
     left: 0
     top: 0
     cursor: pointer
-    z-index: 1
+    z-index: 2
 
     img
         width 1.5rem

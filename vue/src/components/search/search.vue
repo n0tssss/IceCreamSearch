@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:23:17
- * @LastEditTime: 2022-01-13 11:49:47
+ * @LastEditTime: 2022-01-13 16:37:08
  * @Description: 搜索框组件
  * @FilePath: /vue/src/components/search/search.vue
  * @Mail：mail@n0ts.cn
@@ -9,7 +9,7 @@
 
 <template>
     <!-- 搜索框组件 -->
-    <div id="search">
+    <div id="search" :class="{ searchGoTop: data.leftBar }">
         <!-- input 输入框 -->
         <div class="input" :class="{ searchActive: data.searchBoxFocus }">
             <!-- 搜索引擎 logo -->
@@ -273,6 +273,7 @@ watch(
     () => data.searchBoxFocus,
     () => {
         if (data.searchBoxFocus) {
+            data.leftBar = false;
             data.soSelect = false;
         }
     }
@@ -286,6 +287,8 @@ watch(
     height: 50px
     top: 30%
     backdrop-filter: blur(5px)
+    border-radius: 50px
+    z-index: 1
 
     // input 输入框
     .input
@@ -418,4 +421,7 @@ watch(
         text-align: center
         cursor: pointer
         margin-top: 10px
+
+.searchGoTop
+    transform: translate(-50%, -100px) !important
 </style>

@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-11 10:28:43
- * @LastEditTime: 2022-01-12 17:24:33
+ * @LastEditTime: 2022-01-13 16:49:35
  * @Description: 存入缓存的数据
  * @FilePath: /vue/src/hooks/publicData/data.js
  * @Mail：mail@n0ts.cn
@@ -79,39 +79,6 @@ export default reactive({
             label: "左下"
         }
     ],
-    // 链接数据
-    LinkList: [
-        {
-            navName: "实用工具1",
-            links: [
-                {
-                    name: "名字",
-                    content: "介绍",
-                    img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
-                },
-                {
-                    name: "名字",
-                    content: "介绍",
-                    img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
-                }
-            ]
-        },
-        {
-            navName: "实用工具2",
-            links: [
-                {
-                    name: "名字",
-                    content: "介绍",
-                    img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
-                },
-                {
-                    name: "名字",
-                    content: "介绍",
-                    img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
-                }
-            ]
-        }
-    ],
     // 准备添加的搜索引擎
     soAdd: {
         name: "",
@@ -144,8 +111,8 @@ export default reactive({
         AeroState: true, // 毛玻璃是否开启
         openAppListShow: true, // 下方网址导航是否显示
         updateTime: "", // 最后一次更新时间
-        // 搜索引擎
-        so: null
+        so: null, // 搜索引擎
+        LinkList: null // 链接数据
     },
     // 关于
     about: {

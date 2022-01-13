@@ -845,7 +845,7 @@ a,
         -ms-transform: scale(1) translateY(5px);
         -o-transform: scale(1) translateY(5px);
         opacity: 0;
-}
+    }
 
     50% {
         transform: scale(1.1);
@@ -854,7 +854,7 @@ a,
         -ms-transform: scale(1.1);
         -o-transform: scale(1.1);
         opacity: 1;
-}
+    }
 
     100% {
         transform: scale(1) translateY(-10px);
@@ -863,7 +863,7 @@ a,
         -ms-transform: scale(1) translateY(-10px);
         -o-transform: scale(1) translateY(-10px);
         opacity: 0;
-}
+    }
 }
 
 /* 网站列表 */

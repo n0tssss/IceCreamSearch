@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-01-13 13:18:31
+ * @LastEditTime: 2022-01-13 17:46:03
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -10,8 +10,12 @@
 <template>
     <!-- 背景 -->
     <background></background>
+
     <!-- 搜索框 -->
     <search></search>
+
+    <!-- 导航菜单 -->
+    <dMenu></dMenu>
 
     <!-- 初始化询问 -->
     <el-dialog title="提示" v-model="data.initDialog" width="40%">
@@ -32,9 +36,10 @@
 </template>
 
 <script setup>
-import data from "./hooks/publicData/data";
 import background from "./components/background/background.vue";
 import search from "./components/search/search.vue";
+import dMenu from "./components/menu/menu.vue";
+import data from "./hooks/publicData/data";
 import local from "./hooks/localStorage/local";
 import { ElDialog, ElButton } from "element-plus";
 
@@ -60,6 +65,8 @@ document.documentElement.style.setProperty(
     font-family: -apple-system, "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC",
         "Hiragino Sans GB", "Source Han Sans CN", "Source Han Sans SC", "Microsoft YaHei", "Wenquanyi Micro Hei",
         "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+    -webkit-tap-highlight-color: transparent
 
 html,
 body,
@@ -104,13 +111,21 @@ a:hover
     display: none
 
 // 统一过渡
+#menu .menuBox .icon,
+.menuList .navigation>div,
+.list .itemBox>div
+    transition: all .1s
+
 #weather iframe,
+#search,
 #search .input,
 #search .input img,
 #search .input .el-icon,
 .searchResult,
 .searchResult div,
-.searchChange>div
+.searchChange>div,
+#menu .openMenu,
+#menu .menuBox
     transition: all .3s
 
 #background,
@@ -120,7 +135,9 @@ a:hover
 // 统一圆角
 #weather iframe
 .searchResult,
-.searchChange
+.searchChange,
+#menu .menuBox,
+.list .itemBox>div
     border-radius: 10px
 
 // 卡片阴影
@@ -128,7 +145,9 @@ a:hover
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px
 
 // 定位居中
-#search
+#search,
+#menu .openMenu,
+#menu .menuBox
     position: absolute
     left: 50%
     transform: translateX(-50%)
@@ -143,18 +162,12 @@ a:hover
 // element ui
 .el-dialog
     width: 600px
-</style>
 
-<style>
-@media screen and (max-width: 980px) {
-    .el-dialog {
-        width: 50% !important;
-    }
-}
+@media screen and (max-width: 980px)
+    .el-dialog
+        width: 60% !important
 
-@media screen and (max-width: 650px) {
-    .el-dialog {
-        width: 80% !important;
-    }
-}
+@media screen and (max-width: 650px)
+    .el-dialog
+        width: 80% !important
 </style>
