@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:23:17
- * @LastEditTime: 2022-01-14 10:19:58
+ * @LastEditTime: 2022-01-14 11:17:42
  * @Description: 搜索框组件
  * @FilePath: /vue/src/components/search/search.vue
  * @Mail：mail@n0ts.cn
@@ -154,6 +154,7 @@ function setRef(item) {
  * setup
  */
 gethitokoto(); // 获取一言
+keyDown();
 
 /**
  * 加载完毕
@@ -205,10 +206,11 @@ function gethitokoto() {
  */
 function searchGo(e) {
     // 获取键位
-    let e1 = e || event || window.event || arguments.callee.caller.arguments[0];
+    let key =
+        e || event || window.event || arguments.callee.caller.arguments[0];
 
     // 无视上下按键
-    if ((e1 && e1.keyCode == 38) || (e1 && e1.keyCode == 40)) {
+    if ((key && key.keyCode == 38) || (key && key.keyCode == 40)) {
         return (data.soBoxtextCache = data.soBoxtext);
     }
 
@@ -288,7 +290,9 @@ watch(
     () => data.searchBoxFocus,
     () => {
         if (data.searchBoxFocus) {
-            data.leftBar = false;
+            // 关闭导航菜单
+            // data.leftBar = false;
+            // 关闭搜索引擎选择框
             data.soSelect = false;
         }
     }
@@ -316,6 +320,48 @@ function add() {
     local.save();
     // 关闭对话框
     data.soSelectAdd = false;
+}
+
+/**
+ * 上下键切换选项
+ */
+function keyDown() {
+    // 键位
+    let key;
+
+    document.onkeydown = (e) => {
+        // 是否搜索
+        if (!data.searchBoxFocus) {
+            return;
+        }
+
+        // 键位获取
+        key =
+            e || event || window.event || arguments.callee.caller.arguments[0];
+
+        // 上下键检测
+        if (key && key.keyCode == 38) {
+            // 按下上箭头
+            // 索引超出判断
+            if (data.searchSelectIndex == 0) {
+                data.searchSelectIndex = data.soBoxlist.length - 1;
+            } else {
+                data.searchSelectIndex--;
+            }
+            // 结果修改
+            data.soBoxtext = data.soBoxlist[data.searchSelectIndex];
+        } else if (key && key.keyCode == 40) {
+            // 按下下箭头
+            // 索引超出判断
+            if (data.searchSelectIndex == data.soBoxlist.length - 1) {
+                data.searchSelectIndex = 0;
+            } else {
+                data.searchSelectIndex++;
+            }
+            // 结果修改
+            data.soBoxtext = data.soBoxlist[data.searchSelectIndex];
+        }
+    };
 }
 </script>
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-01-14 11:04:31
+ * @LastEditTime: 2022-01-14 11:07:43
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -14,8 +14,8 @@
     <!-- 搜索框 -->
     <search></search>
 
-    <!-- 导航菜单 -->
-    <dMenu></dMenu>
+    <!-- 设置界面 -->
+    <setting></setting>
 
     <!-- 初始化询问 -->
     <el-dialog title="提示" v-model="data.initDialog" width="40%">
@@ -38,7 +38,7 @@
 <script setup>
 import background from "./components/background/background.vue";
 import search from "./components/search/search.vue";
-import dMenu from "./components/menu/menu.vue";
+import setting from "./components/setting/setting.vue";
 import data from "./hooks/publicData/data";
 import local from "./hooks/localStorage/local";
 import { ElDialog, ElButton } from "element-plus";
