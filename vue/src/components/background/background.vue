@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:01:25
- * @LastEditTime: 2022-01-13 11:07:12
+ * @LastEditTime: 2022-01-14 11:02:19
  * @Description: 背景
  * @FilePath: /vue/src/components/background/background.vue
  * @Mail：mail@n0ts.cn
@@ -79,6 +79,10 @@ function getBing() {
         .then((res) => {
             data.bingData = res.data.images;
             // console.log("Bing 壁纸", data.bingData);
+
+            // 获取介绍与链接
+            data.saveData.bgLinkContent = data.bingData[0].copyright;
+            data.saveData.bgLinkHref = data.bingData[0].copyrightlink;
 
             setBg("https://cn.bing.com/" + data.bingData[0].url);
         })

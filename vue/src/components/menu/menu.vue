@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-01-14 10:39:24
+ * @LastEditTime: 2022-01-14 10:53:15
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -13,6 +13,7 @@
         <!-- 打开菜单 -->
         <div class="openMenu" :class="{ openMenuShow: !data.leftBar }">
             <el-icon @click="data.leftBar = true"><arrow-up /></el-icon>
+            <Footer></Footer>
         </div>
 
         <!-- 菜单 -->
@@ -79,6 +80,7 @@
 </template>
 
 <script setup>
+import Footer from "../footer/footer.vue";
 import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
 import { onMounted } from "@vue/runtime-core";
 import { ElIcon, ElTooltip } from "element-plus";

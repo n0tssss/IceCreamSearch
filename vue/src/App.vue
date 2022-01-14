@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-01-14 10:36:49
+ * @LastEditTime: 2022-01-14 11:04:31
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -101,8 +101,8 @@ body
         font-size: 0.9rem
 
 a
-    text-decoration: underline #1e90ff
-    color: #1e90ff
+    text-decoration: underline var(--themeColor)
+    color: var(--themeColor)
 
 a:hover
     opacity: 0.5
@@ -126,7 +126,8 @@ a:hover
 .searchChange>div,
 .searchChange>div>.el-icon,
 #menu .openMenu,
-#menu .menuBox
+#menu .menuBox,
+#footer *
     transition: all .3s
 
 #background,
@@ -155,7 +156,8 @@ a:hover
 
 // 白色字体阴影
 #weather *,
-.hitokoto
+.hitokoto,
+#footer p
     line-height: 1.5rem
     text-shadow: 0 0 3px black
     color: white
