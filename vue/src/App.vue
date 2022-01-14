@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-01-13 17:46:03
+ * @LastEditTime: 2022-01-14 10:17:37
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -124,6 +124,7 @@ a:hover
 .searchResult,
 .searchResult div,
 .searchChange>div,
+.searchChange>div>.el-icon,
 #menu .openMenu,
 #menu .menuBox
     transition: all .3s
@@ -162,6 +163,14 @@ a:hover
 // element ui
 .el-dialog
     width: 600px
+
+.el-dialog .el-dialog__body
+    padding: 10px 20px 30px
+
+.el-notification
+    border: none
+    background: rgba(255, 255, 255, .8)
+    backdrop-filter: blur(5px)
 
 @media screen and (max-width: 980px)
     .el-dialog

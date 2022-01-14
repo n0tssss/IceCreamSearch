@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-13 11:07:57
- * @LastEditTime: 2022-01-13 13:18:21
+ * @LastEditTime: 2022-01-14 10:22:22
  * @Description: 初始化缓存配置
  * @FilePath: /vue/src/hooks/initLocalStorage/init.js
  * @Mail：mail@n0ts.cn
@@ -43,6 +43,11 @@ const go = function () {
 
     // 缓存是否存在新字段需要更新
     checkVersion(cache);
+
+    // 存在配置则覆盖
+    if (cache) {
+        data.saveData = cache;
+    }
 
     // 日志是否存在更新
     checkLogUpdate();

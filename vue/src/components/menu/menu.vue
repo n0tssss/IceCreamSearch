@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-01-13 18:12:31
+ * @LastEditTime: 2022-01-14 10:20:19
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -26,7 +26,7 @@
                     <div
                         v-for="(item, index) in data.saveData.LinkList"
                         :key="index"
-                        @click="scroll(item.navName)"
+                        @click="scroll('list-' + item.navName)"
                     >
                         {{ item.navName }}
                     </div>
@@ -36,7 +36,7 @@
                     <div
                         v-for="(item, index) in data.saveData.LinkList"
                         :key="index"
-                        :refname="item.navName"
+                        :refname="'list-' + item.navName"
                         :ref="setRef"
                     >
                         <!-- 标题 -->
@@ -70,7 +70,8 @@
                         </div>
                     </div>
 
-                    <div style="height: 500px"></div>
+                    <!-- 撑开底部的盒子 -->
+                    <div refname="bigBox" :ref="setRef"></div>
                 </div>
             </div>
         </div>
@@ -79,44 +80,14 @@
 
 <script setup>
 import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
+import { onMounted } from "@vue/runtime-core";
 import { ElIcon, ElTooltip } from "element-plus";
 import data from "../../hooks/publicData/data";
-data.saveData.LinkList = [
-    {
-        navName: "实用工具1",
-        links: [
-            {
-                name: "名字",
-                content: "介绍",
-                img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png",
-                url: "https://baidu.com"
-            },
-            {
-                name: "名字",
-                content: "介绍",
-                img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png",
-                url: "https://baidu.com"
-            }
-        ]
-    },
-    {
-        navName: "实用工具2",
-        links: [
-            {
-                name: "名字",
-                content: "介绍",
-                img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png",
-                url: "https://baidu.com"
-            },
-            {
-                name: "名字",
-                content: "介绍",
-                img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png",
-                url: "https://baidu.com"
-            }
-        ]
-    }
-];
+
+onMounted(() => {
+    // 撑开底部距离盒子高度计算
+    bigBoxHeight();
+});
 
 /**
  * 元素节点
@@ -152,13 +123,12 @@ function scroll(name) {
 
     // 计算滚动高度
     for (const key in nodes) {
-        if (key == "list") {
-            continue;
-        }
         if (key == name) {
             break;
         }
-        top += nodes[key].clientHeight;
+        if (key.includes("list-")) {
+            top += nodes[key].clientHeight;
+        }
     }
 
     // 滚动
@@ -166,6 +136,21 @@ function scroll(name) {
         top,
         behavior: "smooth"
     });
+}
+
+/**
+ * 撑开底部距离盒子高度计算
+ */
+function bigBoxHeight() {
+    let cache;
+    for (const key in nodes) {
+        if (key.includes("list-")) {
+            cache = nodes[key];
+        }
+    }
+
+    nodes.bigBox.style.height =
+        nodes.list.clientHeight - cache.clientHeight + "px";
 }
 </script>
 
@@ -246,6 +231,7 @@ function scroll(name) {
             // 导航
             .navigation
                 width: 25%
+                max-width: 260px
                 height: 100%
                 overflow-y: scroll
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:23:17
- * @LastEditTime: 2022-01-13 16:37:08
+ * @LastEditTime: 2022-01-14 10:19:58
  * @Description: 搜索框组件
  * @FilePath: /vue/src/components/search/search.vue
  * @Mail：mail@n0ts.cn
@@ -74,7 +74,49 @@
                 <!-- 内容 -->
                 <p>{{ item.name }}</p>
             </div>
+            <!-- 添加与关闭按钮 -->
+            <div @click="data.soSelectAdd = true">
+                <el-icon><circle-plus /></el-icon>
+            </div>
+            <div @click="data.soSelect = false">
+                <el-icon><circle-close /></el-icon>
+            </div>
         </div>
+
+        <!-- 搜索引擎添加 -->
+        <el-dialog
+            title="新增一个搜索引擎"
+            v-model="data.soSelectAdd"
+            :append-to-body="true"
+        >
+            <div>
+                <p>搜索引擎名称</p>
+                <p>例如：百度</p>
+                <el-input
+                    v-model="data.soAdd.name"
+                    placeholder="搜索引擎名称"
+                ></el-input>
+            </div>
+            <div>
+                <p>搜索引擎图标</p>
+                <p>例如：https://www.baidu.com/favicon.ico</p>
+                <el-input
+                    v-model="data.soAdd.icon"
+                    placeholder="搜索引擎图标"
+                ></el-input>
+            </div>
+            <div>
+                <p>搜索引擎链接</p>
+                <p>例如：https://www.baidu.com/s?wd=</p>
+                <el-input
+                    v-model="data.soAdd.linkHead"
+                    placeholder="搜索引擎链接"
+                ></el-input>
+            </div>
+            <el-button type="primary" @click="add" style="width: 100%"
+                >添加</el-button
+            >
+        </el-dialog>
 
         <!-- 一言 -->
         <div class="hitokoto" id="hitokoto">{{ data.hitokoto }}</div>
@@ -82,12 +124,13 @@
 </template>
 
 <script setup>
-import { Search } from "@element-plus/icons-vue";
+import { Search, CirclePlus, CircleClose } from "@element-plus/icons-vue";
 import { onMounted, watch } from "vue";
-import { ElIcon } from "element-plus";
+import { ElIcon, ElDialog, ElInput, ElButton } from "element-plus";
 import data from "../../hooks/publicData/data";
 import axios from "../../hooks/http/axios";
 import notify from "../../hooks/notify/notify";
+import local from "../../hooks/localStorage/local";
 
 /**
  * 元素节点
@@ -127,34 +170,6 @@ onMounted(() => {
         }
     });
 });
-
-data.saveData.so = [
-    {
-        name: "百度",
-        icon: require("../../assets/images/baidu.png"),
-        linkHead: "https://www.baidu.com/s?wd="
-    },
-    {
-        name: "必应",
-        icon: require("../../assets/images/bing.png"),
-        linkHead: "https://cn.bing.com/search?q="
-    },
-    {
-        name: "谷歌",
-        icon: require("../../assets/images/google.png"),
-        linkHead: "https://www.google.com/search?q="
-    },
-    {
-        name: "MDN",
-        icon: require("../../assets/images/mdn.png"),
-        linkHead: "https://developer.mozilla.org/zh-CN/search?q="
-    },
-    {
-        name: "哔哩哔哩",
-        icon: require("../../assets/images/bilibili-fill.png"),
-        linkHead: "https://search.bilibili.com/all?keyword="
-    }
-];
 
 /**
  * 获取一言
@@ -278,6 +293,30 @@ watch(
         }
     }
 );
+
+/**
+ * 添加搜索引擎
+ */
+function add() {
+    // 数据验证
+    if (!data.soAdd.name || !data.soAdd.icon || !data.soAdd.linkHead) {
+        return notify("请填写全部内容", 2);
+    }
+
+    // 添加
+    data.saveData.so.push(data.soAdd);
+    // 清空数据
+    data.soAdd = {
+        name: "",
+        icon: "",
+        linkHead: ""
+    };
+    // 保存数据
+    notify("添加成功", 1);
+    local.save();
+    // 关闭对话框
+    data.soSelectAdd = false;
+}
 </script>
 
 <style scoped lang="stylus">
@@ -386,6 +425,7 @@ watch(
             display: flex
             height: 55px
             justify-content: center
+            align-content: center
             flex-wrap: wrap
             opacity: .5
             transform: scale(.9)
@@ -402,6 +442,13 @@ watch(
 
             &:hover
                 opacity: 1
+
+            .el-icon
+                font-size: 2rem
+                padding: 0 8px
+
+                &:hover
+                    transform: scale(1.1)
 
         .searchChangeDivActive
             color: var(--themeColor)
@@ -424,4 +471,7 @@ watch(
 
 .searchGoTop
     transform: translate(-50%, -100px) !important
+
+.el-dialog .el-dialog__body>div
+    margin-bottom: 10px
 </style>

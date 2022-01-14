@@ -1,7 +1,7 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-11 10:28:43
- * @LastEditTime: 2022-01-13 16:49:35
+ * @LastEditTime: 2022-01-14 10:19:58
  * @Description: 存入缓存的数据
  * @FilePath: /vue/src/hooks/publicData/data.js
  * @Mail：mail@n0ts.cn
@@ -111,8 +111,71 @@ export default reactive({
         AeroState: true, // 毛玻璃是否开启
         openAppListShow: true, // 下方网址导航是否显示
         updateTime: "", // 最后一次更新时间
-        so: null, // 搜索引擎
-        LinkList: null // 链接数据
+        // 搜索引擎
+        so: [
+            {
+                name: "百度",
+                icon: require("../../assets/images/baidu.png"),
+                linkHead: "https://www.baidu.com/s?wd="
+            },
+            {
+                name: "必应",
+                icon: require("../../assets/images/bing.png"),
+                linkHead: "https://cn.bing.com/search?q="
+            },
+            {
+                name: "谷歌",
+                icon: require("../../assets/images/google.png"),
+                linkHead: "https://www.google.com/search?q="
+            },
+            {
+                name: "MDN",
+                icon: require("../../assets/images/mdn.png"),
+                linkHead: "https://developer.mozilla.org/zh-CN/search?q="
+            },
+            {
+                name: "哔哩哔哩",
+                icon: require("../../assets/images/bilibili-fill.png"),
+                linkHead: "https://search.bilibili.com/all?keyword="
+            }
+        ],
+        // 链接数据
+        LinkList: [
+            {
+                navName: "实用工具1",
+                links: [
+                    {
+                        name: "名字",
+                        content: "介绍",
+                        img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png",
+                        url: "https://baidu.com"
+                    },
+                    {
+                        name: "名字",
+                        content: "介绍",
+                        img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png",
+                        url: "https://baidu.com"
+                    }
+                ]
+            },
+            {
+                navName: "实用工具2",
+                links: [
+                    {
+                        name: "名字",
+                        content: "介绍",
+                        img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png",
+                        url: "https://baidu.com"
+                    },
+                    {
+                        name: "名字",
+                        content: "介绍",
+                        img: "https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png",
+                        url: "https://baidu.com"
+                    }
+                ]
+            }
+        ]
     },
     // 关于
     about: {
