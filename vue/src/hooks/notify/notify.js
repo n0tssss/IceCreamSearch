@@ -1,9 +1,9 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-12 11:31:22
- * @LastEditTime: 2022-01-12 13:58:49
+ * @LastEditTime: 2022-01-14 10:37:16
  * @Description: 提示框
- * @FilePath: /vue/src/utils/notify/notify.js
+ * @FilePath: /vue/src/hooks/notify/notify.js
  * @Mail：mail@n0ts.cn
  */
 
@@ -36,6 +36,7 @@ export default function (message, select) {
             break;
     }
     ElNotification({
+        // duration: 0,
         title,
         message,
         type

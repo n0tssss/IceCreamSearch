@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-01-14 10:20:19
+ * @LastEditTime: 2022-01-14 10:39:24
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -205,9 +205,10 @@ function bigBoxHeight() {
         width: 90%
         height: 60%
         background-color: rgba(0, 0, 0, 0.5)
-        backdrop-filter: blur(5px)
+        backdrop-filter: blur(10px)
         bottom: 0
         transform: translate(-50%, 100%)
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px
 
         // 关闭按钮
         .el-icon
