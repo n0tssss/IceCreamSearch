@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-01-14 11:07:43
+ * @LastEditTime: 2022-02-23 23:20:00
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -127,7 +127,8 @@ a:hover
 .searchChange>div>.el-icon,
 #menu .openMenu,
 #menu .menuBox,
-#footer *
+#footer *,
+#setting .openBtn
     transition: all .3s
 
 #background,
