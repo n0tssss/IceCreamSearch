@@ -1,12 +1,3 @@
-<!--
- * @Author: N0ts
- * @Date: 2022-01-11 10:01:25
- * @LastEditTime: 2022-01-14 11:09:03
- * @Description: 背景
- * @FilePath: /vue/src/components/background/background.vue
- * @Mail：mail@n0ts.cn
--->
-
 <template>
     <!-- 背景 -->
     <div
@@ -26,8 +17,9 @@
 <script setup>
 import weather from "../weather/weather.vue";
 import Menu from "../menu/menu.vue";
-import axios from "../../hooks/http/axios";
-import data from "../../hooks/publicData/data";
+import axios from "../../utils/http/axios";
+import data from "../../data/data";
+import { ref } from "vue";
 
 /**
  * setup
@@ -68,6 +60,7 @@ function loadBg() {
 /**
  * 获取 Bing 壁纸
  */
+const bingData = ref(null);
 function getBing() {
     axios
         .post("https://cors.lovewml.cn/cors", {
@@ -81,14 +74,14 @@ function getBing() {
             }
         })
         .then((res) => {
-            data.bingData = res.data.images;
-            // console.log("Bing 壁纸", data.bingData);
+            bingData.value = res.data.images;
+            // console.log("Bing 壁纸", bingData.value);
 
             // 获取介绍与链接
-            data.saveData.bgLinkContent = data.bingData[0].copyright;
-            data.saveData.bgLinkHref = data.bingData[0].copyrightlink;
+            data.saveData.bgLinkContent = bingData.value[0].copyright;
+            data.saveData.bgLinkHref = bingData.value[0].copyrightlink;
 
-            setBg("https://cn.bing.com/" + data.bingData[0].url);
+            setBg("https://cn.bing.com/" + bingData.value[0].url);
         })
         .catch((err) => {
             console.log(err);
@@ -106,20 +99,22 @@ function setBg(url) {
 }
 </script>
 
-<style scoped lang="stylus">
-#background
-    width: 100%
-    height: 100%
-    position: absolute
-    top: 0
-    left: 0
+<style scoped lang="less">
+#background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
-.active
-    opacity: 0.5
-    transform: scale(1.05)
-    -webkit-transform: scale(1.05)
-    -moz-transform: scale(1.05)
-    -ms-transform: scale(1.05)
-    -o-transform: scale(1.05)
-    filter: blur(5px)
+.active {
+    opacity: 0.5;
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    filter: blur(10px);
+}
 </style>

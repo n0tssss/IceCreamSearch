@@ -1,38 +1,32 @@
 /*
  * @Author: N0ts
- * @Date: 2022-01-11 10:28:43
- * @LastEditTime: 2022-01-14 10:19:58
- * @Description: 存入缓存的数据
- * @FilePath: /vue/src/hooks/publicData/data.js
+ * @Date: 2022-02-23 22:30:36
+ * @Description: 公共数据
+ * @FilePath: /vue/src/data/data.js
  * @Mail：mail@n0ts.cn
  */
 
 import { reactive } from "vue";
-import updateLog from "../updateLog/updateLog";
+import updateLog from "../data/log";
 
 export default reactive({
     initDialog: true, // 初始化窗口显示
     updateDialog: false, // 更新提示弹窗显示
     soBoxtext: "", // 输入框内容
-    soBoxtextCache: "", // 输入框临时内容
     soBoxlist: [], // 搜索结果
     soBoxlistShow: false, // 搜索结果显示
-    soSelect: false, // 选择引擎界面是否打开
     soSelectAdd: false, // 添加搜索引擎界面是否打开
     soBoxHeight: 0, // 搜索框高度
-    leftBar: false, // 左侧菜单是否打开
-    tabsActive: "option", // 左侧菜单默认选择项
-    bingData: [], // bing 背景数据
+    tabsActive: "basic", // 左侧菜单默认选择项
     bingIndex: 0, // bing 背景当前显示
     openApp: false, // 网站导航是否打开
     searchBoxFocus: false, // 搜索框是否聚焦
-    time: new Date().getFullYear(), // 页脚年份
     searchSelectIndex: -1, // 搜索结果选中索引
     soBoxTime: null, // 当前时间展示数据
-    weatherInfo: null, // 当前天气数据
     updateLog, // 更新日志
     hitokoto: ":D 获取中...", // 一言内容
     loading: false, // 加载转圈圈
+    leftBar: false, // 左侧菜单是否打开
     // 主题色预制
     defaultColors: [
         "#1e90ff",
@@ -115,27 +109,27 @@ export default reactive({
         so: [
             {
                 name: "百度",
-                icon: require("../../assets/images/baidu.png"),
+                icon: require("../assets/images/baidu.png"),
                 linkHead: "https://www.baidu.com/s?wd="
             },
             {
                 name: "必应",
-                icon: require("../../assets/images/bing.png"),
+                icon: require("../assets/images/bing.png"),
                 linkHead: "https://cn.bing.com/search?q="
             },
             {
                 name: "谷歌",
-                icon: require("../../assets/images/google.png"),
+                icon: require("../assets/images/google.png"),
                 linkHead: "https://www.google.com/search?q="
             },
             {
                 name: "MDN",
-                icon: require("../../assets/images/mdn.png"),
+                icon: require("../assets/images/mdn.png"),
                 linkHead: "https://developer.mozilla.org/zh-CN/search?q="
             },
             {
                 name: "哔哩哔哩",
-                icon: require("../../assets/images/bilibili-fill.png"),
+                icon: require("../assets/images/bilibili-fill.png"),
                 linkHead: "https://search.bilibili.com/all?keyword="
             }
         ],

@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-02-23 23:20:00
+ * @LastEditTime: 2022-05-14 17:54:57
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -24,12 +24,12 @@
         >
         <template #footer>
             <span class="dialog-footer">
-                <el-button type="primary" @click="local.initSave(false)"
-                    >取 消</el-button
-                >
-                <el-button type="primary" @click="local.initSave(true)"
-                    >确 定</el-button
-                >
+                <el-button type="primary" @click="local.initSave(false)">
+                    取 消
+                </el-button>
+                <el-button type="primary" @click="local.initSave(true)">
+                    确 定
+                </el-button>
             </span>
         </template>
     </el-dialog>
@@ -39,14 +39,15 @@
 import background from "./components/background/background.vue";
 import search from "./components/search/search.vue";
 import setting from "./components/setting/setting.vue";
-import data from "./hooks/publicData/data";
-import local from "./hooks/localStorage/local";
+import data from "./data/data";
+import local from "./utils/localData/local";
 import { ElDialog, ElButton } from "element-plus";
 
 /**
  * 初始化
  */
-import init from "./hooks/initLocalStorage/init";
+import init from "./utils/localData/init";
+
 init.go();
 
 /**
@@ -58,63 +59,72 @@ document.documentElement.style.setProperty(
 );
 </script>
 
-<style lang="stylus">
-*
-    margin: 0
-    padding: 0
-    font-family: -apple-system, "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC",
-        "Hiragino Sans GB", "Source Han Sans CN", "Source Han Sans SC", "Microsoft YaHei", "Wenquanyi Micro Hei",
-        "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
-    -webkit-tap-highlight-color: transparent
+<style lang="less">
+* {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, "Helvetica Neue", Helvetica, "Nimbus Sans L",
+        Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB",
+        "Source Han Sans CN", "Source Han Sans SC", "Microsoft YaHei",
+        "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei,
+        "WenQuanYi Zen Hei Sharp", sans-serif;
+}
 
 html,
 body,
-#app
-    height: 100%
-    overflow: hidden
+#app {
+    height: 100%;
+    overflow: hidden;
+}
 
 html,
-body
-    min-width: 310px
-    height: 100%
-    scroll-behavior: smooth
-    background-color: black
+body {
+    min-width: 310px;
+    height: 100%;
+    scroll-behavior: smooth;
+    background-color: black;
+}
 
-*::-webkit-scrollbar
-    width: 4px
-    height: 4px
+*::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
 
+*::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.3);
+}
 
-*::-webkit-scrollbar-thumb
-    border-radius: 5px
-    background: rgba(255, 255, 255, 0.3)
+*::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.1);
+}
 
+@media screen and (max-width: 425px) {
+    * {
+        font-size: 0.9rem;
+    }
+}
 
-*::-webkit-scrollbar-track
-    border-radius: 0
-    background: rgba(255, 255, 255, 0.1)
+a {
+    text-decoration: underline var(--themeColor);
+    color: var(--themeColor);
+}
 
+a:hover {
+    opacity: 0.5;
+}
 
-@media screen and (max-width: 425px)
-    *
-        font-size: 0.9rem
-
-a
-    text-decoration: underline var(--themeColor)
-    color: var(--themeColor)
-
-a:hover
-    opacity: 0.5
-
-[v-cloak]
-    display: none
+[v-cloak] {
+    display: none;
+}
 
 // 统一过渡
 #menu .menuBox .icon,
-.menuList .navigation>div,
-.list .itemBox>div
-    transition: all .1s
+.menuList .navigation > div,
+.list .itemBox > div {
+    transition: all 0.1s;
+}
 
 #weather iframe,
 #search,
@@ -123,70 +133,88 @@ a:hover
 #search .input .el-icon,
 .searchResult,
 .searchResult div,
-.searchChange>div,
-.searchChange>div>.el-icon,
+.searchChange > div,
+.searchChange > div > .el-icon,
 #menu .openMenu,
 #menu .menuBox,
 #footer *,
-#setting .openBtn
-    transition: all .3s
+#setting .openBtn {
+    transition: all 0.3s;
+}
 
 #background,
-#search .input
-    transition: all .5s
+#search .input {
+    transition: all 0.5s;
+}
 
 // 统一圆角
-#weather iframe
+#weather iframe,
 .searchResult,
 .searchChange,
 #menu .menuBox,
-.list .itemBox>div
-    border-radius: 10px
+.list .itemBox > div {
+    border-radius: 10px;
+}
 
 // 卡片阴影
-#weather iframe
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px
+#weather iframe {
+    box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
+}
 
 // 定位居中
 #search,
 #menu .openMenu,
-#menu .menuBox
-    position: absolute
-    left: 50%
-    transform: translateX(-50%)
+#menu .menuBox {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
 // 白色字体阴影
 #weather *,
 .hitokoto,
-#footer p
-    line-height: 1.5rem
-    text-shadow: 0 0 3px black
-    color: white
+#footer p {
+    line-height: 1.5rem;
+    text-shadow: 0 0 3px black;
+    color: white;
+}
 
 // element ui
-.el-dialog
-    width: 600px
+.el-dialog {
+    width: 600px;
+}
 
-.el-dialog .el-dialog__body
-    padding: 10px 20px 30px
+.el-dialog .el-dialog__body {
+    padding: 10px 20px 30px;
+}
 
-.el-notification
-    border: none
-    background: rgba(255, 255, 255, .5)
-    backdrop-filter: blur(10px)
+.el-notification {
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+}
 
-.el-notification
-    .el-notification__closeBtn
-        color: #303133
+.el-notification .el-notification__closeBtn {
+    color: #303133;
+}
 
-.el-notification__content p
-    color: rgb(59, 59, 59)
+.el-notification__content p {
+    color: rgb(59, 59, 59);
+}
 
-@media screen and (max-width: 980px)
-    .el-dialog
-        width: 60% !important
+.el-overlay {
+    backdrop-filter: blur(10px);
+}
 
-@media screen and (max-width: 650px)
-    .el-dialog
-        width: 80% !important
+@media screen and (max-width: 980px) {
+    .el-dialog {
+        width: 60% !important;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .el-dialog {
+        width: 80% !important;
+    }
+}
 </style>

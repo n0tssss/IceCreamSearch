@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 13:20:00
- * @LastEditTime: 2022-01-13 16:29:30
+ * @LastEditTime: 2022-03-19 23:23:23
  * @Description: 天气组件
  * @FilePath: /vue/src/components/weather/weather.vue
  * @Mail：mail@n0ts.cn
@@ -9,22 +9,25 @@
 
 <template>
     <!-- 天气组件 -->
-    <div id="weather" v-if="data.weatherInfo">
-        <!-- 地址 -->
-        <p>{{ data.weatherInfo.address }}</p>
-        <!-- 温度 -->
-        <p>{{ data.weatherInfo.temperature }}</p>
-        <!-- 天气图片 -->
-        <img
-            :src="data.weatherInfo.weatherImg"
-            :alt="data.weatherInfo.weatherImg"
-        />
-        <!-- 空气质量 -->
-        <p>{{ data.weatherInfo.air }}</p>
+    <div id="weather">
+        <div v-if="data.weatherInfo">
+            <!-- 地址 -->
+            <p>{{ data.weatherInfo.address }}</p>
+            <!-- 温度 -->
+            <p>{{ data.weatherInfo.temperature }}</p>
+            <!-- 天气图片 -->
+            <img
+                :src="data.weatherInfo.weatherImg"
+                :alt="data.weatherInfo.weatherImg"
+            />
+            <!-- 空气质量 -->
+            <p>{{ data.weatherInfo.air }}</p>
+        </div>
 
         <!-- 悬浮卡片 -->
         <iframe
-            src="https://widget-page.qweather.net/h5/index.html?md=013&bg=1&lc=accu&key=7fb5816208334d858a799b3f531c5d14&v=_1641877899474"
+            v-if="data.frameUrl"
+            :src="data.frameUrl"
             frameborder="0"
             height="450px"
         ></iframe>
@@ -32,8 +35,10 @@
 </template>
 
 <script setup>
-import axios from "../../hooks/http/axios";
-import data from "../../hooks/publicData/data";
+import { reactive } from "vue";
+import axios from "../../utils/http/axios";
+
+const data = reactive({});
 
 goWeather();
 /**
@@ -43,12 +48,14 @@ async function goWeather() {
     try {
         // 获取经纬度
         const position = await getPosition();
+        data.frameUrl = `https://widget-page.qweather.net/h5/index.html?md=013&bg=1&lc=${position.longitude},${position.latitude}&key=7fb5816208334d858a799b3f531c5d14&v=_1641877899474`;
         // console.log(position);
 
         // 根据经纬度获取具体位置信息
         const address = await getAddress(position);
         // console.log(address);
 
+        // 获取天气
         const weather = await getWeather(address.HeWeather6[0].basic[0].cid);
         // console.log(weather);
         data.weatherInfo = {
@@ -134,34 +141,39 @@ function getWeather(location) {
 }
 </script>
 
-<style scoped lang="stylus">
-#weather
-    display: inline-block
-    padding: 10px 30px
-    position: fixed
-    left: 0
-    top: 0
-    cursor: pointer
-    z-index: 2
+<style scoped lang="less">
+#weather {
+    display: inline-block;
+    padding: 10px 30px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+    z-index: 2;
 
-    img
-        width 1.5rem
-        height: 1.5rem
+    img {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
 
-    *
-        padding: 0 3px
-        float: left
+    * {
+        padding: 0 3px;
+        float: left;
+    }
 
-    iframe
-        position: absolute
-        left: 25px
-        top: 200%
-        opacity: 0
-        visibility: hidden
-        padding: 0
+    iframe {
+        position: absolute;
+        left: 25px;
+        top: 200%;
+        opacity: 0;
+        visibility: hidden;
+        padding: 0;
+    }
 
-    &:hover iframe
-        opacity: 1
-        visibility: visible
-        top: 100%
+    &:hover iframe {
+        opacity: 1;
+        visibility: visible;
+        top: 100%;
+    }
+}
 </style>

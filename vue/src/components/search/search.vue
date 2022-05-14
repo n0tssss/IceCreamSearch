@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:23:17
- * @LastEditTime: 2022-01-14 11:17:42
+ * @LastEditTime: 2022-03-19 22:43:33
  * @Description: 搜索框组件
  * @FilePath: /vue/src/components/search/search.vue
  * @Mail：mail@n0ts.cn
@@ -9,12 +9,12 @@
 
 <template>
     <!-- 搜索框组件 -->
-    <div id="search" :class="{ searchGoTop: data.leftBar }">
+    <div id="search" :class="{ searchGoTop: data.openApp }">
         <!-- input 输入框 -->
         <div class="input" :class="{ searchActive: data.searchBoxFocus }">
             <!-- 搜索引擎 logo -->
             <img
-                @click="data.soSelect = !data.soSelect"
+                @click="soSelect = !soSelect"
                 :src="data.saveData.so[data.saveData.soIndex].icon"
                 alt="searchLogo"
             />
@@ -57,7 +57,7 @@
         <!-- 搜索引擎切换 -->
         <div
             class="searchChange"
-            :class="{ searchChangeActive: data.soSelect }"
+            :class="{ searchChangeActive: soSelect }"
             v-if="data.saveData.so"
         >
             <!-- 搜索引擎列表 -->
@@ -78,7 +78,7 @@
             <div @click="data.soSelectAdd = true">
                 <el-icon><circle-plus /></el-icon>
             </div>
-            <div @click="data.soSelect = false">
+            <div @click="soSelect = false">
                 <el-icon><circle-close /></el-icon>
             </div>
         </div>
@@ -119,18 +119,21 @@
         </el-dialog>
 
         <!-- 一言 -->
-        <div class="hitokoto" id="hitokoto">{{ data.hitokoto }}</div>
+        <div class="hitokoto" id="hitokoto">{{ hitokoto }}</div>
     </div>
 </template>
 
 <script setup>
 import { Search, CirclePlus, CircleClose } from "@element-plus/icons-vue";
-import { onMounted, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { ElIcon, ElDialog, ElInput, ElButton } from "element-plus";
-import data from "../../hooks/publicData/data";
-import axios from "../../hooks/http/axios";
-import notify from "../../hooks/notify/notify";
-import local from "../../hooks/localStorage/local";
+import data from "../../data/data";
+import axios from "../../utils/http/axios";
+import notify from "../../utils/notify/notify";
+import local from "../../utils/localData/local";
+
+// 选择引擎界面是否打开
+const soSelect = ref(false);
 
 /**
  * 元素节点
@@ -167,7 +170,7 @@ onMounted(() => {
     new ClipboardJS("#hitokoto", {
         text: () => {
             notify("一言已复制", 1);
-            return data.hitokoto;
+            return hitokoto.value;
         }
     });
 });
@@ -175,6 +178,7 @@ onMounted(() => {
 /**
  * 获取一言
  */
+const hitokoto = ref(":D 获取中...");
 function gethitokoto() {
     // 一言是否展示
     if (!data.saveData.hitokotoShow) {
@@ -194,8 +198,8 @@ function gethitokoto() {
             method: "GET"
         })
         .then((res) => {
-            // data.hitokoto = `「${res.data.hitokoto}」- ${res.data.from}`;
-            data.hitokoto = `${res.data.hitokoto}`;
+            // hitokoto = `「${res.hitokoto}」- ${res.data.from}`;
+            hitokoto.value = `${res.data.hitokoto}`;
         })
         .catch((err) => {
             console.log(err);
@@ -204,6 +208,8 @@ function gethitokoto() {
 /**
  * 搜索框输入文字
  */
+// 输入框临时内容
+const soBoxtextCache = ref("");
 function searchGo(e) {
     // 获取键位
     let key =
@@ -211,7 +217,7 @@ function searchGo(e) {
 
     // 无视上下按键
     if ((key && key.keyCode == 38) || (key && key.keyCode == 40)) {
-        return (data.soBoxtextCache = data.soBoxtext);
+        return (soBoxtextCache.value = data.soBoxtext);
     }
 
     // 回车跳转搜索
@@ -291,9 +297,9 @@ watch(
     () => {
         if (data.searchBoxFocus) {
             // 关闭导航菜单
-            // data.leftBar = false;
+            // data.openApp = false;
             // 关闭搜索引擎选择框
-            data.soSelect = false;
+            soSelect.value = false;
         }
     }
 );
@@ -365,159 +371,185 @@ function keyDown() {
 }
 </script>
 
-<style scoped lang="stylus">
+<style scoped lang="less">
 // 搜索框组件
-#search
-    width: 50%
-    height: 50px
-    top: 30%
-    backdrop-filter: blur(5px)
-    border-radius: 50px
-    z-index: 1
+#search {
+    width: 50%;
+    height: 50px;
+    top: 30%;
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    z-index: 1;
 
     // input 输入框
-    .input
-        width: 100%
-        height: 100%
-        display: flex
-        align-items: center
-        justify-content: space-between
-        border-radius: 50px
-        padding: 0 20px
-        opacity: .3
+    .input {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 50px;
+        padding: 0 20px;
+        opacity: 0.3;
         user-select: text !important;
         -webkit-user-select: text !important;
-        background: white
-        backdrop-filter: blur(5px)
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px
-        box-sizing: border-box
+        background: white;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        box-sizing: border-box;
 
-        &:hover
-            opacity: .5
+        &:hover {
+            opacity: 0.5;
+        }
 
-        img
-            width: 25px
-            cursor: pointer
+        img {
+            width: 25px;
+            cursor: pointer;
 
-            &:hover
-                transform: scale(1.1)
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
 
-        input
-            width 100%
-            margin: 0 15px
-            height: 100%
-            background: transparent
-            border: none
-            outline: none
-            font-size: 1rem
+        input {
+            width: 100%;
+            margin: 0 15px;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1rem;
             user-select: text !important;
             -webkit-user-select: text !important;
+        }
 
-        .el-icon
-            transform: scale(1.3)
-            cursor: pointer
+        .el-icon {
+            transform: scale(1.3);
+            cursor: pointer;
 
-            &:hover
-                transform: scale(1.5)
+            &:hover {
+                transform: scale(1.5);
+            }
+        }
+    }
 
-    .searchActive
-        opacity: 1 !important
+    .searchActive {
+        opacity: 1 !important;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
 
     // 搜索结果
-    .searchResult
-        width: 100%
-        background: white
-        overflow: hidden
-        opacity: 0
+    .searchResult {
+        width: 100%;
+        background: white;
+        overflow: hidden;
+        opacity: 0;
 
-        div
-            height: 40px
-            line-height: 40px
-            padding: 0 20px
-            color: #424242
-            cursor: pointer
+        div {
+            height: 40px;
+            line-height: 40px;
+            padding: 0 20px;
+            color: #424242;
+            cursor: pointer;
 
-            &:hover
-                opacity: 1
+            &:hover {
+                opacity: 1;
+            }
+        }
 
-        .searchResultActive
+        .searchResultActive {
             background-color: rgb(230, 230, 230);
-            padding: 0 25px
-            color: black
+            padding: 0 25px;
+            color: black;
+        }
+    }
 
-    .searchResultAction
-        margin-top: 10px
-        opacity: 1
+    .searchResultAction {
+        margin-top: 10px;
+        opacity: 1;
+    }
 
-    .searchResultClose
-        height: 0 !important
+    .searchResultClose {
+        height: 0 !important;
+    }
 
     // 搜索引擎切换
-    .searchChange
-        width: 100%
-        height: 0
-        background: white
-        overflow: hidden
-        display: flex
-        flex-wrap: wrap
-        box-sizing: border-box
-        padding: 0 20px
-        opacity: 0
-        visibility: hidden
-        transition: all .1s
+    .searchChange {
+        width: 100%;
+        height: 0;
+        background: white;
+        overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+        padding: 0 20px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.1s;
 
-        >div
-            display: flex
-            height: 55px
-            justify-content: center
-            align-content: center
-            flex-wrap: wrap
-            opacity: .5
-            transform: scale(.9)
-            cursor: pointer
+        > div {
+            display: flex;
+            height: 55px;
+            justify-content: center;
+            align-content: center;
+            flex-wrap: wrap;
+            opacity: 0.5;
+            transform: scale(0.9);
+            cursor: pointer;
 
-            img
-                width: 30px
-                height: 30px
+            img {
+                width: 30px;
+                height: 30px;
+            }
 
-            p
-                width: 100%
-                text-align: center
-                font-size: .8rem
+            p {
+                width: 100%;
+                text-align: center;
+                font-size: 0.8rem;
+            }
 
-            &:hover
-                opacity: 1
+            &:hover {
+                opacity: 1;
+            }
 
-            .el-icon
-                font-size: 2rem
-                padding: 0 8px
+            .el-icon {
+                font-size: 2rem;
+                padding: 0 8px;
 
-                &:hover
-                    transform: scale(1.1)
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+        }
 
-        .searchChangeDivActive
-            color: var(--themeColor)
-            transform: scale(1)
-            opacity: 1
+        .searchChangeDivActive {
+            color: var(--themeColor);
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 
-    .searchChangeActive
-        height: auto
-        opacity: 1
-        margin-top: 10px
-        padding: 10px 20px
-        visibility: visible
+    .searchChangeActive {
+        height: auto;
+        opacity: 1;
+        margin-top: 10px;
+        padding: 10px 20px;
+        visibility: visible;
+    }
 
     // 一言
-    .hitokoto
-        width: 100%
-        text-align: center
-        cursor: pointer
-        margin-top: 10px
+    .hitokoto {
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+}
 
-.searchGoTop
-    transform: translate(-50%, -100px) !important
+.searchGoTop {
+    transform: translate(-50%, -100px) !important;
+}
 
-.el-dialog .el-dialog__body>div
-    margin-bottom: 10px
+.el-dialog .el-dialog__body > div {
+    margin-bottom: 10px;
+}
 </style>

@@ -1,16 +1,16 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-13 11:07:57
- * @LastEditTime: 2022-01-14 10:22:22
+ * @LastEditTime: 2022-05-14 17:48:42
  * @Description: 初始化缓存配置
- * @FilePath: /vue/src/hooks/initLocalStorage/init.js
+ * @FilePath: /vue/src/utils/localData/init.js
  * @Mail：mail@n0ts.cn
  */
 
-import data from "../../hooks/publicData/data";
-import stor from "../storage/storage";
-import logs from "../publicData/log";
-import local from "../localStorage/local";
+import data from "../../data/data";
+import stor from "../../utils/storage/storage";
+import logs from "../../data/log";
+import local from "./local";
 
 /**
  * 初始化
@@ -63,7 +63,7 @@ function checkVersion(cache) {
         return cache;
     }
     // 判断数据是否缺少
-    if (Object.keys(cache).length == Object.keys(data.saveDataCache).length) {
+    if (Object.keys(cache).length === Object.keys(data.saveDataCache).length) {
         return cache;
     }
     // 遍历数据修复
@@ -80,7 +80,10 @@ function checkVersion(cache) {
  */
 function checkLogUpdate() {
     // 如果时间不存在 或 与最新日志时间不一致
-    if (!data.saveData.updateTime || data.saveData.updateTime != logs[0].time) {
+    if (
+        !data.saveData.updateTime ||
+        data.saveData.updateTime !== logs[0].time
+    ) {
         // 提示
         data.updateDialog = true;
         // 保存最新时间

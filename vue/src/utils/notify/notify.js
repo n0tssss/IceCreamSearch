@@ -1,9 +1,9 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-12 11:31:22
- * @LastEditTime: 2022-01-14 10:37:16
+ * @LastEditTime: 2022-05-14 17:53:57
  * @Description: 提示框
- * @FilePath: /vue/src/hooks/notify/notify.js
+ * @FilePath: /vue/src/utils/notify/notify.js
  * @Mail：mail@n0ts.cn
  */
 

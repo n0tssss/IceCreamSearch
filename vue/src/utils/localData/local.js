@@ -1,13 +1,13 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-13 11:01:41
- * @LastEditTime: 2022-01-13 13:14:27
+ * @LastEditTime: 2022-05-14 17:53:16
  * @Description: 本地缓存操作
- * @FilePath: /vue/src/hooks/localStorage/local.js
+ * @FilePath: /vue/src/utils/localData/local.js
  * @Mail：mail@n0ts.cn
  */
 
-import data from "../../hooks/publicData/data";
+import data from "../../data/data";
 import stor from "../storage/storage";
 import notify from "../notify/notify";
 
@@ -36,6 +36,7 @@ export default {
         const text = b
             ? ["已开启本地存储设置", 1]
             : ["已关闭本地存储设置，设置里面还可以开启哦", 3];
+        console.log(text);
         notify(text[0], text[1]);
 
         // 关闭窗口
