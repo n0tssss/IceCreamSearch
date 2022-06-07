@@ -1,4 +1,4 @@
-# QQ群讨论
+# QQ 群讨论
 
 [坚果茶馆](https://jq.qq.com/?_wv=1027&k=Mh7ah6Dd)
 
@@ -11,3 +11,4 @@
 开发中... ...
 
 暂时预览地址：[IceCream 冰激凌 | 简约至上 (n0ts.cn)](https://search.n0ts.cn/)
+Vue 重构版预览地址：[Beta IceCream 冰激凌 | 简约至上 (n0ts.cn)](https://search.n0ts.cn/beta)
