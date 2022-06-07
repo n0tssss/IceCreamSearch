@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:23:17
- * @LastEditTime: 2022-03-19 22:43:33
+ * @LastEditTime: 2022-06-07 23:54:47
  * @Description: 搜索框组件
  * @FilePath: /vue/src/components/search/search.vue
  * @Mail：mail@n0ts.cn
@@ -43,14 +43,14 @@
             }"
         >
             <div
-                @mousedown="goHref(item)"
+                @mousedown="goHref(item.text)"
                 @mouseover="data.searchSelectIndex = index"
                 @mouseout="data.searchSelectIndex = -1"
                 :class="{ searchResultActive: data.searchSelectIndex == index }"
                 v-for="(item, index) in data.soBoxlist"
                 :key="index"
             >
-                {{ item }}
+                {{ item.text }}
             </div>
         </div>
 
@@ -193,13 +193,10 @@ function gethitokoto() {
 
     // 类型判断
     axios
-        .post("https://cors.lovewml.cn/cors", {
-            url: "https://v1.hitokoto.cn" + type,
-            method: "GET"
-        })
+        .get("https://v1.hitokoto.cn" + type)
         .then((res) => {
-            // hitokoto = `「${res.hitokoto}」- ${res.data.from}`;
-            hitokoto.value = `${res.data.hitokoto}`;
+            // hitokoto.value = `「 ${res.hitokoto} 」- ${res.from}`;
+            hitokoto.value = `${res.hitokoto}`;
         })
         .catch((err) => {
             console.log(err);
@@ -236,10 +233,10 @@ function searchGo(e) {
 
     // 请求百度获取搜索匹配结果
     axios
-        .post("https://cors.lovewml.cn/cors", {
-            url: `https://suggestion.baidu.com/su?wd=${data.soBoxtext}`,
-            method: "GET",
-            responseType: "arraybuffer"
+        .get("https://api.n0ts.cn/baidu", {
+            params: {
+                keywords: data.soBoxtext
+            }
         })
         .then((res) => {
             // 是否有内容
@@ -249,11 +246,7 @@ function searchGo(e) {
             }
 
             // 提取搜索结果转为数组
-            res.data = res.data.match(/\[.+\]/g)[0];
-            if (res.data) {
-                res.data = JSON.parse(res.data);
-            }
-            data.soBoxlist = res.data;
+            data.soBoxlist = res.data.result;
 
             // 结果框高度计算
             data.soBoxHeight =
@@ -261,7 +254,7 @@ function searchGo(e) {
                     ? data.saveData.soBoxlistShowNum
                     : data.soBoxlist.length) * 40;
 
-            // console.log("搜索结果", data.soBoxlist);
+            console.log("搜索结果", data.soBoxlist);
         })
         .catch(() => {
             data.soBoxHeight = 0;

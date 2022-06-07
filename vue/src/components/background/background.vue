@@ -63,7 +63,7 @@ function loadBg() {
 const bingData = ref(null);
 function getBing() {
     axios
-        .post("https://cors.lovewml.cn/cors", {
+        .post("https://api.n0ts.cn/cors", {
             method: "get",
             url: "https://cn.bing.com/HPImageArchive.aspx",
             params: {

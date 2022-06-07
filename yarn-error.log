@@ -1,0 +1,112 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn
+
+PATH: 
+  /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/opt/homebrew/bin:/opt/homebrew/sbin
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.13.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/Users/n0ts/Library/Caches/Yarn/v6/npm-color-convert-2.0.1-72d3a68d598c9bdb3af2ad1e84f21d896abd4de3-integrity/node_modules/color-convert/README.md' -> '/Users/n0ts/project/Vue/IceCreamSearch/node_modules/@commitlint/load/node_modules/color-convert/README.md'
+
+npm manifest: 
+  {
+    "name": "IceCreamSearch",
+    "version": "1.0.0",
+    "description": "[坚果茶馆](https://jq.qq.com/?_wv=1027&k=Mh7ah6Dd)",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "commit": "git-cz"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "cz-conventional-changelog": "^3.3.0"
+    },
+    "config": {
+      "commitizen": {
+        "path": "./node_modules/cz-conventional-changelog-zh",
+        "defaultType": "✨[Feat]",
+        "types": {
+          "✨[Feat]": {
+            "description": "新功能",
+            "title": "Features"
+          },
+          "🐛[Bug]": {
+            "description": "修复bug",
+            "title": "Bug Fixes"
+          },
+          "📝[Docs]": {
+            "description": "文档增删改",
+            "title": "Documentation"
+          },
+          "🎨[Style]": {
+            "description": "样式修改",
+            "title": "Styles"
+          },
+          "♻️[Refactoring]": {
+            "description": "重构代码",
+            "title": "Code Refactoring"
+          },
+          "⚡️[Pref]": {
+            "description": "性能优化",
+            "title": "Performance Improvements"
+          },
+          "✅[Test]": {
+            "description": "增加测试",
+            "title": "Tests"
+          },
+          "💚[Build]": {
+            "description": "构建系统外部修改",
+            "title": "Builds"
+          },
+          "👷[CI]": {
+            "description": "对CI配置文件和脚本的更改",
+            "title": "Continuous Integrations"
+          },
+          "🔧[Chore]": {
+            "description": "除src目录或测试文件以外的修改",
+            "title": "Chores"
+          },
+          "⏪[Revert]": {
+            "description": "回退历史版本",
+            "title": "Reverts"
+          },
+          "💥[Conflict]": {
+            "description": "修改冲突",
+            "title": "Conflict"
+          },
+          "💬[Font]": {
+            "description": "字体文件更新",
+            "title": "Fonts"
+          },
+          "🗑️[Delete]": {
+            "description": "删除文件",
+            "title": "Delete Files"
+          },
+          "🚨[Stash]": {
+            "description": "暂存文件",
+            "title": "Stash Files"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "cz-conventional-changelog-zh": "^0.0.2"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
