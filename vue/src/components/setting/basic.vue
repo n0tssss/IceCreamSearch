@@ -8,7 +8,7 @@
 
 <template>
     <div id="basic">
-        <div>
+        <div class="optionsBox">
             <p class="title">本地存储</p>
             <p class="about">将您的设置存储在浏览器缓存中</p>
             <div class="operation">

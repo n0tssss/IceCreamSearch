@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-05-14 17:54:57
+ * @LastEditTime: 2022-06-08 00:19:11
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -138,7 +138,8 @@ a:hover {
 #menu .openMenu,
 #menu .menuBox,
 #footer *,
-#setting .openBtn {
+#setting .openBtn,
+.optionsBox {
     transition: all 0.3s;
 }
 
@@ -152,7 +153,8 @@ a:hover {
 .searchResult,
 .searchChange,
 #menu .menuBox,
-.list .itemBox > div {
+.list .itemBox > div,
+.optionsBox {
     border-radius: 10px;
 }
 
@@ -215,6 +217,32 @@ a:hover {
 @media screen and (max-width: 650px) {
     .el-dialog {
         width: 80% !important;
+    }
+}
+
+// 设置选项卡样式
+.optionsBox {
+    padding: 15px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
+    .title {
+        border-left: 3px solid #409eff;
+        padding: 3px 0px 3px 8px;
+        margin-bottom: 5px;
+        color: rgb(30, 30, 30);
+    }
+
+    .about {
+        color: rgb(95, 95, 95);
+        font-size: 0.8rem;
+    }
+
+    &:hover {
+        background-color: white;
+        transform: translateY(-5px);
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+            rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     }
 }
 </style>

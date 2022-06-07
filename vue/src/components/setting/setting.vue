@@ -39,8 +39,9 @@ import basic from "./basic.vue";
     position: absolute;
     z-index: 2;
 
-    .el-drawer {
+    :deep(.el-drawer) {
         width: 320px;
+        background-color: rgb(245, 245, 245);
     }
 
     .openBtn {
@@ -86,6 +87,12 @@ import basic from "./basic.vue";
 
             .el-tabs__header {
                 margin-right: 40px;
+            }
+
+            .el-tabs__content {
+                padding: 10px;
+                overflow: unset;
+                font-size: 0.9rem;
             }
 
             .el-tabs__item {
