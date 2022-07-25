@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-11 10:23:17
- * @LastEditTime: 2022-06-07 23:54:47
+ * @LastEditTime: 2022-07-25 23:36:35
  * @Description: 搜索框组件
  * @FilePath: /vue/src/components/search/search.vue
  * @Mail：mail@n0ts.cn
@@ -26,6 +26,7 @@
                 @focus="data.searchBoxFocus = true"
                 @blur="data.searchBoxFocus = false"
                 @keyup="searchGo"
+                @keydown="searchDown"
             />
             <!-- 搜索图标 -->
             <el-icon @click="enter"><Search /></el-icon>
@@ -50,7 +51,11 @@
                 v-for="(item, index) in data.soBoxlist"
                 :key="index"
             >
-                {{ item.text }}
+                <span>{{ item.text }}</span>
+                <span v-if="controlState" class="control">
+                    <kbd>Ctrl</kbd> +
+                    <kbd>{{ index + 1 }}</kbd>
+                </span>
             </div>
         </div>
 
@@ -157,7 +162,6 @@ function setRef(item) {
  * setup
  */
 gethitokoto(); // 获取一言
-keyDown();
 
 /**
  * 加载完毕
@@ -202,64 +206,141 @@ function gethitokoto() {
             console.log(err);
         });
 }
+
+// Control 是否按下
+const controlState = ref(false);
+
 /**
- * 搜索框输入文字
+ * 搜索框按键按下
  */
+function searchDown(e) {
+    const keyCode = e.keyCode;
+
+    // console.log("按下", keyCode);
+
+    // Control 按下
+    if (!controlState.value) {
+        controlState.value = keyCode == 17;
+    }
+
+    // Tab 按下
+    if (keyCode == 9) {
+        e.preventDefault();
+        const length = data.saveData.so.length;
+        data.saveData.soIndex =
+            data.saveData.soIndex == length - 1 ? 0 : data.saveData.soIndex + 1;
+    }
+
+    // 上下键检测
+    if (e && keyCode == 38) {
+        // 按下上箭头
+        // 索引超出判断
+        if (data.searchSelectIndex == 0) {
+            data.searchSelectIndex = data.soBoxlist.length - 1;
+        } else {
+            data.searchSelectIndex--;
+        }
+        // 结果修改
+        data.soBoxtext = data.soBoxlist[data.searchSelectIndex].text;
+    } else if (e && keyCode == 40) {
+        // 按下下箭头
+        // 索引超出判断
+        if (data.searchSelectIndex == data.soBoxlist.length - 1) {
+            data.searchSelectIndex = 0;
+        } else {
+            data.searchSelectIndex++;
+        }
+        // 结果修改
+        data.soBoxtext = data.soBoxlist[data.searchSelectIndex].text;
+    }
+}
+
 // 输入框临时内容
 const soBoxtextCache = ref("");
+
+// 防抖
+let antiShake = null;
+
+/**
+ * 搜索框键盘放开
+ */
 function searchGo(e) {
-    // 获取键位
-    let key =
-        e || event || window.event || arguments.callee.caller.arguments[0];
+    const keyCode = e.keyCode;
 
-    // 无视上下按键
-    if ((key && key.keyCode == 38) || (key && key.keyCode == 40)) {
-        return (soBoxtextCache.value = data.soBoxtext);
+    // console.log("松开", keyCode);
+
+    // 是否在 Control 按下的同时按下了数字键
+    if (keyCode >= 48 && keyCode <= 57 && controlState.value) {
+        const controlDownNum = keyCode - 48;
+
+        // 搜索结果有这个数则跳转
+        if (data.soBoxlist.length >= controlDownNum) {
+            goHref(data.soBoxlist[controlDownNum - 1].text);
+        }
     }
+    controlState.value = false;
 
-    // 回车跳转搜索
-    if (e.keyCode == 13) {
-        return enter();
+    if (antiShake) {
+        clearTimeout(antiShake);
     }
-
-    // 搜索结果选中索引修改
-    data.searchSelectIndex = -1;
-
-    // 是否有内容
-    if (!data.soBoxtext) {
-        data.soBoxHeight = 0;
-        return (data.soBoxlist = []);
-    }
-
-    // 请求百度获取搜索匹配结果
-    axios
-        .get("https://api.n0ts.cn/baidu", {
-            params: {
-                keywords: data.soBoxtext
-            }
-        })
-        .then((res) => {
-            // 是否有内容
-            if (!data.soBoxtext) {
-                data.soBoxHeight = 0;
-                return (data.soBoxlist = []);
-            }
-
-            // 提取搜索结果转为数组
-            data.soBoxlist = res.data.result;
-
-            // 结果框高度计算
-            data.soBoxHeight =
-                (data.soBoxlist.length > data.saveData.soBoxlistShowNum
-                    ? data.saveData.soBoxlistShowNum
-                    : data.soBoxlist.length) * 40;
-
-            console.log("搜索结果", data.soBoxlist);
-        })
-        .catch(() => {
+    antiShake = setTimeout(() => {
+        // 是否有内容
+        if (!data.soBoxtext) {
             data.soBoxHeight = 0;
             return (data.soBoxlist = []);
-        });
+        }
+
+        // 无视上下按键
+        if ((e && keyCode == 38) || (e && keyCode == 40)) {
+            return (soBoxtextCache.value = data.soBoxtext);
+        }
+
+        // 回车跳转搜索
+        if (keyCode == 13) {
+            return enter();
+        }
+
+        // 搜索结果选中索引修改
+        data.searchSelectIndex = -1;
+
+        // 请求百度获取搜索匹配结果
+        axios
+            .get("https://api.n0ts.cn/baidu", {
+                params: {
+                    keywords: data.soBoxtext
+                }
+            })
+            .then((res) => {
+                // 是否有内容
+                if (!data.soBoxtext) {
+                    data.soBoxHeight = 0;
+                    return (data.soBoxlist = []);
+                }
+                // 提取搜索结果转为数组
+                data.soBoxlist =
+                    res.data.result.length > data.saveData.soBoxlistShowNum
+                        ? res.data.result.slice(
+                              0,
+                              data.saveData.soBoxlistShowNum
+                          )
+                        : res.data.length;
+
+                // 结果框高度计算
+                data.soBoxHeight =
+                    (data.soBoxlist.length > data.saveData.soBoxlistShowNum
+                        ? data.saveData.soBoxlistShowNum
+                        : data.soBoxlist.length) * 40;
+
+                // console.log(
+                //     "🚀 | file: search.vue | line 260 | .then | data.soBoxlist 搜索结果",
+                //     data.soBoxlist
+                // );
+            })
+            .catch(() => {
+                data.soBoxHeight = 0;
+                return (data.soBoxlist = []);
+            });
+    }, 100);
 }
 
 /**
@@ -320,54 +401,13 @@ function add() {
     // 关闭对话框
     data.soSelectAdd = false;
 }
-
-/**
- * 上下键切换选项
- */
-function keyDown() {
-    // 键位
-    let key;
-
-    document.onkeydown = (e) => {
-        // 是否搜索
-        if (!data.searchBoxFocus) {
-            return;
-        }
-
-        // 键位获取
-        key =
-            e || event || window.event || arguments.callee.caller.arguments[0];
-
-        // 上下键检测
-        if (key && key.keyCode == 38) {
-            // 按下上箭头
-            // 索引超出判断
-            if (data.searchSelectIndex == 0) {
-                data.searchSelectIndex = data.soBoxlist.length - 1;
-            } else {
-                data.searchSelectIndex--;
-            }
-            // 结果修改
-            data.soBoxtext = data.soBoxlist[data.searchSelectIndex];
-        } else if (key && key.keyCode == 40) {
-            // 按下下箭头
-            // 索引超出判断
-            if (data.searchSelectIndex == data.soBoxlist.length - 1) {
-                data.searchSelectIndex = 0;
-            } else {
-                data.searchSelectIndex++;
-            }
-            // 结果修改
-            data.soBoxtext = data.soBoxlist[data.searchSelectIndex];
-        }
-    };
-}
 </script>
 
 <style scoped lang="less">
 // 搜索框组件
 #search {
     width: 50%;
+    max-width: 1000px;
     height: 50px;
     top: 30%;
     backdrop-filter: blur(10px);
@@ -446,6 +486,19 @@ function keyDown() {
 
             &:hover {
                 opacity: 1;
+            }
+
+            .control {
+                float: right;
+                transform: scale(0.7);
+            }
+
+            kbd {
+                background: #e9e9e9;
+                box-shadow: 0 2px 0 rgba(95, 97, 101, 0.3);
+                padding: 1px 5px;
+                margin: 0 3px;
+                border-radius: 3px;
             }
         }
 

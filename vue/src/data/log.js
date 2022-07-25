@@ -1,14 +1,22 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-13 11:43:22
- * @LastEditTime: 2022-02-23 22:34:48
+ * @LastEditTime: 2022-07-25 23:42:51
  * @Description: 更新日志
  * 1：新增；2：修改；3：修复；4：移除；5：重构；
- * @FilePath: /vue/src/hooks/publicData/log.js
+ * @FilePath: /vue/src/data/log.js
  * @Mail：mail@n0ts.cn
  */
 
 export default [
+    {
+        time: "2022-7-25",
+        log: [
+            "1；新增搜索结果时支持 Control + 数字键 快捷跳转结果",
+            "1；新增搜索框聚焦时 TAB 键切换搜索引擎",
+            "2；网址导航样式修改"
+        ]
+    },
     {
         time: "2021-1-10",
         log: [

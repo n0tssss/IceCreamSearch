@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-03-26 15:23:30
+ * @LastEditTime: 2022-07-25 22:09:07
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -217,7 +217,8 @@ function bigBoxHeight() {
 
     // 菜单
     .menuBox {
-        width: 90%;
+        width: 80%;
+        min-width: 1000px;
         height: 60%;
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(30px);
@@ -250,7 +251,7 @@ function bigBoxHeight() {
 
         // 导航
         .navigation {
-            width: 25%;
+            width: 20%;
             max-width: 260px;
             height: 100%;
             overflow-y: scroll;
