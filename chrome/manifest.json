@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "IceCream 冰激凌 | 简约至上",
+    "description": "IceCream 冰激凌 | 简约至上",
+    "version": "0.0.1",
+    "icons": {
+        "16": "favicon.png",
+        "48": "favicon.png",
+        "128": "favicon.png"
+    },
+    "permissions": ["storage"],
+    "chrome_url_overrides": {
+        "newtab": "index.html"
+    }
+}
