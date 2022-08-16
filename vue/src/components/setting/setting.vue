@@ -2,7 +2,7 @@
  * @Author: N0ts
  * @Date: 2022-02-23 22:30:36
  * @Description: 设置界面
- * @FilePath: /vue/src/components/setting/setting.vue
+ * @FilePath: /vue3/src/components/setting/setting.vue
  * @Mail：mail@n0ts.cn
 -->
 
@@ -27,10 +27,10 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Tools } from "@element-plus/icons-vue";
-import { ElIcon, ElDrawer, ElTabs, ElTabPane } from "element-plus";
-import data from "../../data/data";
+// import { ElIcon, ElDrawer, ElTabs, ElTabPane } from "element-plus";
+import data from "@/data/data";
 import basic from "./basic.vue";
 </script>
 
@@ -73,7 +73,7 @@ import basic from "./basic.vue";
     }
 
     :deep(.el-overlay) .menu {
-        #el-drawer__title {
+        .el-drawer__header {
             margin: 0;
             padding: 0;
             position: absolute;

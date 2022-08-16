@@ -1,9 +1,8 @@
 <!--
  * @Author: N0ts
- * @Date: 2022-01-11 13:20:00
- * @LastEditTime: 2022-03-19 23:23:23
+ * @Date: 2022-08-16 15:06:38
  * @Description: 天气组件
- * @FilePath: /vue/src/components/weather/weather.vue
+ * @FilePath: /vue3/src/components/weather/weather.vue
  * @Mail：mail@n0ts.cn
 -->
 
@@ -34,11 +33,11 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive } from "vue";
 import axios from "../../utils/http/axios";
 
-const data = reactive({});
+const data: any = reactive({});
 
 goWeather();
 /**
@@ -47,16 +46,18 @@ goWeather();
 async function goWeather() {
     try {
         // 获取经纬度
-        const position = await getPosition();
+        const position: any = await getPosition();
         data.frameUrl = `https://widget-page.qweather.net/h5/index.html?md=013&bg=1&lc=${position.longitude},${position.latitude}&key=7fb5816208334d858a799b3f531c5d14&v=_1641877899474`;
         // console.log(position);
 
         // 根据经纬度获取具体位置信息
-        const address = await getAddress(position);
+        const address: any = await getAddress(position);
         // console.log(address);
 
         // 获取天气
-        const weather = await getWeather(address.HeWeather6[0].basic[0].cid);
+        const weather: any = await getWeather(
+            address.HeWeather6[0].basic[0].cid
+        );
         // console.log(weather);
         data.weatherInfo = {
             address: address.HeWeather6[0].basic[0].location, // 地址
@@ -98,7 +99,7 @@ function getPosition() {
 /**
  * 根据经纬度获取具体位置信息
  */
-function getAddress(position) {
+function getAddress(position: any) {
     return new Promise((resolve, reject) => {
         axios
             .get("https://geoapi.qweather.com/find", {
@@ -121,7 +122,7 @@ function getAddress(position) {
 /**
  * 根据位置信息获取天气
  */
-function getWeather(location) {
+function getWeather(location: any) {
     return new Promise((resolve, reject) => {
         axios
             .get("https://widget-api.heweather.net/s6/plugin/h5", {

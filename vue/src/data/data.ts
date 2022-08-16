@@ -1,15 +1,15 @@
 /*
  * @Author: N0ts
- * @Date: 2022-02-23 22:30:36
+ * @Date: 2022-08-16 15:07:37
  * @Description: 公共数据
- * @FilePath: /vue/src/data/data.js
+ * @FilePath: /vue3/src/data/data.ts
  * @Mail：mail@n0ts.cn
  */
 
 import { reactive } from "vue";
-import updateLog from "../data/log";
+import updateLog from "./log";
 
-export default reactive({
+const data: any = reactive({
     initDialog: true, // 初始化窗口显示
     updateDialog: false, // 更新提示弹窗显示
     soBoxtext: "", // 输入框内容
@@ -82,6 +82,7 @@ export default reactive({
     saveDataCache: null, // 存储数据缓存
     // 存储数据
     saveData: {
+        simple: false, // 简约模式
         // 码云数据
         gitee: {
             GiteeToken: "", // Gitee Access Token
@@ -187,3 +188,4 @@ export default reactive({
         <p>有问题或者建议欢迎前往仓库给我们留言！</p>`
     }
 });
+export default data;

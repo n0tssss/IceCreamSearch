@@ -1,12 +1,3 @@
-/*
- * @Author: N0ts
- * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-01-10 15:41:08
- * @Description: Eslint
- * @FilePath: /vue/.eslintrc.js
- * @Mail：mail@n0ts.cn
- */
-
 module.exports = {
     root: true,
     env: {
@@ -15,10 +6,11 @@ module.exports = {
     extends: [
         "plugin:vue/vue3-essential",
         "eslint:recommended",
-        "@vue/prettier"
+        "@vue/typescript/recommended",
+        "plugin:prettier/recommended"
     ],
     parserOptions: {
-        parser: "babel-eslint"
+        ecmaVersion: 2020
     },
     rules: {
         "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",

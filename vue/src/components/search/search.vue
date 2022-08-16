@@ -1,7 +1,6 @@
 <!--
  * @Author: N0ts
- * @Date: 2022-01-11 10:23:17
- * @LastEditTime: 2022-07-25 23:36:35
+ * @Date: 2022-08-16 15:06:38
  * @Description: 搜索框组件
  * @FilePath: /vue/src/components/search/search.vue
  * @Mail：mail@n0ts.cn
@@ -124,18 +123,21 @@
         </el-dialog>
 
         <!-- 一言 -->
-        <div class="hitokoto" id="hitokoto">{{ hitokoto }}</div>
+        <div class="hitokoto" id="hitokoto" v-if="data.saveData.hitokotoShow">
+            {{ hitokoto }}
+        </div>
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Search, CirclePlus, CircleClose } from "@element-plus/icons-vue";
 import { onMounted, ref, watch } from "vue";
 import { ElIcon, ElDialog, ElInput, ElButton } from "element-plus";
-import data from "../../data/data";
-import axios from "../../utils/http/axios";
-import notify from "../../utils/notify/notify";
-import local from "../../utils/localData/local";
+import axios from "@/utils/http/axios";
+import data from "@/data/data";
+import notify from "@/utils/notify/notify";
+import local from "@/utils/localData/local";
+import ClipboardJS from "clipboard";
 
 // 选择引擎界面是否打开
 const soSelect = ref(false);
@@ -143,12 +145,12 @@ const soSelect = ref(false);
 /**
  * 元素节点
  */
-let nodes = {};
+let nodes: any = {};
 
 /**
  * 获取 ref 元素
  */
-function setRef(item) {
+function setRef(item: any) {
     // 如果元素不存在 或 id 与 refname 都不存在的话
     if (!item || !item.attributes.refname.value) {
         return;
@@ -191,14 +193,14 @@ function gethitokoto() {
 
     // 一言类型选择
     let type = "?";
-    data.saveData.hitokotoIndex.forEach((item) => {
+    data.saveData.hitokotoIndex.forEach((item: any) => {
         type += item == "all" ? "" : `c=${item}&`;
     });
 
     // 类型判断
     axios
         .get("https://v1.hitokoto.cn" + type)
-        .then((res) => {
+        .then((res: any) => {
             // hitokoto.value = `「 ${res.hitokoto} 」- ${res.from}`;
             hitokoto.value = `${res.hitokoto}`;
         })
@@ -207,13 +209,23 @@ function gethitokoto() {
         });
 }
 
+watch(
+    () => data.saveData.hitokotoShow,
+    () => {
+        gethitokoto();
+    },
+    {
+        immediate: true
+    }
+);
+
 // Control 是否按下
 const controlState = ref(false);
 
 /**
  * 搜索框按键按下
  */
-function searchDown(e) {
+function searchDown(e: any) {
     const keyCode = e.keyCode;
 
     // console.log("按下", keyCode);
@@ -259,12 +271,12 @@ function searchDown(e) {
 const soBoxtextCache = ref("");
 
 // 防抖
-let antiShake = null;
+let antiShake: any = null;
 
 /**
  * 搜索框键盘放开
  */
-function searchGo(e) {
+function searchGo(e: any) {
     const keyCode = e.keyCode;
 
     // console.log("松开", keyCode);
@@ -356,7 +368,7 @@ function enter() {
 /**
  * 跳转搜索
  */
-function goHref(item) {
+function goHref(item: string) {
     window.open(
         data.saveData.so[data.saveData.soIndex].linkHead +
             encodeURIComponent(item)

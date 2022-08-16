@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-07-25 22:09:07
+ * @LastEditTime: 2022-08-16 17:38:17
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -79,12 +79,12 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Footer from "../footer/footer.vue";
 import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
 import { onMounted } from "@vue/runtime-core";
 import { ElIcon, ElTooltip } from "element-plus";
-import data from "../../data/data";
+import data from "@/data/data";
 
 onMounted(() => {
     // 撑开底部距离盒子高度计算
@@ -94,12 +94,12 @@ onMounted(() => {
 /**
  * 元素节点
  */
-let nodes = {};
+let nodes: any = {};
 
 /**
  * 获取 ref 元素
  */
-function setRef(item) {
+function setRef(item: any) {
     // 如果元素不存在 或 id 与 refname 都不存在的话
     if (!item || !item.attributes.refname.value) {
         return;
@@ -112,14 +112,14 @@ function setRef(item) {
 /**
  * 跳转到指定链接
  */
-function openHref(url) {
+function openHref(url: string) {
     window.open(url);
 }
 
 /**
  * 滚动到指定位置
  */
-function scroll(name) {
+function scroll(name: string) {
     // 需要滚动的高度
     let top = 0;
 
@@ -187,24 +187,34 @@ function bigBoxHeight() {
             width: 100%;
             height: 40%;
             cursor: pointer;
-
-            .icon {
-                animation: openApp 1s ease-in-out infinite;
-            }
+            animation: openApp 1s ease-in-out infinite;
+            -webkit-animation: openApp 1s ease-in-out infinite;
 
             @keyframes openApp {
                 0% {
                     transform: scale(1) translateY(5px);
+                    -webkit-transform: scale(1) translateY(5px);
+                    -moz-transform: scale(1) translateY(5px);
+                    -ms-transform: scale(1) translateY(5px);
+                    -o-transform: scale(1) translateY(5px);
                     opacity: 0;
                 }
 
                 50% {
                     transform: scale(1.1);
+                    -webkit-transform: scale(1.1);
+                    -moz-transform: scale(1.1);
+                    -ms-transform: scale(1.1);
+                    -o-transform: scale(1.1);
                     opacity: 1;
                 }
 
                 100% {
                     transform: scale(1) translateY(-10px);
+                    -webkit-transform: scale(1) translateY(-10px);
+                    -moz-transform: scale(1) translateY(-10px);
+                    -ms-transform: scale(1) translateY(-10px);
+                    -o-transform: scale(1) translateY(-10px);
                     opacity: 0;
                 }
             }

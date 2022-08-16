@@ -1,6 +1,14 @@
+<!--
+ * @Author: N0ts
+ * @Date: 2022-08-16 15:06:38
+ * @Description: 页脚
+ * @FilePath: /vue/src/components/footer/footer.vue
+ * @Mail：mail@n0ts.cn
+-->
+
 <template>
     <!-- 页脚 -->
-    <div id="footer">
+    <div id="footer" v-if="data.saveData.footerText">
         <div v-if="data.saveData.bgLinkHref && data.saveData.bgLinkContent">
             <p>
                 <a :href="data.saveData.bgLinkHref" target="_blank">{{
@@ -22,9 +30,9 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
-import data from "../../data/data";
+import data from "@/data/data";
 
 // 页脚年份
 const time = ref(new Date().getFullYear());

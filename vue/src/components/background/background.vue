@@ -1,3 +1,11 @@
+<!--
+ * @Author: N0ts
+ * @Date: 2022-08-16 15:06:38
+ * @Description: 背景
+ * @FilePath: /vue3/src/components/background/background.vue
+ * @Mail：mail@n0ts.cn
+-->
+
 <template>
     <!-- 背景 -->
     <div
@@ -14,11 +22,11 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import weather from "../weather/weather.vue";
 import Menu from "../menu/menu.vue";
-import axios from "../../utils/http/axios";
-import data from "../../data/data";
+import axios from "@/utils/http/axios";
+import data from "@/data/data";
 import { ref } from "vue";
 
 /**
@@ -29,12 +37,12 @@ loadBg(); // 加载壁纸
 /**
  * 元素节点
  */
-let nodes = {};
+let nodes: any = {};
 
 /**
  * 获取 ref 元素
  */
-function setRef(item) {
+function setRef(item: any) {
     // 如果元素不存在 或 id 与 refname 都不存在的话
     if (!item || !item.attributes.refname.value) {
         return;
@@ -60,7 +68,7 @@ function loadBg() {
 /**
  * 获取 Bing 壁纸
  */
-const bingData = ref(null);
+const bingData: any = ref(null);
 function getBing() {
     axios
         .post("https://api.n0ts.cn/cors", {
@@ -91,7 +99,7 @@ function getBing() {
 /**
  * 设置背景
  */
-function setBg(url) {
+function setBg(url: string) {
     nodes.background.style.background = `url(${url})`;
     nodes.background.style.backgroundSize = "cover";
     nodes.background.style.backgroundPosition = "center";

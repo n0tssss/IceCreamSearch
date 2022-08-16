@@ -1,103 +1,34 @@
 {
-    "name": "vue",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint",
-        "pre": "prettier --write .",
-        "commit": "git-cz"
-    },
-    "dependencies": {
-        "@element-plus/icons-vue": "^0.2.4",
-        "axios": "^0.24.0",
-        "core-js": "^3.6.5",
-        "element-plus": "^1.3.0-beta.3",
-        "less": "^4.1.2",
-        "less-loader": "7.x",
-        "vue": "^3.0.0"
-    },
-    "devDependencies": {
-        "@vue/cli-plugin-babel": "~4.5.0",
-        "@vue/cli-plugin-eslint": "~4.5.0",
-        "@vue/cli-service": "~4.5.0",
-        "@vue/compiler-sfc": "^3.0.0",
-        "@vue/eslint-config-prettier": "^6.0.0",
-        "axios": "^0.24.0",
-        "babel-eslint": "^10.1.0",
-        "cz-conventional-changelog": "^3.3.0",
-        "eslint": "^6.7.2",
-        "eslint-plugin-prettier": "^3.3.1",
-        "eslint-plugin-vue": "^7.0.0",
-        "prettier": "^2.5.1"
-    },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog-zh",
-            "defaultType": "✨[Feat]",
-            "types": {
-                "✨[Feat]": {
-                    "description": "新功能",
-                    "title": "Features"
-                },
-                "🐛[Bug]": {
-                    "description": "修复bug",
-                    "title": "Bug Fixes"
-                },
-                "📝[Docs]": {
-                    "description": "文档增删改",
-                    "title": "Documentation"
-                },
-                "🎨[Style]": {
-                    "description": "样式修改",
-                    "title": "Styles"
-                },
-                "♻️[Refactoring]": {
-                    "description": "重构代码",
-                    "title": "Code Refactoring"
-                },
-                "⚡️[Pref]": {
-                    "description": "性能优化",
-                    "title": "Performance Improvements"
-                },
-                "✅[Test]": {
-                    "description": "增加测试",
-                    "title": "Tests"
-                },
-                "💚[Build]": {
-                    "description": "构建系统外部修改",
-                    "title": "Builds"
-                },
-                "👷[CI]": {
-                    "description": "对CI配置文件和脚本的更改",
-                    "title": "Continuous Integrations"
-                },
-                "🔧[Chore]": {
-                    "description": "除src目录或测试文件以外的修改",
-                    "title": "Chores"
-                },
-                "⏪[Revert]": {
-                    "description": "回退历史版本",
-                    "title": "Reverts"
-                },
-                "💥[Conflict]": {
-                    "description": "修改冲突",
-                    "title": "Conflict"
-                },
-                "💬[Font]": {
-                    "description": "字体文件更新",
-                    "title": "Fonts"
-                },
-                "🗑️[Delete]": {
-                    "description": "删除文件",
-                    "title": "Delete Files"
-                },
-                "🚨[Stash]": {
-                    "description": "暂存文件",
-                    "title": "Stash Files"
-                }
-            }
-        }
-    }
+  "name": "vue3",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "clipboard": "^2.0.11",
+    "core-js": "^3.8.3",
+    "element-plus": "^2.2.13",
+    "vue": "^3.2.13"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-typescript": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/eslint-config-typescript": "^9.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "less": "^4.0.0",
+    "less-loader": "^8.0.0",
+    "prettier": "^2.4.1",
+    "typescript": "~4.5.5"
+  }
 }

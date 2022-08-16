@@ -1,15 +1,15 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-13 11:07:57
- * @LastEditTime: 2022-05-14 17:48:42
+ * @LastEditTime: 2022-08-16 15:36:31
  * @Description: 初始化缓存配置
- * @FilePath: /vue/src/utils/localData/init.js
+ * @FilePath: /vue3/src/utils/localData/init.ts
  * @Mail：mail@n0ts.cn
  */
 
-import data from "../../data/data";
-import stor from "../../utils/storage/storage";
-import logs from "../../data/log";
+import data from "@/data/data";
+import stor from "@/utils/storage/storage";
+import logs from "@/data/log";
 import local from "./local";
 
 /**
@@ -58,7 +58,7 @@ const go = function () {
 /**
  * 版本是否更新
  */
-function checkVersion(cache) {
+function checkVersion(cache: any) {
     if (!cache) {
         return cache;
     }

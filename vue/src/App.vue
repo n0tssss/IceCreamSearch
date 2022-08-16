@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-06-08 00:19:11
+ * @LastEditTime: 2022-08-16 16:36:05
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -35,12 +35,12 @@
     </el-dialog>
 </template>
 
-<script setup>
-import background from "./components/background/background.vue";
-import search from "./components/search/search.vue";
-import setting from "./components/setting/setting.vue";
-import data from "./data/data";
-import local from "./utils/localData/local";
+<script setup lang="ts">
+import background from "@/components/background/background.vue";
+import search from "@/components/search/search.vue";
+import setting from "@/components/setting/setting.vue";
+import data from "@/data/data";
+import local from "@/utils/localData/local";
 import { ElDialog, ElButton } from "element-plus";
 
 /**
@@ -225,21 +225,20 @@ a:hover {
     padding: 15px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
         rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    margin-bottom: 15px;
+    background-color: white;
 
     .title {
-        border-left: 3px solid #409eff;
-        padding: 3px 0px 3px 8px;
         margin-bottom: 5px;
         color: rgb(30, 30, 30);
     }
 
     .about {
-        color: rgb(95, 95, 95);
+        color: rgb(142, 142, 142);
         font-size: 0.8rem;
     }
 
     &:hover {
-        background-color: white;
         transform: translateY(-5px);
         box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
             rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
