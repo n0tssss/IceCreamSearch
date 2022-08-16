@@ -1,14 +1,22 @@
 /*
  * @Author: N0ts
  * @Date: 2022-01-13 11:43:22
- * @LastEditTime: 2022-07-25 23:42:51
+ * @LastEditTime: 2022-08-16 17:44:47
  * @Description: 更新日志
  * 1：新增；2：修改；3：修复；4：移除；5：重构；
- * @FilePath: /vue/src/data/log.js
+ * @FilePath: /vue/src/data/log.ts
  * @Mail：mail@n0ts.cn
  */
 
 export default [
+    {
+        time: "2022-8-16",
+        log: [
+            "5；使用 Vue3 + Ts 重构完成",
+            "1；新增底部文案是否展示",
+            "1；新增一言是否展示"
+        ]
+    },
     {
         time: "2022-7-25",
         log: [
