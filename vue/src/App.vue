@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-08-16 16:36:05
+ * @LastEditTime: 2022-08-17 14:06:33
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -139,7 +139,8 @@ a:hover {
 #menu .menuBox,
 #footer *,
 #setting .openBtn,
-.optionsBox {
+.optionsBox,
+#style .colors > div {
     transition: all 0.3s;
 }
 
@@ -154,7 +155,10 @@ a:hover {
 .searchChange,
 #menu .menuBox,
 .list .itemBox > div,
-.optionsBox {
+.optionsBox,
+#search .input,
+#search,
+#setting .openBtn {
     border-radius: 10px;
 }
 
@@ -208,6 +212,33 @@ a:hover {
     backdrop-filter: blur(10px);
 }
 
+.el-tabs__item.is-active {
+    color: var(--themeColor) !important;
+}
+
+.el-tabs__active-bar {
+    color: var(--themeColor) !important;
+    background-color: var(--themeColor) !important;
+}
+
+.el-tabs__item:hover {
+    color: var(--themeColor) !important;
+}
+
+.el-switch.is-checked .el-switch__core {
+    border-color: var(--themeColor) !important;
+    background-color: var(--themeColor) !important;
+}
+
+.el-button {
+    background-color: var(--themeColor) !important;
+    border-color: var(--themeColor) !important;
+}
+
+.el-button:hover {
+    opacity: 0.8;
+}
+
 @media screen and (max-width: 980px) {
     .el-dialog {
         width: 60% !important;
@@ -217,31 +248,6 @@ a:hover {
 @media screen and (max-width: 650px) {
     .el-dialog {
         width: 80% !important;
-    }
-}
-
-// 设置选项卡样式
-.optionsBox {
-    padding: 15px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-    margin-bottom: 15px;
-    background-color: white;
-
-    .title {
-        margin-bottom: 5px;
-        color: rgb(30, 30, 30);
-    }
-
-    .about {
-        color: rgb(142, 142, 142);
-        font-size: 0.8rem;
-    }
-
-    &:hover {
-        transform: translateY(-5px);
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
-            rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     }
 }
 </style>

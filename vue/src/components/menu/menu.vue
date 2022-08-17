@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-08-16 17:38:17
+ * @LastEditTime: 2022-08-17 10:40:44
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -12,12 +12,21 @@
     <div id="menu">
         <!-- 打开菜单 -->
         <div class="openMenu" :class="{ openMenuShow: !data.openApp }">
-            <el-icon @click.stop="data.openApp = true"><arrow-up /></el-icon>
+            <el-icon
+                v-if="data.saveData.openAppListShow"
+                @click.stop="data.openApp = true"
+                ><arrow-up
+            /></el-icon>
             <Footer></Footer>
         </div>
 
         <!-- 菜单 -->
-        <div class="menuBox" :class="{ menuBoxShow: data.openApp }">
+        <div
+            class="menuBox"
+            :class="{
+                menuBoxShow: data.openApp && data.saveData.openAppListShow
+            }"
+        >
             <!-- 关闭按钮 -->
             <el-icon @click="data.openApp = false"><arrow-down /></el-icon>
             <!-- 菜单列表 -->

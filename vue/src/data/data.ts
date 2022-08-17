@@ -2,7 +2,7 @@
  * @Author: N0ts
  * @Date: 2022-08-16 15:07:37
  * @Description: 公共数据
- * @FilePath: /vue3/src/data/data.ts
+ * @FilePath: /vue/src/data/data.ts
  * @Mail：mail@n0ts.cn
  */
 
@@ -18,7 +18,9 @@ const data: any = reactive({
     soSelectAdd: false, // 添加搜索引擎界面是否打开
     soBoxHeight: 0, // 搜索框高度
     tabsActive: "basic", // 左侧菜单默认选择项
+    bindData: null, // bing 壁纸数据
     bingIndex: 0, // bing 背景当前显示
+    backgroundCss: "", // 背景图片样式
     openApp: false, // 网站导航是否打开
     searchBoxFocus: false, // 搜索框是否聚焦
     searchSelectIndex: -1, // 搜索结果选中索引
@@ -97,6 +99,7 @@ const data: any = reactive({
         bgLink: "", // 背景图片链接
         bgLinkContent: "", // 背景图片介绍
         bgLinkHref: "", // 背景图片跳转
+        customerBgLink: "", // 自定义背景图片链接
         soIndex: 0, // 当前选中的搜索引擎
         footerText: true, // 底部文字显示
         hitokotoShow: true, // 一言展示

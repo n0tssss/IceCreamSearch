@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-08-16 15:06:38
- * @Description: 基本设置
+ * @Description: 设置 - 基本
  * @FilePath: /vue/src/components/setting/basic.vue
  * @Mail：mail@n0ts.cn
 -->
@@ -44,14 +44,53 @@
                 </el-switch>
             </div>
         </div>
+        <div class="optionsBox">
+            <p class="title">一言类型</p>
+            <p class="about">选择一言的类型</p>
+            <div class="operation">
+                <el-select
+                    v-model="data.saveData.hitokotoIndex"
+                    multiple
+                    @change="changeHitokoto"
+                >
+                    <el-option
+                        v-for="item in data.hitokotoConfig"
+                        :key="item[1]"
+                        :label="item[0]"
+                        :value="item[1]"
+                    >
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="btns">
+                <el-button
+                    type="primary"
+                    size="small"
+                    :icon="RefreshLeft"
+                    @click="reloadHitokoto"
+                    >恢复默认</el-button
+                >
+            </div>
+        </div>
+        <div class="optionsBox">
+            <p class="title">网址导航</p>
+            <p class="about">是否开启网址导航</p>
+            <div class="operation">
+                <el-switch
+                    v-model="data.saveData.openAppListShow"
+                    active-color="#13ce66"
+                    @change="setOpenAppListShow"
+                >
+                </el-switch>
+            </div>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
 import data from "@/data/data";
-// import { ElSwitch } from "element-plus";
-import stor from "@/utils/storage/storage";
 import notify from "@/utils/notify/notify";
 import local from "@/utils/localData/local";
+import { RefreshLeft } from "@element-plus/icons-vue";
 
 /**
  * 本地存储开关
@@ -82,6 +121,50 @@ function setHitokotoShow() {
     const msg = data.saveData.hitokotoShow
         ? ["已开启一言", 1]
         : ["已关闭一言", 3];
+    notify(msg[0], msg[1]);
+    local.save();
+}
+
+/**
+ * 一言类型修改
+ */
+function changeHitokoto() {
+    let length = data.saveData.hitokotoIndex.length;
+    // 最后一项时则缓存
+    if (length == 1) {
+        return (data.saveData.hitokotoLastData =
+            data.saveData.hitokotoIndex[0]);
+    }
+    // 选择了其他时不选择默认选项
+    if (length > 1 && data.saveData.hitokotoIndex.includes("all")) {
+        notify("点击恢复默认即可随机", 3);
+        data.saveData.hitokotoIndex.splice(
+            data.saveData.hitokotoIndex.indexOf("all"),
+            1
+        );
+    }
+    // 只有最后一项时无法移除
+    if (length == 0) {
+        notify("至少得选择一个哦~", 2);
+        data.saveData.hitokotoIndex.push(data.saveData.hitokotoLastData);
+    }
+}
+
+/**
+ * 一言恢复默认
+ */
+function reloadHitokoto() {
+    data.saveData.hitokotoIndex = ["all"];
+    notify("一言已恢复默认类型", 1);
+}
+
+/**
+ * 网址导航开关
+ */
+function setOpenAppListShow() {
+    const msg = data.saveData.openAppListShow
+        ? ["网址导航已开启", 1]
+        : ["网址导航已关闭", 3];
     notify(msg[0], msg[1]);
     local.save();
 }

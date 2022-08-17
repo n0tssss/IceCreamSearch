@@ -210,7 +210,7 @@ function gethitokoto() {
 }
 
 watch(
-    () => data.saveData.hitokotoShow,
+    () => [data.saveData.hitokotoShow, data.saveData.hitokotoIndex],
     () => {
         gethitokoto();
     },
@@ -423,7 +423,7 @@ function add() {
     height: 50px;
     top: 30%;
     backdrop-filter: blur(10px);
-    border-radius: 50px;
+    // border-radius: 50px;
     z-index: 1;
 
     // input 输入框
@@ -433,7 +433,7 @@ function add() {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: 50px;
+        // border-radius: 50px;
         padding: 0 20px;
         opacity: 0.3;
         user-select: text !important;

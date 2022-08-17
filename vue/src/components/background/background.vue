@@ -2,7 +2,7 @@
  * @Author: N0ts
  * @Date: 2022-08-16 15:06:38
  * @Description: 背景
- * @FilePath: /vue3/src/components/background/background.vue
+ * @FilePath: /vue/src/components/background/background.vue
  * @Mail：mail@n0ts.cn
 -->
 
@@ -11,7 +11,7 @@
     <div
         id="background"
         refname="background"
-        :ref="setRef"
+        :style="data.backgroundCss"
         :class="{ active: data.searchBoxFocus }"
     >
         <!-- 天气 -->
@@ -27,12 +27,7 @@ import weather from "../weather/weather.vue";
 import Menu from "../menu/menu.vue";
 import axios from "@/utils/http/axios";
 import data from "@/data/data";
-import { ref } from "vue";
-
-/**
- * setup
- */
-loadBg(); // 加载壁纸
+import { ref, watch } from "vue";
 
 /**
  * 元素节点
@@ -53,23 +48,14 @@ function setRef(item: any) {
 }
 
 /**
- * 加载壁纸
- */
-function loadBg() {
-    // 是否已经设置壁纸
-    if (data.saveData.bgLink) {
-        return setBg(data.saveData.bgLink);
-    }
-
-    // 获取 Bing 壁纸
-    getBing();
-}
-
-/**
  * 获取 Bing 壁纸
  */
-const bingData: any = ref(null);
 function getBing() {
+    // 是否已经存在壁纸
+    if (data.saveData.customerBgLink) {
+        return;
+    }
+
     axios
         .post("https://api.n0ts.cn/cors", {
             method: "get",
@@ -82,29 +68,30 @@ function getBing() {
             }
         })
         .then((res) => {
-            bingData.value = res.data.images;
-            // console.log("Bing 壁纸", bingData.value);
+            data.bingData = res.data.images;
+            // console.log("Bing 壁纸", data.bingData);
 
             // 获取介绍与链接
-            data.saveData.bgLinkContent = bingData.value[0].copyright;
-            data.saveData.bgLinkHref = bingData.value[0].copyrightlink;
-
-            setBg("https://cn.bing.com/" + bingData.value[0].url);
+            data.saveData.bgLinkContent = data.bingData[0].copyright;
+            data.saveData.bgLinkHref = data.bingData[0].copyrightlink;
+            data.saveData.bgLink =
+                "https://cn.bing.com/" + data.bingData[0].url;
         })
         .catch((err) => {
             console.log(err);
         });
 }
+getBing();
 
-/**
- * 设置背景
- */
-function setBg(url: string) {
-    nodes.background.style.background = `url(${url})`;
-    nodes.background.style.backgroundSize = "cover";
-    nodes.background.style.backgroundPosition = "center";
-    nodes.background.style.backgroundAttachment = "fixed";
-}
+watch(
+    () => data.saveData.bgLink,
+    () => {
+        data.backgroundCss = `background: url("${data.saveData.bgLink}") center center / cover fixed;`;
+    },
+    {
+        immediate: true
+    }
+);
 </script>
 
 <style scoped lang="less">

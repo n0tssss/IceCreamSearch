@@ -2,7 +2,7 @@
  * @Author: N0ts
  * @Date: 2022-02-23 22:30:36
  * @Description: 设置界面
- * @FilePath: /vue3/src/components/setting/setting.vue
+ * @FilePath: /vue/src/components/setting/setting.vue
  * @Mail：mail@n0ts.cn
 -->
 
@@ -17,7 +17,9 @@
         <el-drawer v-model="data.leftBar" direction="ltr" custom-class="menu">
             <el-tabs v-model="data.tabsActive">
                 <el-tab-pane label="基本" name="basic"><basic /></el-tab-pane>
-                <el-tab-pane label="样式" name="style">Config</el-tab-pane>
+                <el-tab-pane label="样式" name="style">
+                    <styleComm />
+                </el-tab-pane>
                 <el-tab-pane label="搜索" name="search">Role</el-tab-pane>
                 <el-tab-pane label="个人" name="me">Task</el-tab-pane>
                 <el-tab-pane label="其他" name="orther">Task</el-tab-pane>
@@ -32,6 +34,7 @@ import { Tools } from "@element-plus/icons-vue";
 // import { ElIcon, ElDrawer, ElTabs, ElTabPane } from "element-plus";
 import data from "@/data/data";
 import basic from "./basic.vue";
+import styleComm from "./style.vue";
 </script>
 
 <style scoped lang="less">
@@ -40,7 +43,7 @@ import basic from "./basic.vue";
     z-index: 2;
 
     :deep(.el-drawer) {
-        width: 320px;
+        min-width: 320px;
         background-color: rgb(245, 245, 245);
     }
 
@@ -48,7 +51,7 @@ import basic from "./basic.vue";
         width: 50px;
         height: 50px;
         background: black;
-        border-radius: 50%;
+        // border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -97,6 +100,39 @@ import basic from "./basic.vue";
 
             .el-tabs__item {
                 padding: 0 10px;
+            }
+        }
+
+        // 设置选项卡样式
+        .optionsBox {
+            padding: 15px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+                rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+            margin-bottom: 15px;
+            background-color: white;
+
+            .title {
+                margin-bottom: 5px;
+                color: rgb(30, 30, 30);
+            }
+
+            .about {
+                color: rgb(142, 142, 142);
+                font-size: 0.8rem;
+            }
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+                    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+            }
+
+            .operation {
+                margin-top: 3px;
+            }
+
+            .btns {
+                margin-top: 5px;
             }
         }
     }

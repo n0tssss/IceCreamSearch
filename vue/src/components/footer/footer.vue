@@ -17,15 +17,17 @@
             </p>
         </div>
         <div>
-            <p>
-                © {{ time }} IceCreemSearch | THEME MADE BY
+            <div>
+                <span>© {{ time }} </span>
+                <a href="#"> IceCreemSearch </a>
+                <span> | THEME MADE BY </span>
                 <a href="https://n0ts.cn" target="_blank">N0ts</a>
-            </p>
-            <p>
+            </div>
+            <div>
                 <a href="http://beian.miit.gov.cn" target="_blank"
                     >湘ICP备20005603号-2</a
                 >
-            </p>
+            </div>
         </div>
     </div>
 </template>
@@ -49,25 +51,25 @@ const time = ref(new Date().getFullYear());
     padding-bottom: 15px;
 
     div {
-        opacity: 0.5;
-
-        p {
+        div {
             display: inline-block;
             margin: 5px 10px;
             line-height: 0.5rem;
         }
 
+        span {
+            opacity: 0.5;
+        }
+
         a {
             color: white;
             text-decoration: none;
+            opacity: 0.5;
 
             &:hover {
                 color: var(--themeColor);
+                opacity: 1;
             }
-        }
-
-        &:hover {
-            opacity: 1;
         }
     }
 }
