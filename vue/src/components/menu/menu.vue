@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-08-17 10:40:44
+ * @LastEditTime: 2022-08-17 22:15:05
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -40,6 +40,10 @@
                     >
                         {{ item.navName }}
                     </div>
+                    <!-- 添加菜单 -->
+                    <div class="addBtn">
+                        <Plus />
+                    </div>
                 </div>
                 <!-- 列表 -->
                 <div class="list" refname="list" :ref="setRef">
@@ -77,6 +81,9 @@
                                     </div>
                                 </div>
                             </el-tooltip>
+                            <div class="addBtn">
+                                <Plus />
+                            </div>
                         </div>
                     </div>
 
@@ -90,7 +97,7 @@
 
 <script setup lang="ts">
 import Footer from "../footer/footer.vue";
-import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
+import { ArrowUp, ArrowDown, Plus } from "@element-plus/icons-vue";
 import { onMounted } from "@vue/runtime-core";
 import { ElIcon, ElTooltip } from "element-plus";
 import data from "@/data/data";
@@ -266,6 +273,18 @@ function bigBoxHeight() {
             display: flex;
             flex-wrap: nowrap;
             color: white;
+
+            // 添加 icon
+            .addBtn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                svg {
+                    width: 15px;
+                    height: 15px;
+                }
+            }
         }
 
         // 导航

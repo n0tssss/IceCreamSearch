@@ -213,9 +213,6 @@ watch(
     () => [data.saveData.hitokotoShow, data.saveData.hitokotoIndex],
     () => {
         gethitokoto();
-    },
-    {
-        immediate: true
     }
 );
 

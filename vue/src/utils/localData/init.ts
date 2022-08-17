@@ -67,7 +67,7 @@ function checkVersion(cache: any) {
         return cache;
     }
     // 遍历数据修复
-    for (let key in data.saveDataCache) {
+    for (const key in data.saveDataCache) {
         if (!cache[key]) {
             cache[key] = data.saveDataCache[key];
         }

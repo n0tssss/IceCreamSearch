@@ -28,18 +28,27 @@
             </div>
             <div class="btns"></div>
         </div>
-        <!-- <div class="optionsBox">
-            <p class="title">主题色</p>
-            <p class="about">设置一个喜欢的主题色</p>
+        <div class="optionsBox">
+            <p class="title">背景图</p>
+            <p class="about">随机 Bing 每日壁纸或自定义喜爱的壁纸</p>
             <div class="operation">
                 <el-input
-                    v-model="data.saveData.bgLink"
+                    v-model="bgUrl"
                     placeholder="请输入图片链接"
-                    @change="setNowBg(saveData.bgLink)"
                 ></el-input>
             </div>
-            <div class="btns"></div>
-        </div> -->
+            <div class="btns">
+                <el-button type="primary" size="small" @click="saveBgUrl"
+                    >保存</el-button
+                >
+                <el-button type="primary" size="small" @click="refreshBg"
+                    >重置</el-button
+                >
+                <el-button type="primary" size="small" @click="nextBingBg"
+                    >下一张</el-button
+                >
+            </div>
+        </div>
     </div>
 </template>
 
@@ -47,7 +56,7 @@
 import data from "@/data/data";
 import notify from "@/utils/notify/notify";
 import local from "@/utils/localData/local";
-import { RefreshLeft } from "@element-plus/icons-vue";
+import { ref } from "vue";
 
 /**
  * 主题色修改
@@ -64,20 +73,44 @@ function changeThemeColor(color: string) {
 }
 
 /**
- * 设置 url 背景
- * @param {*} url 图片 url
+ * 背景图 url
  */
-// function setNowBg(url) {
-//     // if (!url) {
-//     //     return this.getBing(1);
-//     // }
-//     let bgBox = data.$refs.bingBg;
-//     bgBox.style.background = `url(${url})`;
-//     bgBox.style.backgroundSize = "cover";
-//     bgBox.style.backgroundPosition = "center";
-//     bgBox.style.backgroundAttachment = "fixed";
-//     local.save();
-// }
+const bgUrl = ref("");
+
+/**
+ * 保存背景图
+ */
+function saveBgUrl() {
+    data.saveData.bgLink = bgUrl.value;
+    local.save();
+    notify("背景图设置成功", 1);
+}
+
+/**
+ * 重置背景图
+ */
+function refreshBg() {
+    bgUrl.value = "";
+    data.saveData.bgLink = "";
+    local.save();
+    notify("背景图重置成功", 1);
+}
+
+/**
+ * 下一张 bing 壁纸
+ */
+function nextBingBg() {
+    data.bingIndex++;
+    if (data.bingIndex == data.bingData.length) {
+        data.bingIndex = 0;
+    }
+    data.saveData.bgLinkContent = data.bingData[data.bingIndex].copyright;
+    data.saveData.bgLinkHref = data.bingData[data.bingIndex].copyrightlink;
+    data.saveData.bgLink =
+        "https://cn.bing.com/" + data.bingData[data.bingIndex].url;
+    bgUrl.value = data.saveData.bgLink;
+    local.save();
+}
 </script>
 
 <style lang="less">
