@@ -97,6 +97,7 @@ const data: any = reactive({
         updateStorage: false, // 用户是否允许操作 Storage
         soBoxlistShowNum: 8, // 搜索结果数量
         bgLink: "", // 背景图片链接
+        bgSet: false, // 是否设置了背景图片
         bgLinkContent: "", // 背景图片介绍
         bgLinkHref: "", // 背景图片跳转
         soIndex: 0, // 当前选中的搜索引擎

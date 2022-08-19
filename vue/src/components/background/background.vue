@@ -12,7 +12,10 @@
         id="background"
         refname="background"
         :style="data.backgroundCss"
-        :class="{ active: data.searchBoxFocus }"
+        :class="{
+            active: data.searchBoxFocus,
+            activeBlur: !data.saveData.AeroState && data.searchBoxFocus
+        }"
     >
         <!-- 天气 -->
         <weather></weather>
@@ -27,8 +30,7 @@ import weather from "../weather/weather.vue";
 import Menu from "../menu/menu.vue";
 import axios from "@/utils/http/axios";
 import data from "@/data/data";
-import { ref, watch } from "vue";
-import local from "@/utils/localData/local";
+import { watch } from "vue";
 import notify from "@/utils/notify/notify";
 
 /**
@@ -69,7 +71,8 @@ getBing();
 watch(
     () => data.saveData.bgLink,
     () => {
-        if (data.saveData.bgLink) {
+        // 是否设置了壁纸，没设置则获取 bing
+        if (data.saveData.bgSet) {
             setBg(data.saveData.bgLink);
         } else {
             getBing();
@@ -102,5 +105,10 @@ function setBg(url: string) {
     -ms-transform: scale(1.05);
     -o-transform: scale(1.05);
     filter: blur(10px);
+}
+
+.activeBlur {
+    filter: none;
+    opacity: 0.3;
 }
 </style>

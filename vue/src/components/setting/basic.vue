@@ -15,7 +15,15 @@
                 <el-switch
                     v-model="data.saveData.updateStorage"
                     active-color="#13ce66"
-                    @change="StorageStatus"
+                    @change="
+                        saveAndNotify(
+                            [
+                                '已开启本地存储设置',
+                                '已关闭本地存储设置，设置里面还可以开启哦'
+                            ],
+                            data.saveData.updateStorage
+                        )
+                    "
                 >
                 </el-switch>
             </div>
@@ -27,7 +35,12 @@
                 <el-switch
                     v-model="data.saveData.footerText"
                     active-color="#13ce66"
-                    @change="setFooterTextDisplay"
+                    @change="
+                        saveAndNotify(
+                            ['已开启底部文案展示', '已关闭底部文案展示'],
+                            data.saveData.footerText
+                        )
+                    "
                 >
                 </el-switch>
             </div>
@@ -39,7 +52,12 @@
                 <el-switch
                     v-model="data.saveData.hitokotoShow"
                     active-color="#13ce66"
-                    @change="setHitokotoShow"
+                    @change="
+                        saveAndNotify(
+                            ['已开启一言', '已关闭一言'],
+                            data.saveData.hitokotoShow
+                        )
+                    "
                 >
                 </el-switch>
             </div>
@@ -79,7 +97,12 @@
                 <el-switch
                     v-model="data.saveData.openAppListShow"
                     active-color="#13ce66"
-                    @change="setOpenAppListShow"
+                    @change="
+                        saveAndNotify(
+                            ['网址导航已开启', '网址导航已关闭'],
+                            data.saveData.openAppListShow
+                        )
+                    "
                 >
                 </el-switch>
             </div>
@@ -91,39 +114,6 @@ import data from "@/data/data";
 import notify from "@/utils/notify/notify";
 import local from "@/utils/localData/local";
 import { RefreshLeft } from "@element-plus/icons-vue";
-
-/**
- * 本地存储开关
- */
-function StorageStatus() {
-    const msg = data.saveData.hitokotoShow
-        ? ["已开启本地存储设置", 1]
-        : ["已关闭本地存储设置，设置里面还可以开启哦", 3];
-    notify(msg[0], msg[1]);
-    local.save();
-}
-
-/**
- * 底部文案开关
- */
-function setFooterTextDisplay() {
-    const msg = data.saveData.hitokotoShow
-        ? ["已开启底部文案展示", 1]
-        : ["已关闭底部文案展示", 3];
-    notify(msg[0], msg[1]);
-    local.save();
-}
-
-/**
- * 一言开关
- */
-function setHitokotoShow() {
-    const msg = data.saveData.hitokotoShow
-        ? ["已开启一言", 1]
-        : ["已关闭一言", 3];
-    notify(msg[0], msg[1]);
-    local.save();
-}
 
 /**
  * 一言类型修改
@@ -159,13 +149,10 @@ function reloadHitokoto() {
 }
 
 /**
- * 网址导航开关
+ * 保存配置并提示
  */
-function setOpenAppListShow() {
-    const msg = data.saveData.openAppListShow
-        ? ["网址导航已开启", 1]
-        : ["网址导航已关闭", 3];
-    notify(msg[0], msg[1]);
+function saveAndNotify(msg: Array<string>, type: boolean) {
+    notify(type ? msg[0] : msg[1], type ? 1 : 3);
     local.save();
 }
 </script>

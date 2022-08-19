@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-08-17 22:15:05
+ * @LastEditTime: 2022-08-19 16:03:24
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -24,8 +24,10 @@
         <div
             class="menuBox"
             :class="{
-                menuBoxShow: data.openApp && data.saveData.openAppListShow
+                menuBoxShow: data.openApp && data.saveData.openAppListShow,
+                menuBoxBlur: !data.saveData.AeroState
             }"
+            @click.right.prevent="rightClick"
         >
             <!-- 关闭按钮 -->
             <el-icon @click="data.openApp = false"><arrow-down /></el-icon>
@@ -41,7 +43,7 @@
                         {{ item.navName }}
                     </div>
                     <!-- 添加菜单 -->
-                    <div class="addBtn">
+                    <div class="addBtn" @click="addMenuDialog = true">
                         <Plus />
                     </div>
                 </div>
@@ -59,7 +61,6 @@
                         <div class="itemBox">
                             <!-- 提示 -->
                             <el-tooltip
-                                class="box-item"
                                 effect="dark"
                                 :content="item2.content"
                                 placement="bottom"
@@ -79,6 +80,15 @@
                                             {{ item2.content }}
                                         </p>
                                     </div>
+                                    <!-- 删除 -->
+                                    <div class="btns" v-if="rightSetting">
+                                        <div>
+                                            <Edit />
+                                        </div>
+                                        <div>
+                                            <Close />
+                                        </div>
+                                    </div>
                                 </div>
                             </el-tooltip>
                             <div class="addBtn">
@@ -93,14 +103,42 @@
             </div>
         </div>
     </div>
+
+    <!-- 添加菜单 -->
+    <el-dialog v-model="addMenuDialog" title="添加菜单" width="300px">
+        <el-form
+            ref="addMenuForm"
+            :model="addMenuData"
+            :rules="addMenuRules"
+            label-width="78px"
+        >
+            <el-form-item label="菜单名字" prop="name">
+                <el-input v-model="addMenuData.name" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button type="primary" @click="addMenuDialog = false"
+                    >取消</el-button
+                >
+                <el-button type="primary" @click="addMenu(addMenuForm)"
+                    >添加</el-button
+                >
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
 import Footer from "../footer/footer.vue";
-import { ArrowUp, ArrowDown, Plus } from "@element-plus/icons-vue";
+import { ArrowUp, ArrowDown, Plus, Close, Edit } from "@element-plus/icons-vue";
 import { onMounted } from "@vue/runtime-core";
 import { ElIcon, ElTooltip } from "element-plus";
 import data from "@/data/data";
+import type { FormInstance } from "element-plus";
+import { ref } from "vue";
+import notify from "@/utils/notify/notify";
+import local from "@/utils/localData/local";
 
 onMounted(() => {
     // 撑开底部距离盒子高度计算
@@ -169,6 +207,58 @@ function bigBoxHeight() {
 
     nodes.bigBox.style.height =
         nodes.list.clientHeight - cache.clientHeight + "px";
+}
+
+/**
+ * 右键状态
+ */
+const rightSetting = ref(false);
+
+/**
+ * 右键改变状态
+ */
+function rightClick() {
+    rightSetting.value = !rightSetting.value;
+}
+
+/**
+ * 添加菜单 dialog & form & rules & data
+ */
+const addMenuDialog = ref(false);
+const addMenuForm = ref<FormInstance>();
+const addMenuRules = ref({
+    name: {
+        required: true,
+        message: "请填写菜单名字",
+        trigger: "blur"
+    }
+});
+const addMenuData = ref({
+    name: ""
+});
+
+/**
+ * 添加菜单
+ */
+function addMenu(formEl: FormInstance | undefined) {
+    if (!formEl) return;
+    formEl.validate((valid) => {
+        if (!valid) {
+            return;
+        }
+        data.saveData.LinkList.push({
+            navName: addMenuData.value.name,
+            links: []
+        });
+        addMenuData.value.name = "";
+        addMenuDialog.value = false;
+        local.save();
+        notify("添加菜单成功", 1);
+        console.log(
+            "🚀 菜单链接数据 | file: menu.vue | line 245 | formEl.validate | data.saveData.LinkList",
+            data.saveData.LinkList
+        );
+    });
 }
 </script>
 
@@ -246,7 +336,7 @@ function bigBoxHeight() {
         width: 80%;
         min-width: 1000px;
         height: 60%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(20, 20, 20, 0.5);
         backdrop-filter: blur(30px);
         bottom: 0;
         transform: translate(-50%, 100%);
@@ -299,10 +389,14 @@ function bigBoxHeight() {
                 padding: 10px 0;
                 text-align: center;
                 cursor: pointer;
+                font-size: 0.9rem;
+                opacity: 0.8;
 
                 &:hover {
                     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
                     background-color: rgba(0, 0, 0, 0.3);
+                    transform: scale(1.05);
+                    opacity: 1;
                 }
             }
         }
@@ -318,7 +412,7 @@ function bigBoxHeight() {
                 box-sizing: border-box;
 
                 > h1 {
-                    font-size: 1.3rem;
+                    font-size: 1.1rem;
                     padding: 0 0 15px 0;
                     position: relative;
                     display: inline-block;
@@ -346,10 +440,52 @@ function bigBoxHeight() {
                     cursor: pointer;
                     padding: 10px;
                     box-sizing: border-box;
+                    position: relative;
 
                     &:hover {
                         box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
                         background-color: rgba(0, 0, 0, 0.3);
+                        transform: scale(1.05);
+
+                        .btns {
+                            opacity: 1;
+                            visibility: visible;
+                            transform: scale(1) translateY(-50%);
+                        }
+                    }
+
+                    .btns {
+                        position: absolute;
+                        right: 5px;
+                        top: 50%;
+                        transform: scale(0) translateY(-50%);
+                        display: flex;
+                        color: white;
+                        width: 45px;
+                        opacity: 0;
+                        visibility: hidden;
+
+                        > div {
+                            width: 15px;
+                            height: 15px;
+                            background-color: rgb(225, 225, 225);
+                            border-radius: 50%;
+                            margin-left: 3px;
+                            padding: 2px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            > svg {
+                                width: 13px;
+                                height: 13px;
+                                color: rgb(75, 75, 75);
+                            }
+
+                            &:hover {
+                                opacity: 0.6;
+                            }
+                        }
                     }
 
                     img {
@@ -384,6 +520,11 @@ function bigBoxHeight() {
                 }
             }
         }
+    }
+
+    .menuBoxBlur {
+        backdrop-filter: none;
+        background-color: rgba(20, 20, 20, 0.8);
     }
 
     .menuBoxShow {

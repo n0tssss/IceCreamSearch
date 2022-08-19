@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-08-17 14:06:33
+ * @LastEditTime: 2022-08-19 15:54:03
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -122,7 +122,11 @@ a:hover {
 // 统一过渡
 #menu .menuBox .icon,
 .menuList .navigation > div,
-.list .itemBox > div {
+.list .itemBox > div,
+#menu .menuBox .list .itemBox > div,
+#menu .menuBox .menuList .addBtn,
+#menu .menuBox .list .itemBox > div .btns > div,
+#menu .menuBox .list .itemBox > div .btns {
     transition: all 0.1s;
 }
 
@@ -138,7 +142,9 @@ a:hover {
 #menu .openMenu,
 #menu .menuBox,
 #footer *,
+#setting .el-icon,
 #setting .openBtn,
+#setting .openBtn svg,
 .optionsBox,
 #style .colors > div {
     transition: all 0.3s;
@@ -194,20 +200,6 @@ a:hover {
     padding: 10px 20px 30px;
 }
 
-.el-notification {
-    border: none;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-}
-
-.el-notification .el-notification__closeBtn {
-    color: #303133;
-}
-
-.el-notification__content p {
-    color: rgb(59, 59, 59);
-}
-
 .el-overlay {
     backdrop-filter: blur(10px);
 }
@@ -237,6 +229,20 @@ a:hover {
 
 .el-button:hover {
     opacity: 0.8;
+}
+
+.el-notification {
+    border: none !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    // backdrop-filter: blur(10px) !important;
+
+    .el-notification__closeBtn {
+        color: #303133;
+    }
+
+    .el-notification__content p {
+        color: rgb(59, 59, 59);
+    }
 }
 
 @media screen and (max-width: 980px) {

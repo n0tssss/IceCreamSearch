@@ -1,9 +1,8 @@
 /*
  * @Author: N0ts
- * @Date: 2022-01-13 11:07:57
- * @LastEditTime: 2022-08-16 15:36:31
+ * @Date: 2022-08-18 09:26:13
  * @Description: 初始化缓存配置
- * @FilePath: /vue3/src/utils/localData/init.ts
+ * @FilePath: /vue/src/utils/localData/init.ts
  * @Mail：mail@n0ts.cn
  */
 
@@ -25,21 +24,12 @@ const go = function () {
         ...data.saveData
     };
 
-    // 从缓存中读取配置
-    let cache = null;
-    if (storageCache) {
-        cache = storageCache;
-        // 关闭初始化
-        data.initDialog = false;
-        // 用户允许了操作 Storage
-        data.saveData.updateStorage = true;
-    } else if (sessionCache) {
-        cache = sessionCache;
-        // 关闭初始化
-        data.initDialog = false;
-        // 用户不允许操作 Storage
-        data.saveData.updateStorage = false;
-    }
+    // 缓存配置读取，优先 storage
+    const cache = storageCache == null ? storageCache : sessionCache;
+    // 关闭初始化
+    data.initDialog = false;
+    // 用户是否允许操作 storage
+    data.saveData.updateStorage = storageCache != null;
 
     // 缓存是否存在新字段需要更新
     checkVersion(cache);
@@ -66,12 +56,8 @@ function checkVersion(cache: any) {
     if (Object.keys(cache).length === Object.keys(data.saveDataCache).length) {
         return cache;
     }
-    // 遍历数据修复
-    for (const key in data.saveDataCache) {
-        if (!cache[key]) {
-            cache[key] = data.saveDataCache[key];
-        }
-    }
+    // 数据修复
+    cache = { ...data.saveDataCache, ...cache };
     local.save();
 }
 

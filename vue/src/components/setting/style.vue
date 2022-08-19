@@ -49,6 +49,42 @@
                 >
             </div>
         </div>
+        <div class="optionsBox">
+            <p class="title">设置按钮</p>
+            <p class="about">指定设置按钮的位置</p>
+            <div class="operation">
+                <el-select
+                    v-model="data.saveData.settingLocation"
+                    size="small"
+                    @change="local.save"
+                >
+                    <el-option
+                        v-for="item in data.settingSelect"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    >
+                    </el-option>
+                </el-select>
+            </div>
+        </div>
+        <div class="optionsBox">
+            <p class="title">毛玻璃</p>
+            <p class="about">是否开启毛玻璃效果</p>
+            <div class="operation">
+                <el-switch
+                    v-model="data.saveData.AeroState"
+                    active-color="#13ce66"
+                    @change="
+                        saveAndNotify(
+                            ['毛玻璃效果已开启', '毛玻璃效果已关闭'],
+                            data.saveData.AeroState
+                        )
+                    "
+                >
+                </el-switch>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -57,6 +93,14 @@ import data from "@/data/data";
 import notify from "@/utils/notify/notify";
 import local from "@/utils/localData/local";
 import { ref } from "vue";
+
+/**
+ * 保存配置并提示
+ */
+function saveAndNotify(msg: Array<string>, type: boolean) {
+    notify(type ? msg[0] : msg[1], type ? 1 : 3);
+    local.save();
+}
 
 /**
  * 主题色修改
@@ -75,7 +119,7 @@ function changeThemeColor(color: string) {
 /**
  * 背景图 url
  */
-const bgUrl = ref("");
+const bgUrl = ref(data.saveData.bgSet ? data.saveData.bgLink : "");
 
 /**
  * 保存背景图
@@ -92,6 +136,7 @@ function saveBgUrl() {
 function refreshBg() {
     bgUrl.value = "";
     data.saveData.bgLink = "";
+    data.saveData.bgSet = false;
     local.save();
     notify("背景图重置成功", 1);
 }
@@ -109,6 +154,7 @@ function nextBingBg() {
     data.saveData.bgLink =
         "https://cn.bing.com/" + data.bingData[data.bingIndex].url;
     bgUrl.value = data.saveData.bgLink;
+    data.saveData.bgSet = true;
     local.save();
 }
 </script>

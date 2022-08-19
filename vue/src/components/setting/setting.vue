@@ -8,9 +8,24 @@
 
 <template>
     <!-- 设置界面 -->
-    <div id="setting">
+    <div
+        id="setting"
+        :class="{
+            settingBlur: !data.saveData.AeroState
+        }"
+    >
         <!-- 打开按钮 -->
-        <div class="openBtn" @click="data.leftBar = !data.leftBar">
+        <div
+            class="openBtn"
+            @click="data.leftBar = !data.leftBar"
+            :class="{
+                optionIcon: true,
+                optionIconLeftTop: data.saveData.settingLocation == 1,
+                optionIconRightTop: data.saveData.settingLocation == 2,
+                optionIconRightBottom: data.saveData.settingLocation == 3,
+                optionIconLeftBottom: data.saveData.settingLocation == 4
+            }"
+        >
             <el-icon><tools /></el-icon>
         </div>
 
@@ -59,8 +74,6 @@ import styleComm from "./style.vue";
         backdrop-filter: blur(10px);
         cursor: pointer;
         position: fixed;
-        bottom: 50px;
-        left: 30px;
 
         :deep(.el-icon),
         svg {
@@ -70,9 +83,38 @@ import styleComm from "./style.vue";
         }
 
         &:hover {
+            opacity: 0.8;
+        }
+
+        &:hover :deep(.el-icon),
+        svg {
             transform: scale(1.1) rotate(360deg);
             opacity: 0.8;
         }
+    }
+
+    @iconWidth: 40px;
+    @iconHeight: 80px;
+
+    /* 设置界面图标 - 各位置 */
+    .optionIconLeftTop {
+        top: @iconHeight;
+        left: @iconWidth;
+    }
+
+    .optionIconRightTop {
+        top: @iconHeight;
+        right: @iconWidth;
+    }
+
+    .optionIconRightBottom {
+        bottom: @iconHeight;
+        right: @iconWidth;
+    }
+
+    .optionIconLeftBottom {
+        bottom: @iconHeight;
+        left: @iconWidth;
     }
 
     :deep(.el-overlay) .menu {
@@ -135,6 +177,12 @@ import styleComm from "./style.vue";
                 margin-top: 5px;
             }
         }
+    }
+}
+
+.settingBlur {
+    :deep(.el-overlay) {
+        backdrop-filter: none;
     }
 }
 </style>

@@ -8,7 +8,13 @@
 
 <template>
     <!-- 搜索框组件 -->
-    <div id="search" :class="{ searchGoTop: data.openApp }">
+    <div
+        id="search"
+        :class="{
+            searchGoTop: data.openApp,
+            searchBlur: !data.saveData.AeroState
+        }"
+    >
         <!-- input 输入框 -->
         <div class="input" :class="{ searchActive: data.searchBoxFocus }">
             <!-- 搜索引擎 logo -->
@@ -241,26 +247,28 @@ function searchDown(e: any) {
     }
 
     // 上下键检测
-    if (e && keyCode == 38) {
-        // 按下上箭头
-        // 索引超出判断
-        if (data.searchSelectIndex == 0) {
-            data.searchSelectIndex = data.soBoxlist.length - 1;
-        } else {
-            data.searchSelectIndex--;
+    if (data.soBoxlist.length != 0) {
+        if (e && keyCode == 38) {
+            // 按下上箭头
+            // 索引超出判断
+            if (data.searchSelectIndex == 0) {
+                data.searchSelectIndex = data.soBoxlist.length - 1;
+            } else {
+                data.searchSelectIndex--;
+            }
+            // 结果修改
+            data.soBoxtext = data.soBoxlist[data.searchSelectIndex].text;
+        } else if (e && keyCode == 40) {
+            // 按下下箭头
+            // 索引超出判断
+            if (data.searchSelectIndex == data.soBoxlist.length - 1) {
+                data.searchSelectIndex = 0;
+            } else {
+                data.searchSelectIndex++;
+            }
+            // 结果修改
+            data.soBoxtext = data.soBoxlist[data.searchSelectIndex].text;
         }
-        // 结果修改
-        data.soBoxtext = data.soBoxlist[data.searchSelectIndex].text;
-    } else if (e && keyCode == 40) {
-        // 按下下箭头
-        // 索引超出判断
-        if (data.searchSelectIndex == data.soBoxlist.length - 1) {
-            data.searchSelectIndex = 0;
-        } else {
-            data.searchSelectIndex++;
-        }
-        // 结果修改
-        data.soBoxtext = data.soBoxlist[data.searchSelectIndex].text;
     }
 }
 
@@ -597,6 +605,18 @@ function add() {
         text-align: center;
         cursor: pointer;
         margin-top: 10px;
+    }
+}
+
+.searchBlur {
+    backdrop-filter: none !important;
+
+    .input {
+        opacity: 0.6 !important;
+
+        &:hover {
+            opacity: 0.8 !important;
+        }
     }
 }
 
