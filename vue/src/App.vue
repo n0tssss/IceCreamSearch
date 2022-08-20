@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-08-19 15:54:03
+ * @LastEditTime: 2022-08-20 16:34:31
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -125,8 +125,8 @@ a:hover {
 .list .itemBox > div,
 #menu .menuBox .list .itemBox > div,
 #menu .menuBox .menuList .addBtn,
-#menu .menuBox .list .itemBox > div .btns > div,
-#menu .menuBox .list .itemBox > div .btns {
+#menu .menuBox .btns > div,
+#menu .menuBox .btns {
     transition: all 0.1s;
 }
 

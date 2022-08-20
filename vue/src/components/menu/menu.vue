@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-08-19 16:03:24
+ * @LastEditTime: 2022-08-20 16:32:50
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -41,6 +41,15 @@
                         @click="scroll('list-' + item.navName)"
                     >
                         {{ item.navName }}
+                        <!-- 删除 -->
+                        <div class="btns" v-if="rightSetting">
+                            <div>
+                                <Edit />
+                            </div>
+                            <div>
+                                <Close />
+                            </div>
+                        </div>
                     </div>
                     <!-- 添加菜单 -->
                     <div class="addBtn" @click="addMenuDialog = true">
@@ -356,6 +365,40 @@ function addMenu(formEl: FormInstance | undefined) {
             }
         }
 
+        .btns {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            display: flex;
+            color: white;
+            width: 45px !important;
+            transform: scale(0) translateY(-50%);
+            opacity: 0;
+            visibility: hidden;
+
+            > div {
+                width: 15px;
+                height: 15px;
+                background-color: rgb(225, 225, 225);
+                border-radius: 50%;
+                margin-left: 3px;
+                padding: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                > svg {
+                    width: 13px;
+                    height: 13px;
+                    color: rgb(75, 75, 75);
+                }
+
+                &:hover {
+                    opacity: 0.6;
+                }
+            }
+        }
+
         // 菜单列表
         .menuList {
             width: 100%;
@@ -397,6 +440,12 @@ function addMenu(formEl: FormInstance | undefined) {
                     background-color: rgba(0, 0, 0, 0.3);
                     transform: scale(1.05);
                     opacity: 1;
+
+                    .btns {
+                        opacity: 1;
+                        visibility: visible;
+                        transform: scale(1) translateY(-50%);
+                    }
                 }
             }
         }
@@ -451,40 +500,6 @@ function addMenu(formEl: FormInstance | undefined) {
                             opacity: 1;
                             visibility: visible;
                             transform: scale(1) translateY(-50%);
-                        }
-                    }
-
-                    .btns {
-                        position: absolute;
-                        right: 5px;
-                        top: 50%;
-                        transform: scale(0) translateY(-50%);
-                        display: flex;
-                        color: white;
-                        width: 45px;
-                        opacity: 0;
-                        visibility: hidden;
-
-                        > div {
-                            width: 15px;
-                            height: 15px;
-                            background-color: rgb(225, 225, 225);
-                            border-radius: 50%;
-                            margin-left: 3px;
-                            padding: 2px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-
-                            > svg {
-                                width: 13px;
-                                height: 13px;
-                                color: rgb(75, 75, 75);
-                            }
-
-                            &:hover {
-                                opacity: 0.6;
-                            }
                         }
                     }
 
