@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-08-20 16:32:50
+ * @LastEditTime: 2022-08-26 15:45:21
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -426,6 +426,7 @@ function addMenu(formEl: FormInstance | undefined) {
             max-width: 260px;
             height: 100%;
             overflow-y: scroll;
+            overflow: hidden;
 
             > div {
                 width: 100%;
