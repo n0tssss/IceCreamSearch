@@ -35,10 +35,10 @@
                 <el-tab-pane label="样式" name="style">
                     <styleComm />
                 </el-tab-pane>
-                <el-tab-pane label="搜索" name="search">Role</el-tab-pane>
-                <el-tab-pane label="个人" name="me">Task</el-tab-pane>
-                <el-tab-pane label="其他" name="orther">Task</el-tab-pane>
-                <el-tab-pane label="关于" name="about">Task</el-tab-pane>
+                <el-tab-pane label="搜索" name="search"><search /></el-tab-pane>
+                <el-tab-pane label="个人" name="me">个人</el-tab-pane>
+                <el-tab-pane label="其他" name="orther">其他</el-tab-pane>
+                <el-tab-pane label="关于" name="about">关于</el-tab-pane>
             </el-tabs>
         </el-drawer>
     </div>
@@ -50,6 +50,7 @@ import { Tools } from "@element-plus/icons-vue";
 import data from "@/data/data";
 import basic from "./basic.vue";
 import styleComm from "./style.vue";
+import search from "./search.vue";
 </script>
 
 <style scoped lang="less">

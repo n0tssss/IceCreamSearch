@@ -94,7 +94,7 @@ const data: any = reactive({
             giteeRepos: null // 码云仓库
         },
         themeColor: "#1e90ff", // 主题色
-        updateStorage: false, // 用户是否允许操作 Storage
+        updateStorage: true, // 用户是否允许操作 Storage
         soBoxlistShowNum: 8, // 搜索结果数量
         bgLink: "", // 背景图片链接
         bgSet: false, // 是否设置了背景图片

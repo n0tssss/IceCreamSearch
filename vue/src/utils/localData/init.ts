@@ -26,8 +26,10 @@ const go = function () {
 
     // 缓存配置读取，优先 storage
     const cache = storageCache == null ? storageCache : sessionCache;
-    // 关闭初始化
-    data.initDialog = false;
+    // 存在则关闭初始化
+    if (storageCache && sessionCache) {
+        data.initDialog = false;
+    }
     // 用户是否允许操作 storage
     data.saveData.updateStorage = storageCache != null;
 
