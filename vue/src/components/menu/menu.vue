@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-13 16:00:18
- * @LastEditTime: 2022-08-26 15:45:21
+ * @LastEditTime: 2022-11-11 15:36:40
  * @Description: 导航菜单
  * @FilePath: /vue/src/components/menu/menu.vue
  * @Mail：mail@n0ts.cn
@@ -79,7 +79,16 @@
                                 <!-- content -->
                                 <div @click="openHref(item2.url)">
                                     <!-- logo -->
-                                    <img :src="item2.img" :alt="item2.name" />
+                                    <img
+                                        v-if="item2.img != ''"
+                                        :src="item2.img"
+                                        :alt="item2.name"
+                                    />
+                                    <img
+                                        v-else
+                                        src="https://infinityicon.infinitynewtab.com/user-share-icon/6e49210c084629259f22609980c48ecf.png"
+                                        alt="none"
+                                    />
                                     <!-- text -->
                                     <div>
                                         <p class="itemTitle">
@@ -100,7 +109,7 @@
                                     </div>
                                 </div>
                             </el-tooltip>
-                            <div class="addBtn">
+                            <div class="addBtn" @click="setAddItemId(index)">
                                 <Plus />
                             </div>
                         </div>
@@ -131,6 +140,39 @@
                     >取消</el-button
                 >
                 <el-button type="primary" @click="addMenu(addMenuForm)"
+                    >添加</el-button
+                >
+            </span>
+        </template>
+    </el-dialog>
+
+    <!-- 添加网址 -->
+    <el-dialog v-model="addItemDialog" title="添加网址" width="300px">
+        <el-form
+            ref="addItemForm"
+            :model="addItemData"
+            :rules="addItemRules"
+            label-width="78px"
+        >
+            <el-form-item label="网址" prop="url">
+                <el-input v-model="addItemData.url" />
+            </el-form-item>
+            <el-form-item label="名字" prop="name">
+                <el-input v-model="addItemData.name" />
+            </el-form-item>
+            <el-form-item label="介绍" prop="content">
+                <el-input v-model="addItemData.content" />
+            </el-form-item>
+            <el-form-item label="图标" prop="img">
+                <el-input v-model="addItemData.img" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button type="primary" @click="addItemDialog = false"
+                    >取消</el-button
+                >
+                <el-button type="primary" @click="addItem(addItemForm)"
                     >添加</el-button
                 >
             </span>
@@ -259,8 +301,64 @@ function addMenu(formEl: FormInstance | undefined) {
             navName: addMenuData.value.name,
             links: []
         });
-        addMenuData.value.name = "";
+        formEl.resetFields();
         addMenuDialog.value = false;
+        local.save();
+        notify("添加菜单成功", 1);
+        console.log(
+            "🚀 菜单链接数据 | file: menu.vue | line 245 | formEl.validate | data.saveData.LinkList",
+            data.saveData.LinkList
+        );
+    });
+}
+
+/**
+ * 添加菜单 dialog & form & rules & data
+ */
+const addItemDialog = ref(false);
+const addItemForm = ref<FormInstance>();
+const addItemRules = ref({
+    name: {
+        required: true,
+        message: "请填写网址名字",
+        trigger: "blur"
+    },
+    url: {
+        required: true,
+        message: "请填写网址",
+        trigger: "blur"
+    }
+});
+const addItemData = ref({
+    name: "",
+    content: "",
+    img: "",
+    url: ""
+});
+let addItemIndex = 0;
+
+/**
+ * 设置添加网址索引
+ */
+function setAddItemId(index: any) {
+    addItemIndex = index;
+    addItemDialog.value = true;
+}
+
+/**
+ * 添加网址
+ */
+function addItem(formEl: FormInstance | undefined) {
+    if (!formEl) return;
+    formEl.validate((valid) => {
+        if (!valid) {
+            return;
+        }
+        data.saveData.LinkList[addItemIndex].links.push(
+            JSON.parse(JSON.stringify(addItemData.value))
+        );
+        addItemDialog.value = false;
+        formEl.resetFields();
         local.save();
         notify("添加菜单成功", 1);
         console.log(
@@ -412,6 +510,7 @@ function addMenu(formEl: FormInstance | undefined) {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                min-height: 50px;
 
                 svg {
                     width: 15px;

@@ -10,7 +10,7 @@ const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
     transpileDependencies: true,
     lintOnSave: false,
-    // publicPath: "../beta",
+    publicPath: "../beta",
     pages: {
         index: {
             // page 的入口
