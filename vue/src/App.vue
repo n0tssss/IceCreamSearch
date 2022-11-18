@@ -1,7 +1,7 @@
 <!--
  * @Author: N0ts
  * @Date: 2022-01-10 15:27:28
- * @LastEditTime: 2022-11-10 17:17:57
+ * @LastEditTime: 2022-11-18 12:03:57
  * @Description: App 入口
  * @FilePath: /vue/src/App.vue
  * @Mail：mail@n0ts.cn
@@ -42,6 +42,7 @@ import setting from "@/components/setting/setting.vue";
 import data from "@/data/data";
 import local from "@/utils/localData/local";
 import { ElDialog, ElButton } from "element-plus";
+import giteeUtil from "@/utils/giteeUtil";
 
 /**
  * 初始化
@@ -56,6 +57,16 @@ init.go();
 document.documentElement.style.setProperty(
     "--themeColor",
     data.saveData.themeColor
+);
+
+const code = window.location.search.match(/[^\?code=].+/g);
+// if (code && !data.saveData.giteeToken) {
+//     giteeUtil.getGiteeToken(
+//         "641217fc99ed89b51fb44f14df6909f619263abd55fa27bc9b541d312c7efc9b"
+//     );
+// }
+giteeUtil.getGiteeToken(
+    "641217fc99ed89b51fb44f14df6909f619263abd55fa27bc9b541d312c7efc9b"
 );
 </script>
 

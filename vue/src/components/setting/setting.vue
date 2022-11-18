@@ -36,7 +36,7 @@
                     <styleComm />
                 </el-tab-pane>
                 <el-tab-pane label="搜索" name="search"><search /></el-tab-pane>
-                <el-tab-pane label="个人" name="me">个人</el-tab-pane>
+                <el-tab-pane label="个人" name="me"><me /></el-tab-pane>
                 <el-tab-pane label="其他" name="orther">其他</el-tab-pane>
                 <el-tab-pane label="关于" name="about">关于</el-tab-pane>
             </el-tabs>
@@ -51,6 +51,7 @@ import data from "@/data/data";
 import basic from "./basic.vue";
 import styleComm from "./style.vue";
 import search from "./search.vue";
+import me from "./me.vue";
 </script>
 
 <style scoped lang="less">
@@ -59,7 +60,7 @@ import search from "./search.vue";
     z-index: 2;
 
     :deep(.el-drawer) {
-        min-width: 320px;
+        width: 400px !important;
         background-color: rgb(245, 245, 245);
     }
 
